@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Deep Learning &amp; NLP — Garv Aggarwal</title>
-<link rel="stylesheet" href="_shared.css" />
+<link rel="stylesheet" href="../shared.css" />
 <style>
   body[data-page="nlp"]{
     --accent: #1E4E8C;
@@ -201,19 +201,8 @@
 </head>
 <body data-page="nlp" data-layout="default">
 
-<header class="nav" id="nav">
-  <a class="brand" href="../index.html" aria-label="Back to home">
-    <span class="back-arrow">←</span>
-    <span class="lotus" aria-hidden="true"></span>
-    <span class="name">Garv Aggarwal</span>
-  </a>
-  <nav class="links" aria-label="primary">
-    <a href="../index.html#about">About</a>
-    <a href="../index.html#work" class="current">Work</a>
-    <a href="../index.html#resources">Resources</a>
-    <a href="../index.html#connect">Connect</a>
-  </nav>
-</header>
+<div id="nav-mount" data-nav-root="../" data-nav-pages="" data-nav-current="work"></div>
+<script src="../nav-loader.js"></script>
 
 <main>
   <section class="page-head">
@@ -394,11 +383,5 @@ out = split(<span class="str">"tatraivakālaḥ"</span>)
   </div>
 </footer>
 
-<script>
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', ()=>{
-    nav.classList.toggle('is-scrolled', window.scrollY > 8);
-  }, { passive:true });
-</script>
 </body>
 </html>

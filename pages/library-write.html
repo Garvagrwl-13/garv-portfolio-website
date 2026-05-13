@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Write — Garv Aggarwal</title>
-<link rel="stylesheet" href="_shared.css" />
+<link rel="stylesheet" href="../shared.css" />
 <style>
   body[data-page="write"]{
     background: #F8F1DC;
@@ -206,19 +206,8 @@
 </head>
 <body data-page="write">
 
-<header class="nav" id="nav">
-  <a class="brand" href="../index.html" aria-label="Back to home">
-    <span class="back-arrow">←</span>
-    <span class="lotus" aria-hidden="true"></span>
-    <span class="name">Garv Aggarwal</span>
-  </a>
-  <nav class="links" aria-label="primary">
-    <a href="../index.html#about">About</a>
-    <a href="../index.html#work">Work</a>
-    <a href="../index.html#resources" class="current">Resources</a>
-    <a href="../index.html#connect">Connect</a>
-  </nav>
-</header>
+<div id="nav-mount" data-nav-root="../" data-nav-pages="" data-nav-current="resources"></div>
+<script src="../nav-loader.js"></script>
 
 <main>
   <section class="lib-hero">
@@ -396,11 +385,5 @@
   </div>
 </footer>
 
-<script>
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', ()=>{
-    nav.classList.toggle('is-scrolled', window.scrollY > 8);
-  }, { passive:true });
-</script>
 </body>
 </html>
