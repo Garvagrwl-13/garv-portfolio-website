@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Read — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="read"]{
+    --accent: var(--red);
+    --accent-soft: rgba(139,26,26,.10);
+    background: #EFE5C5;
+    --page-bg: #EFE5C5;
+  }
+
+  /* manuscript-edge hero */
+  .lib-hero{
+    padding:160px 36px 64px;
+    position:relative; z-index:2;
+    max-width:1280px; margin:0 auto;
+    border-bottom:1px solid var(--rule);
+  }
+  .lib-hero .crumb{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.6;
+    margin-bottom:32px;
+  }
+  .lib-hero .crumb a{ color:inherit; text-decoration:none; }
+  .lib-hero .crumb .dot{ width:5px; height:5px; border-radius:50%; background:var(--accent); }
+  .lib-hero h1{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(64px, 9vw, 156px);
+    line-height:.92; letter-spacing:-.025em;
+  }
+  .lib-hero h1 em{ font-style:italic; color: var(--accent); font-weight:400; }
+  .lib-hero .lede{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(20px, 1.6vw, 26px);
+    line-height:1.5; max-width:62ch; color: var(--ink-soft);
+    margin-top:14px;
+  }
+  .lib-hero .meta{
+    display:flex; gap:28px; flex-wrap:wrap;
+    margin-top:36px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.6;
+  }
+
+  /* shelf section */
+  .shelf{
+    max-width:1280px; margin:0 auto;
+    padding:80px 36px 40px;
+    position:relative; z-index:2;
+  }
+  .shelf-head{
+    display:flex; align-items:baseline; gap:18px;
+    margin-bottom:36px;
+  }
+  .shelf-head .id{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-weight:500; font-size:38px; color: var(--accent); letter-spacing:-.01em;
+  }
+  .shelf-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:.95; letter-spacing:-.015em;
+  }
+  .shelf-head h2 em{ font-style:italic; }
+  .shelf-head .count{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+    margin-left:auto;
+  }
+  .shelf-head .rule{ flex:1; height:1px; background: currentColor; opacity:.18; }
+
+  .row-books{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:32px 24px;
+  }
+  .book{
+    display:flex; flex-direction:column; gap:12px;
+    text-decoration:none; color:inherit;
+    transition: transform .2s ease;
+  }
+  .book:hover{ transform: translateY(-3px); }
+  .book .cover{
+    aspect-ratio: 3 / 4.2;
+    position:relative; overflow:hidden;
+    border-radius:2px;
+    box-shadow: 0 12px 28px rgba(26,10,0,.18), 0 1px 0 rgba(0,0,0,.2);
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:18px 16px 16px;
+    color:#F5EDD6;
+  }
+  /* spine highlight */
+  .book .cover::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:6px;
+    background: linear-gradient(180deg, rgba(0,0,0,.4), rgba(255,255,255,.05));
+  }
+  /* grain */
+  .book .cover::after{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(0,0,0,.18) 1px, transparent 1.2px);
+    background-size:4px 4px; opacity:.5; mix-blend-mode:multiply;
+    pointer-events:none;
+  }
+  .book .cover .dev{
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px; line-height:1; opacity:.55;
+  }
+  .book .cover .ttl{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:22px; line-height:1.1; letter-spacing:-.005em;
+  }
+  .book .cover .ttl em{ font-style:italic; font-weight:400; }
+  .book .cover .by{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.2em; text-transform:uppercase; opacity:.7;
+    margin-top:6px;
+  }
+  .book .info .label{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:18px; line-height:1.2; letter-spacing:-.005em;
+  }
+  .book .info .label em{ font-style:italic; }
+  .book .info .note{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:14px; color: var(--ink-soft); line-height:1.4;
+    margin-top:2px;
+  }
+  .book .info .where{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.2em; text-transform:uppercase; opacity:.55;
+    margin-top:6px;
+  }
+
+  /* cover palettes */
+  .cover.c-red    { background: linear-gradient(160deg, #8B1A1A, #4a0d0d); }
+  .cover.c-ink    { background: linear-gradient(160deg, #1A0A00, #2a1810); }
+  .cover.c-saffron{ background: linear-gradient(160deg, #c46d2a, #6b3210); color:#F5EDD6; }
+  .cover.c-gold   { background: linear-gradient(160deg, #C4922A, #6e4d12); color:#1A0A00; }
+  .cover.c-night  { background: linear-gradient(160deg, #11335c, #0a162a); }
+  .cover.c-cream  { background: linear-gradient(160deg, #f0e3bf, #c8b683); color:#1A0A00; }
+  .cover.c-moss   { background: linear-gradient(160deg, #3a5a3a, #1c2a1c); }
+  .cover.c-rose   { background: linear-gradient(160deg, #aa3a4a, #5a1a26); }
+
+  @media (max-width:980px){
+    .lib-hero{ padding:120px 22px 48px; }
+    .shelf{ padding:60px 22px 20px; }
+    .row-books{ grid-template-columns: repeat(2, 1fr); gap:24px 16px; }
+  }
+</style>
+</head>
+<body data-page="read">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work">Work</a>
+    <a href="../index.html#resources" class="current">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="lib-hero">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#resources">The Library</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>02 — Read</span>
+    </div>
+    <h1><em>Read</em>.</h1>
+    <p class="lede">Texts, dictionaries, commentary. A working shelf, not a syllabus — what I return to, in roughly the order I'd send a stranger to them.</p>
+    <div class="meta">
+      <span>32 titles</span>
+      <span>Vyākaraṇa · Kāvya · Veda · Reference</span>
+      <span>★ — start here</span>
+    </div>
+  </section>
+
+  <!-- ===== Vyākaraṇa ===== -->
+  <section class="shelf">
+    <div class="shelf-head">
+      <span class="id">i.</span>
+      <h2><em>Vyākaraṇa</em> — grammar</h2>
+      <div class="rule"></div>
+      <span class="count">8 titles</span>
+    </div>
+    <div class="row-books">
+
+      <a class="book" href="#">
+        <div class="cover c-red">
+          <span class="dev">अष्टा॰</span>
+          <div>
+            <div class="ttl">Aṣṭā-<br/><em>dhyāyī</em></div>
+            <div class="by">Pāṇini · c. 4th BCE</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Aṣṭādhyāyī <em>★</em></div>
+          <div class="note">The compressed, terrifying root.</div>
+          <div class="where">Sharma · 6 vols</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-ink">
+          <span class="dev">महा॰</span>
+          <div>
+            <div class="ttl">Mahā-<br/><em>bhāṣya</em></div>
+            <div class="by">Patañjali · c. 2nd BCE</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Mahābhāṣya</div>
+          <div class="note">Patañjali in conversation with himself.</div>
+          <div class="where">MLBD reprint</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-saffron">
+          <span class="dev">सि॰कौ॰</span>
+          <div>
+            <div class="ttl"><em>Siddhānta</em><br/>Kaumudī</div>
+            <div class="by">Bhaṭṭojī Dīkṣita</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Siddhāntakaumudī <em>★</em></div>
+          <div class="note">The Aṣṭādhyāyī, rearranged for humans.</div>
+          <div class="where">Vasu · 2 vols</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-cream">
+          <span class="dev">लघु॰</span>
+          <div>
+            <div class="ttl"><em>Laghu</em><br/>Siddhānta-<br/>kaumudī</div>
+            <div class="by">Varadarāja</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Laghu Siddhāntakaumudī</div>
+          <div class="note">A short version that isn't short.</div>
+          <div class="where">Ballantyne ed.</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== Kāvya ===== -->
+  <section class="shelf">
+    <div class="shelf-head">
+      <span class="id">ii.</span>
+      <h2><em>Kāvya</em> — poetry &amp; drama</h2>
+      <div class="rule"></div>
+      <span class="count">12 titles</span>
+    </div>
+    <div class="row-books">
+
+      <a class="book" href="#">
+        <div class="cover c-night">
+          <span class="dev">मेघ॰</span>
+          <div>
+            <div class="ttl"><em>Megha-</em><br/>dūta</div>
+            <div class="by">Kālidāsa</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Meghadūta <em>★</em></div>
+          <div class="note">The whole language in 111 verses.</div>
+          <div class="where">Mallinātha comm.</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-rose">
+          <span class="dev">शाकु॰</span>
+          <div>
+            <div class="ttl">Abhi-<br/>jñāna<em>śākuntalam</em></div>
+            <div class="by">Kālidāsa</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Śākuntalam</div>
+          <div class="note">Read the third act aloud, twice.</div>
+          <div class="where">Cappeller ed.</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-moss">
+          <span class="dev">रघु॰</span>
+          <div>
+            <div class="ttl"><em>Raghu-</em><br/>vaṁśa</div>
+            <div class="by">Kālidāsa</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Raghuvaṁśa</div>
+          <div class="note">Genealogy as cinematography.</div>
+          <div class="where">Goodall &amp; Isaacson</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-gold">
+          <span class="dev">गीत॰</span>
+          <div>
+            <div class="ttl"><em>Gīta-</em><br/>govinda</div>
+            <div class="by">Jayadeva · 12th c.</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Gītagovinda</div>
+          <div class="note">Sound first. Sense, eventually.</div>
+          <div class="where">Miller trans.</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== Veda + Reference ===== -->
+  <section class="shelf">
+    <div class="shelf-head">
+      <span class="id">iii.</span>
+      <h2><em>Veda</em> &amp; reference</h2>
+      <div class="rule"></div>
+      <span class="count">12 titles</span>
+    </div>
+    <div class="row-books">
+
+      <a class="book" href="#">
+        <div class="cover c-ink">
+          <span class="dev">ऋग्॰</span>
+          <div>
+            <div class="ttl"><em>Ṛg-</em><br/>veda</div>
+            <div class="by">trad. unknown · early</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Ṛgveda <em>★</em></div>
+          <div class="note">The deep end. Begin with maṇḍala 10.</div>
+          <div class="where">Jamison &amp; Brereton</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-saffron">
+          <span class="dev">निरुक्त</span>
+          <div>
+            <div class="ttl"><em>Nirukta</em></div>
+            <div class="by">Yāska</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Nirukta</div>
+          <div class="note">Etymology as a moral art.</div>
+          <div class="where">Sarup ed.</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-cream">
+          <span class="dev">मो॰वि॰</span>
+          <div>
+            <div class="ttl"><em>Monier-</em><br/>Williams</div>
+            <div class="by">Oxford · 1899</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">A Sanskrit–English Dictionary <em>★</em></div>
+          <div class="note">Imperfect, indispensable.</div>
+          <div class="where">Cologne digital</div>
+        </div>
+      </a>
+
+      <a class="book" href="#">
+        <div class="cover c-moss">
+          <span class="dev">आप्टे</span>
+          <div>
+            <div class="ttl"><em>Āpṭe's</em><br/>Practical</div>
+            <div class="by">V. S. Apte · 1890</div>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Practical Sanskrit–English</div>
+          <div class="note">Idioms Monier-Williams missed.</div>
+          <div class="where">3 vols · revised</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">02 / 05 — Read · Garv Aggarwal</div>
+    </div>
+    <div class="next">next room: <a href="library-write.html">Write →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+</script>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Protect — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="protect"]{
+    background: #6f1313;
+    color: #F5EDD6;
+    --page-bg: #6f1313;
+    --page-fg: #F5EDD6;
+    --accent: var(--gold);
+    --accent-soft: rgba(196,146,42,.14);
+    --rule: rgba(245,237,214,.12);
+  }
+  body[data-page="protect"]::before{
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.04) 0 2px, transparent 2px 14px);
+    mix-blend-mode:normal; opacity:1;
+    background-size:auto;
+  }
+
+  body[data-page="protect"] .nav .brand,
+  body[data-page="protect"] .nav .links a{ color: #F5EDD6; }
+  body[data-page="protect"] .nav.is-scrolled{
+    background: rgba(74,12,12,.78);
+    border-bottom-color: rgba(245,237,214,.08);
+  }
+  body[data-page="protect"] .nav .brand .lotus{
+    filter: invert(.9) sepia(.4) hue-rotate(-10deg);
+  }
+
+  /* ===== manifesto hero ===== */
+  .manifesto{
+    padding:140px 36px 80px;
+    max-width:1280px; margin:0 auto;
+    position:relative; z-index:2;
+  }
+  .manifesto .crumb{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(245,237,214,.7);
+    margin-bottom:48px;
+  }
+  .manifesto .crumb a{ color:inherit; text-decoration:none; }
+  .manifesto .crumb a:hover{ color: var(--accent); }
+  .manifesto .crumb .dot{ width:5px; height:5px; border-radius:50%; background: var(--accent); }
+  .manifesto h1{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(72px, 12vw, 220px);
+    line-height:.88; letter-spacing:-.03em;
+    margin-bottom:14px;
+  }
+  .manifesto h1 em{ font-style:italic; color: var(--accent); font-weight:400; }
+
+  .manifesto .roman{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(18px, 1.5vw, 22px);
+    letter-spacing:.25em; text-transform:uppercase;
+    color: rgba(245,237,214,.6);
+    margin-bottom:64px;
+  }
+
+  .m-body{
+    display:grid; grid-template-columns: 1fr 1.5fr;
+    gap:80px;
+    margin-top:60px;
+  }
+  .m-body .left{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; line-height:1.5;
+    color: rgba(245,237,214,.7);
+  }
+  .m-body .left strong{
+    font-family:'JetBrains Mono', monospace; font-style:normal;
+    font-size:10px; letter-spacing:.24em; text-transform:uppercase;
+    display:block; margin-bottom:10px; color: var(--accent);
+    font-weight:400;
+  }
+  .m-body .right p{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(22px, 1.8vw, 30px);
+    line-height:1.4;
+    margin-bottom:24px;
+    max-width: 28ch;
+  }
+  .m-body .right p em{ font-style:italic; color: var(--accent); }
+  .m-body .right p:first-letter{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    float:left; font-size:88px; line-height:.78;
+    margin: 10px 14px 0 0; color: var(--accent);
+  }
+  .m-body .right .sig{
+    margin-top:36px;
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(245,237,214,.6);
+  }
+  .m-body .right .sig::before{
+    content:""; width:24px; height:1px; background: var(--accent);
+  }
+
+  /* ===== seven theses (the gist) ===== */
+  .theses{
+    max-width:1280px; margin:120px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .theses h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(40px, 4vw, 60px); line-height:1;
+    letter-spacing:-.02em; margin-bottom:8px;
+  }
+  .theses h2 em{ font-style:italic; color: var(--accent); }
+  .theses > p{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color: rgba(245,237,214,.65);
+    max-width:60ch; margin-bottom:48px;
+  }
+  .thesis-grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:0;
+    border-top:1px solid var(--rule);
+    border-left:1px solid var(--rule);
+  }
+  .thesis{
+    padding:36px 32px 32px;
+    border-right:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    display:flex; gap:24px; align-items:flex-start;
+  }
+  .thesis .n{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-weight:500; font-size:42px; line-height:.9;
+    color: var(--accent); letter-spacing:-.01em;
+    flex-shrink:0; min-width:48px;
+  }
+  .thesis h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:24px; line-height:1.2;
+    letter-spacing:-.005em;
+    margin-bottom:8px;
+  }
+  .thesis h3 em{ font-style:italic; }
+  .thesis p{
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px; line-height:1.5;
+    color: rgba(245,237,214,.78);
+  }
+
+  /* ===== campaign items / writings ===== */
+  .items{
+    max-width:1280px; margin:120px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .items-head{
+    display:flex; align-items:baseline; gap:18px;
+    margin-bottom:36px;
+  }
+  .items-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(40px, 4vw, 60px); line-height:1;
+    letter-spacing:-.02em;
+  }
+  .items-head h2 em{ font-style:italic; color: var(--accent); }
+  .items-head .rule{ flex:1; height:1px; background: currentColor; opacity:.18; }
+  .items-head .count{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(245,237,214,.55);
+  }
+
+  .item{
+    display:grid;
+    grid-template-columns: 80px 1fr 160px 40px;
+    gap:24px; align-items:baseline;
+    padding:22px 0;
+    border-bottom:1px solid var(--rule);
+    text-decoration:none; color:inherit;
+    transition: padding .2s ease, background .2s ease;
+  }
+  .item:first-child{ border-top:1px solid var(--rule); }
+  .item:hover{ padding-left:8px; background: rgba(245,237,214,.04); }
+  .item:hover .arr{ color: var(--accent); opacity:1; }
+  .item .when{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; opacity:.6;
+  }
+  .item .body{
+    font-family:'Cormorant Garamond', serif;
+  }
+  .item .body .ttl{
+    font-size:24px; line-height:1.2; letter-spacing:-.005em;
+  }
+  .item .body .ttl em{ font-style:italic; }
+  .item .body .sub{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:15px; color: rgba(245,237,214,.65);
+    margin-top:4px;
+  }
+  .item .kind{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase;
+    color: var(--accent); opacity:.85;
+    text-align:right;
+  }
+  .item .arr{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:24px; opacity:.5; text-align:right;
+  }
+
+  /* ===== call to action ===== */
+  .cta{
+    max-width:1280px; margin:140px auto 0;
+    padding:80px 36px;
+    border-top:1px solid var(--rule);
+    text-align:center;
+    position:relative; z-index:2;
+  }
+  .cta h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(56px, 7vw, 120px);
+    line-height:.95; letter-spacing:-.03em;
+    margin-bottom:14px;
+  }
+  .cta h2 em{ font-style:italic; color: var(--accent); }
+  .cta p{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:20px; color: rgba(245,237,214,.7);
+    max-width:48ch; margin: 0 auto 32px;
+  }
+  .cta .row{
+    display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+  }
+  .cta a{
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.24em; text-transform:uppercase;
+    padding:13px 24px;
+    color:inherit; text-decoration:none;
+    border:1px solid currentColor; border-radius:99px;
+    transition: all .2s;
+  }
+  .cta a:hover{ background: var(--accent); color: #6f1313; border-color: var(--accent); }
+  .cta a.primary{ background: var(--accent); color: #6f1313; border-color: var(--accent); }
+  .cta a.primary:hover{ background: transparent; color: var(--accent); }
+
+  body[data-page="protect"] .foot{
+    border-top-color: var(--rule);
+  }
+  body[data-page="protect"] .foot .meta{ color: rgba(245,237,214,.55); }
+  body[data-page="protect"] .foot .colophon{ filter: invert(.9) sepia(.4) hue-rotate(-20deg); opacity:.5; }
+  body[data-page="protect"] .foot .next a:hover{ color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width:880px){
+    .manifesto{ padding:120px 22px 60px; }
+    .m-body{ grid-template-columns:1fr; gap:32px; margin-top:32px; }
+    .theses, .items, .cta{ padding:0 22px; margin-top:80px; }
+    .cta{ padding:60px 22px; }
+    .thesis-grid{ grid-template-columns:1fr; }
+    .item{ grid-template-columns:1fr; gap:6px; }
+    .item .when, .item .kind, .item .arr{ display:none; }
+  }
+</style>
+</head>
+<body data-page="protect">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work">Work</a>
+    <a href="../index.html#resources" class="current">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===== manifesto ===== -->
+  <section class="manifesto">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#resources">The Library</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>05 — Protect</span>
+    </div>
+
+    <div class="roman">a manifesto · in seven theses</div>
+    <h1><em>Protect</em>.</h1>
+
+    <div class="m-body">
+      <div class="left">
+        <strong>What this is</strong>
+        Not a project. A position. The reason any of the other work exists at all — written down so I can hold myself to it, and so a stranger reading this site knows exactly what's at stake.
+      </div>
+      <div class="right">
+        <p>Sanskrit is not dying. It is being <em>forgotten</em> — which is worse, because forgetting is a thing we choose.</p>
+        <p>It survives only as long as someone — a child in a paṭhaśālā, a researcher with an editor open, a translator at three in the morning — decides it is <em>worth the trouble</em>.</p>
+        <p>This room is a list of those troubles, and the people taking them.</p>
+        <div class="sig">Garv Aggarwal · 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== theses ===== -->
+  <section class="theses">
+    <h2>Seven <em>theses</em>.</h2>
+    <p>The whole argument, compressed. Each is unpacked in a longer essay below.</p>
+
+    <div class="thesis-grid">
+      <div class="thesis">
+        <span class="n">i.</span>
+        <div>
+          <h3>Sanskrit is not a <em>religion</em></h3>
+          <p>Confusing it with one is the single biggest reason it gets refused, and the second biggest reason it gets misused.</p>
+        </div>
+      </div>
+
+      <div class="thesis">
+        <span class="n">ii.</span>
+        <div>
+          <h3>It is also not <em>dead</em></h3>
+          <p>A language with active speakers, active poets, and a working morphology is alive — even if we wish, for our own reasons, that it weren't.</p>
+        </div>
+      </div>
+
+      <div class="thesis">
+        <span class="n">iii.</span>
+        <div>
+          <h3>Memorisation is a <em>technology</em></h3>
+          <p>Of preservation, of attention, of community. Replacing it with search is not progress; it's a trade we should make with both eyes open.</p>
+        </div>
+      </div>
+
+      <div class="thesis">
+        <span class="n">iv.</span>
+        <div>
+          <h3>Translation is <em>essential</em>, and dangerous</h3>
+          <p>Necessary for circulation, fatal if mistaken for the thing itself. Translate often, never quietly.</p>
+        </div>
+      </div>
+
+      <div class="thesis">
+        <span class="n">v.</span>
+        <div>
+          <h3>The script is not the <em>language</em></h3>
+          <p>Sanskrit existed for centuries in many scripts and in none. Devanāgarī is a beautiful guest, not the landlord.</p>
+        </div>
+      </div>
+
+      <div class="thesis">
+        <span class="n">vi.</span>
+        <div>
+          <h3>Open the door <em>wider</em></h3>
+          <p>Free texts, free dictionaries, free pedagogy. Anything else is a gate built by people who confused tradition with property.</p>
+        </div>
+      </div>
+
+      <div class="thesis">
+        <span class="n">vii.</span>
+        <div>
+          <h3>Build with it, not <em>around</em> it</h3>
+          <p>Models, tools, education platforms — let the language sit at the centre of the design, not the bottom of a footnote.</p>
+        </div>
+      </div>
+
+      <div class="thesis" style="background: var(--accent-soft);">
+        <span class="n" style="color: var(--accent);">·</span>
+        <div>
+          <h3>Read the long version</h3>
+          <p>The full essay — about 4,200 words — is in the writings list below.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== writings & initiatives ===== -->
+  <section class="items">
+    <div class="items-head">
+      <h2>Writings &amp; <em>initiatives</em></h2>
+      <div class="rule"></div>
+      <span class="count">8 items</span>
+    </div>
+
+    <a class="item" href="#">
+      <span class="when">2025 · 10</span>
+      <div class="body">
+        <div class="ttl">The full manifesto, <em>unabridged</em></div>
+        <div class="sub">All seven theses, expanded · 4,200 words</div>
+      </div>
+      <span class="kind">Essay · long</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2025 · 08</span>
+      <div class="body">
+        <div class="ttl">Open the door <em>wider</em> — on free Sanskrit resources</div>
+        <div class="sub">A practical argument for open licensing of texts</div>
+      </div>
+      <span class="kind">Essay</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2025 · 06</span>
+      <div class="body">
+        <div class="ttl">Why <em>Sanskrit</em> belongs in CS curricula</div>
+        <div class="sub">A note for university administrators</div>
+      </div>
+      <span class="kind">Open letter</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2025 · 05</span>
+      <div class="body">
+        <div class="ttl">The <em>open-corpus</em> initiative</div>
+        <div class="sub">A volunteer project to make 50K verses freely tagged and searchable</div>
+      </div>
+      <span class="kind">Initiative</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2025 · 03</span>
+      <div class="body">
+        <div class="ttl">Against the <em>museum</em> view of Sanskrit</div>
+        <div class="sub">On why preservation must mean use, not display</div>
+      </div>
+      <span class="kind">Essay</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2024 · 11</span>
+      <div class="body">
+        <div class="ttl">Pay what you can — the <em>teaching pledge</em></div>
+        <div class="sub">A commitment that 50% of my teaching seats remain free or scaled</div>
+      </div>
+      <span class="kind">Pledge</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2024 · 09</span>
+      <div class="body">
+        <div class="ttl">On the politics of <em>correct</em></div>
+        <div class="sub">Pronunciation, gatekeeping, and the violence of the perfect</div>
+      </div>
+      <span class="kind">Essay</span>
+      <span class="arr">→</span>
+    </a>
+
+    <a class="item" href="#">
+      <span class="when">2024 · 04</span>
+      <div class="body">
+        <div class="ttl">A short letter to <em>language departments</em></div>
+        <div class="sub">On hiring poets, not just philologists</div>
+      </div>
+      <span class="kind">Open letter</span>
+      <span class="arr">→</span>
+    </a>
+  </section>
+
+  <!-- ===== cta ===== -->
+  <section class="cta">
+    <h2>Join the <em>work</em>.</h2>
+    <p>Read it, share it, argue with it — and if any of it makes sense, write to me. There's room for more hands.</p>
+    <div class="row">
+      <a class="primary" href="mailto:aggarwalgarv.4@gmail.com">Write to me ↗</a>
+      <a href="#">Read the manifesto in full ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">05 / 05 — Protect · Garv Aggarwal</div>
+    </div>
+    <div class="next">back to: <a href="../index.html#resources">The Library →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+</script>
+</body>
+</html>

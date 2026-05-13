@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Deep Learning &amp; NLP — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="nlp"]{
+    --accent: #1E4E8C;
+    --accent-soft: rgba(30,78,140,.10);
+  }
+
+  /* terminal-ish metric strip under hero */
+  .strip{
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    padding:22px 36px;
+    margin-bottom:96px;
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.16em; text-transform:uppercase;
+    position:relative; z-index:2;
+  }
+  .strip-inner{
+    max-width:1280px; margin:0 auto;
+    display:flex; gap:48px; flex-wrap:wrap; justify-content:space-between;
+    align-items:center;
+    color:var(--ink-soft);
+  }
+  .strip .num{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:400;
+    font-size:32px; color:var(--accent);
+    letter-spacing:-.01em;
+    margin-right:10px;
+  }
+  .strip .item{ display:flex; align-items:baseline; gap:6px; }
+
+  /* ====== PROJECTS ====== */
+  .projects{
+    max-width:1280px; margin:0 auto;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .projects > .label{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+    margin-bottom:24px;
+  }
+  .proj{
+    display:grid;
+    grid-template-columns: 220px 1fr 320px;
+    gap:40px;
+    padding:48px 0;
+    border-top:1px solid var(--rule);
+    align-items:start;
+  }
+  .proj:last-child{ border-bottom:1px solid var(--rule); }
+  .proj .side{
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .proj .side .id{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-weight:500; font-size:40px; line-height:1; color:var(--accent);
+  }
+  .proj .side .yr{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.6;
+  }
+  .proj .side .status{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase;
+    color:var(--accent);
+  }
+  .proj .side .status .d{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .proj .side .status.pub{ color:#1F8A5B; }
+  .proj .side .status.pub .d{ background:#1F8A5B; }
+  .proj .side .status.draft{ color:var(--ink-soft); }
+  .proj .side .status.draft .d{ background:var(--ink-soft); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
+
+  .proj .body h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 3.4vw, 52px);
+    line-height:1; letter-spacing:-.015em;
+    margin-bottom:14px;
+  }
+  .proj .body h3 em{ font-style:italic; color:var(--accent); font-weight:400; }
+  .proj .body .abstract{
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px; line-height:1.55;
+    color:var(--ink-soft);
+    max-width:62ch;
+    margin-bottom:20px;
+  }
+  .proj .body .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+  .proj .body .tags .pill{ font-size:9px; }
+  .proj .body .links{ display:flex; gap:18px; flex-wrap:wrap; }
+  .proj .body .links a{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase;
+    color:inherit; text-decoration:none;
+    border-bottom:1px solid currentColor; padding-bottom:2px;
+    opacity:.85;
+  }
+  .proj .body .links a:hover{ color:var(--accent); border-color:var(--accent); opacity:1; }
+
+  /* mini results panel */
+  .proj .panel{
+    border:1px solid var(--rule);
+    border-radius:4px;
+    padding:18px 18px 14px;
+    background: var(--accent-soft);
+  }
+  .proj .panel .h{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.6;
+    margin-bottom:12px;
+  }
+  .proj .panel .row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding:8px 0;
+    border-bottom:1px dashed rgba(0,0,0,.08);
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.04em;
+  }
+  .proj .panel .row:last-child{ border-bottom:none; }
+  .proj .panel .row .v{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-size:20px;
+    color:var(--accent);
+  }
+  .proj .panel.code{
+    background:#0c1a2e; color:#bfd5ee;
+    border-color:#0c1a2e;
+  }
+  .proj .panel.code .h{ color:#7da9d6; opacity:1; }
+  .proj .panel.code pre{
+    font-family:'JetBrains Mono', monospace; font-size:11px; line-height:1.55;
+    white-space:pre; overflow:auto;
+  }
+  .proj .panel.code .kw{ color:#ff8a7a; }
+  .proj .panel.code .str{ color:var(--activation); }
+  .proj .panel.code .com{ color:#5d7ea0; font-style:italic; }
+  .proj .panel.code .num{ color:#e8b76a; }
+
+  /* sub-section header */
+  .sub-head{
+    max-width:1280px; margin:140px auto 36px;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .sub-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(48px,5vw,80px); line-height:.95; letter-spacing:-.02em;
+  }
+  .sub-head h2 em{ font-style:italic; color:var(--accent); }
+  .sub-head p{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color:var(--ink-soft);
+    max-width:60ch; margin-top:14px;
+  }
+
+  /* writings list */
+  .writings{
+    max-width:1280px; margin:0 auto; padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .writing{
+    display:grid; grid-template-columns: 100px 1fr auto; gap:32px;
+    align-items:baseline;
+    padding:22px 0;
+    border-bottom:1px solid var(--rule);
+    font-family:'Cormorant Garamond', serif;
+    transition: padding .2s ease;
+  }
+  .writing:first-child{ border-top:1px solid var(--rule); }
+  .writing:hover{ padding-left:8px; }
+  .writing .yr{
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.16em; opacity:.55;
+  }
+  .writing .ttl{ font-size:22px; line-height:1.3; }
+  .writing .ttl em{ font-style:italic; }
+  .writing .where{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase; opacity:.65;
+    color:var(--accent);
+  }
+
+  @media (max-width:980px){
+    .proj{ grid-template-columns: 1fr; gap:20px; padding:36px 0; }
+    .proj .side{ flex-direction:row; align-items:baseline; gap:18px; }
+    .strip{ padding:18px 22px; }
+    .strip-inner{ gap:18px; }
+    .projects, .sub-head, .writings{ padding:0 22px !important; }
+    .writing{ grid-template-columns: 1fr; gap:6px; }
+  }
+</style>
+</head>
+<body data-page="nlp" data-layout="default">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work" class="current">Work</a>
+    <a href="../index.html#resources">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#work">The Work</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>02 — Deep Learning &amp; NLP</span>
+    </div>
+    <h1>Deep <em>Learning</em>.</h1>
+    <p class="lede">Sanskrit is, among other things, a 2,500-year-old experiment in formal grammar. The deep models we build today have a lot to learn from it — and a few things to give back.</p>
+  </section>
+
+  <!-- ===== metrics strip ===== -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="item"><span class="num">04</span><span>Active projects</span></div>
+      <div class="item"><span class="num">02</span><span>Pre-prints</span></div>
+      <div class="item"><span class="num">19K</span><span>tokens · v0 corpus</span></div>
+      <div class="item"><span class="num">PyTorch</span><span>· HF · sktime</span></div>
+    </div>
+  </div>
+
+  <!-- ===== Active projects ===== -->
+  <section class="projects" aria-labelledby="proj-h">
+    <div class="label" id="proj-h">→ Active research · last updated 2025-11</div>
+
+    <article class="proj">
+      <div class="side">
+        <div class="id">01</div>
+        <div class="yr">2024 — present</div>
+        <div class="status"><span class="d"></span>active</div>
+      </div>
+      <div class="body">
+        <h3>Pāṇini-aware <em>morphological parser</em></h3>
+        <p class="abstract">A transformer-based parser that doesn't just label morphemes — it predicts the Aṣṭādhyāyī rule chain that would have produced them. Sandhi-aware tokenisation, sūtra-conditioned attention, evaluated against the Digital Corpus of Sanskrit.</p>
+        <div class="tags">
+          <span class="pill">Morphology</span><span class="pill">Pāṇini</span><span class="pill">Transformers</span><span class="pill">PyTorch</span>
+        </div>
+        <div class="links">
+          <a href="#">paper ↗</a>
+          <a href="#">github ↗</a>
+          <a href="#">live demo ↗</a>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="h">↧ Selected metrics</div>
+        <div class="row"><span>Token-level F1</span><span class="v">0.913</span></div>
+        <div class="row"><span>Sūtra match @ k=5</span><span class="v">0.82</span></div>
+        <div class="row"><span>Params</span><span class="v">42M</span></div>
+        <div class="row"><span>Corpus size</span><span class="v">19K verses</span></div>
+      </aside>
+    </article>
+
+    <article class="proj">
+      <div class="side">
+        <div class="id">02</div>
+        <div class="yr">2024</div>
+        <div class="status pub"><span class="d"></span>pre-print</div>
+      </div>
+      <div class="body">
+        <h3>Sandhi as a <em>seq-to-seq</em> problem</h3>
+        <p class="abstract">A small character-level encoder–decoder learns the inverse of internal-sandhi: take a fused surface form and emit its underlying word boundary. Compared against rule-based baselines (saMsAdhanI, Sanskrit-Heritage) on five test sets.</p>
+        <div class="tags">
+          <span class="pill">Sandhi</span><span class="pill">seq2seq</span><span class="pill">char-level</span>
+        </div>
+        <div class="links">
+          <a href="#">pdf ↗</a>
+          <a href="#">code ↗</a>
+        </div>
+      </div>
+      <aside class="panel code" aria-label="code preview">
+        <div class="h">↧ inference.py</div>
+<pre><span class="com"># split a sandhi'd compound</span>
+<span class="kw">from</span> sandhi <span class="kw">import</span> split
+out = split(<span class="str">"tatraivakālaḥ"</span>)
+<span class="com"># → ['tatra', 'eva', 'kālaḥ']</span>
+<span class="com"># confidence: <span class="num">0.94</span></span></pre>
+      </aside>
+    </article>
+
+    <article class="proj">
+      <div class="side">
+        <div class="id">03</div>
+        <div class="yr">2025</div>
+        <div class="status"><span class="d"></span>active</div>
+      </div>
+      <div class="body">
+        <h3>Embedding the <em>śloka</em></h3>
+        <p class="abstract">A contrastive objective trains verse embeddings on the dual signal of meaning and metre. Same śloka in different metres lands close; same metre with different meaning stays apart. A small but useful primitive for stylometric retrieval.</p>
+        <div class="tags">
+          <span class="pill">Embeddings</span><span class="pill">Contrastive</span><span class="pill">Metre · chandas</span>
+        </div>
+        <div class="links">
+          <a href="#">notebook ↗</a>
+          <a href="#">retrieval demo ↗</a>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="h">↧ Retrieval · NDCG@10</div>
+        <div class="row"><span>Bag-of-syllables</span><span class="v">0.41</span></div>
+        <div class="row"><span>BERT-multi (zero-shot)</span><span class="v">0.53</span></div>
+        <div class="row"><span>Ours · meaning</span><span class="v">0.78</span></div>
+        <div class="row"><span>Ours · metre</span><span class="v">0.81</span></div>
+      </aside>
+    </article>
+
+    <article class="proj">
+      <div class="side">
+        <div class="id">04</div>
+        <div class="yr">2025</div>
+        <div class="status draft"><span class="d"></span>draft</div>
+      </div>
+      <div class="body">
+        <h3>Reading <em>commentary</em> at scale</h3>
+        <p class="abstract">An LLM-assisted reading layer that aligns root text and traditional commentary token-by-token. Less about translation; more about surfacing the inheritance — where Sāyaṇa lingered, where Yāska disagreed, what got cut. Closed alpha.</p>
+        <div class="tags">
+          <span class="pill">LLM</span><span class="pill">Alignment</span><span class="pill">Bhāṣya</span><span class="pill">UI</span>
+        </div>
+        <div class="links">
+          <a href="#">request access ↗</a>
+        </div>
+      </div>
+      <aside class="panel">
+        <div class="h">↧ Pipeline</div>
+        <div class="row"><span>OCR · printed devanāgarī</span><span class="v">→</span></div>
+        <div class="row"><span>Verse / commentary split</span><span class="v">→</span></div>
+        <div class="row"><span>Token alignment</span><span class="v">→</span></div>
+        <div class="row"><span>Reading UI</span><span class="v">live</span></div>
+      </aside>
+    </article>
+
+  </section>
+
+  <!-- ===== writings ===== -->
+  <div class="sub-head">
+    <h2>Selected <em>writings</em>.</h2>
+    <p>Working notes, blog posts, and pre-prints — short-form is where most of the thinking happens.</p>
+  </div>
+  <div class="writings">
+    <div class="writing">
+      <span class="yr">2025 · 04</span>
+      <span class="ttl"><em>What Pāṇini got right about transformers</em></span>
+      <span class="where">Note · 2,400 words</span>
+    </div>
+    <div class="writing">
+      <span class="yr">2024 · 11</span>
+      <span class="ttl">Sandhi, restated</span>
+      <span class="where">Pre-print · arxiv</span>
+    </div>
+    <div class="writing">
+      <span class="yr">2024 · 07</span>
+      <span class="ttl">Why Sanskrit is a benchmark</span>
+      <span class="where">Essay · long</span>
+    </div>
+    <div class="writing">
+      <span class="yr">2023 · 10</span>
+      <span class="ttl">A tiny corpus is enough, sometimes</span>
+      <span class="where">Note · 1,100 words</span>
+    </div>
+    <div class="writing">
+      <span class="yr">2023 · 03</span>
+      <span class="ttl"><em>Aṣṭādhyāyī</em> as a graph</span>
+      <span class="where">Talk · slides</span>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">02 / 04 — Deep Learning &amp; NLP · Garv Aggarwal</div>
+    </div>
+    <div class="next">next chapter: <a href="work-education.html">Sanskrit Education →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+</script>
+</body>
+</html>

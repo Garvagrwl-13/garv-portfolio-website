@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Garv Aggarwal — Sanskrit / Deep Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ====================================================================
+   GARV AGGARWAL — PORTFOLIO
+   palette: manuscript cream  +  deep sacred red  +  aged gold
+            night: deep space + neural blue + activation green
+   type:    Cormorant Garamond (display) · Inter (body) · JetBrains Mono (meta)
+   ==================================================================== */
+
+:root{
+  --paper:#F5EDD6;
+  --paper-2:#EFE5C5;
+  --ink:#1A0A00;
+  --ink-soft:#3a2c1c;
+  --red:#8B1A1A;
+  --red-deep:#6f1313;
+  --gold:#C4922A;
+  --night:#050A14;
+  --neural:#0A2540;
+  --neural-2:#11335c;
+  --activation:#00FFB2;
+  --rule: rgba(26,10,0,.18);
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{ background:var(--paper); color:var(--ink); }
+body{
+  font-family:'Inter', system-ui, sans-serif;
+  font-weight:400;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+/* paper grain */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:1;
+  background-image:
+    radial-gradient(rgba(26,10,0,.04) 1px, transparent 1.4px);
+  background-size: 5px 5px;
+  mix-blend-mode:multiply;
+  opacity:.7;
+}
+
+/* ===== type ===== */
+.display{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  letter-spacing:-.02em;
+  line-height:.92;
+}
+.serif{ font-family:'Cormorant Garamond', serif; font-weight:400; }
+.mono{
+  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+}
+.italic-serif{ font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
+
+/* ===== NAV ============================================================ */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 36px;
+  transition: background .35s ease, backdrop-filter .35s ease, border-color .35s ease, color .35s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.is-scrolled{
+  background:rgba(245,237,214,.78);
+  backdrop-filter: blur(10px) saturate(1.1);
+  -webkit-backdrop-filter: blur(10px) saturate(1.1);
+  border-bottom-color: var(--rule);
+}
+.nav .brand{
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none; color:inherit; white-space:nowrap;
+}
+.nav .brand .lotus{
+  width:22px; height:22px;
+  background:url("assets/lotus.png") center/contain no-repeat;
+  filter:drop-shadow(0 0 0 transparent);
+}
+.nav .brand .name{
+  font-family:'Cormorant Garamond', serif;
+  font-size:18px; letter-spacing:.01em; font-weight:500;
+}
+.nav .links{ display:flex; gap:28px; }
+.nav .links a{
+  font-family:'Inter', sans-serif; font-size:13px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase;
+  color:inherit; text-decoration:none; opacity:.78;
+  transition:opacity .2s;
+}
+.nav .links a:hover{ opacity:1; }
+
+/* ===== HERO =========================================================== */
+.hero-wrap{ position:relative; }
+
+/* layer A: organic cream layer */
+.layer-cream{
+  position:absolute; inset:0;
+  background:var(--paper);
+  overflow:hidden;
+}
+.layer-cream::after{
+  content:""; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(196,146,42,.08), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(139,26,26,.06), transparent 55%);
+  pointer-events:none;
+}
+
+/* layer B: night layer */
+.layer-night{
+  position:absolute; inset:0;
+  background:radial-gradient(ellipse at 50% 50%, var(--neural) 0%, var(--night) 70%);
+  overflow:hidden;
+}
+.layer-night .grid{
+  position:absolute; inset:-20px;
+  background-image:
+    linear-gradient(rgba(0,255,178,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,178,.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+.layer-night canvas{
+  position:absolute; inset:0; width:100%; height:100%;
+}
+
+/* hero stage */
+.hero-stage{
+  position:relative;
+  width:100%; height:100vh;
+  min-height:680px;
+  display:grid; place-items:center;
+  overflow:hidden;
+}
+
+/* ===== TWO-LOTUS LAYOUT =====
+   Back lotus: peeks from behind the 't' of "Sanskrit" (z < text)
+   Front lotus: rests in front of the 'S' (z > text)
+   Each lotus is a stacked pair (pink + wire) that crossfades by --scroll-p
+   ============================================================== */
+.lotus{
+  position:absolute;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:contain;
+  pointer-events:none;
+  transition: filter .4s ease;
+  will-change: transform, opacity;
+}
+
+/* back lotus: right side, behind 't' */
+.lotus.back{
+  right: 4%;
+  top: 50%;
+  width: clamp(280px, 42vh, 560px);
+  aspect-ratio: 1.35 / 1;
+  transform: translateY(-30%) rotate(7deg);
+  animation: bob-back 11s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* front lotus: left side, in front of 'S' */
+.lotus.front{
+  left: 4%;
+  top: 50%;
+  width: clamp(320px, 48vh, 620px);
+  aspect-ratio: 1.35 / 1;
+  transform: translateY(-32%) rotate(-9deg);
+  animation: bob-front 9s ease-in-out infinite;
+  z-index: 5;
+}
+
+/* pink (day) vs wireframe (night) variants */
+.lotus.pink{ background-image: url("assets/lotus-2-pink.png"); }
+.lotus.wire{
+  background-image: url("assets/lotus-2-wire.png");
+  filter: drop-shadow(0 0 10px rgba(0,255,178,.45));
+  opacity:0;
+}
+
+@keyframes bob-front{
+  0%,100%{ transform: translateY(-32%) rotate(-9deg); }
+  50%   { transform: translateY(calc(-32% - 10px)) rotate(-8deg); }
+}
+@keyframes bob-back{
+  0%,100%{ transform: translateY(-30%) rotate(7deg); }
+  50%   { transform: translateY(calc(-30% - 8px)) rotate(6.2deg); }
+}
+
+.lotus-stack{ display:none; }
+
+/* hero text */
+.hero-text{
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  z-index:3;
+  pointer-events:none;
+  text-align:center;
+}
+.hero-word{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-size: clamp(96px, 16vw, 280px);
+  line-height:.9;
+  letter-spacing:-.025em;
+  color:var(--ink);
+  mix-blend-mode:multiply;
+  position:relative;
+}
+.hero-sub{
+  position:absolute; bottom:14vh; left:0; right:0;
+  font-family:'Cormorant Garamond', serif;
+  font-style:italic; font-weight:400;
+  font-size: clamp(18px, 1.5vw, 22px);
+  color:var(--ink-soft);
+  letter-spacing:.02em;
+  z-index:3;
+  text-align:center;
+}
+
+.hero-meta-tl{
+  position:absolute; top:96px; left:36px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ink-soft);
+  z-index:4;
+}
+.hero-meta-tr{
+  position:absolute; top:96px; right:36px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ink-soft);
+  z-index:4;
+  text-align:right;
+}
+.hero-scrollhint{
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ink-soft);
+  z-index:4;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.hero-scrollhint .line{ width:1px; height:36px; background:currentColor; opacity:.6; animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse{
+  0%,100%{ transform:scaleY(1); transform-origin:top; opacity:.6; }
+  50%   { transform:scaleY(.4); opacity:1; }
+}
+
+/* ============================================================
+   SCROLL VARIANT — tie scroll fraction to --scroll-p, drive glitch
+   ============================================================ */
+.hero-wrap{ height:220vh; }
+.sticky-stage{
+  position:sticky; top:0;
+  width:100%; height:100vh;
+}
+.layer-night{
+  opacity: var(--scroll-p, 0);
+  transition: none;
+}
+.layer-cream .organic{
+  opacity: calc(1 - var(--scroll-p, 0));
+}
+.layer-night .lotus-stack .wire{
+  opacity: var(--scroll-p, 0);
+}
+.hero-word{
+  color: color-mix(in oklab, var(--ink) calc((1 - var(--scroll-p, 0)) * 100%), #e9e2c8);
+  mix-blend-mode: var(--word-blend, multiply);
+}
+.hero-sub{
+  opacity: calc(1 - var(--scroll-p, 0) * 1.4);
+}
+
+/* glitch effect */
+.glitch{
+  position:relative;
+  display:inline-block;
+}
+.glitch::before, .glitch::after{
+  content: attr(data-text);
+  position:absolute; inset:0;
+  pointer-events:none;
+  opacity:0;
+  mix-blend-mode:screen;
+}
+.glitch.is-glitching::before{
+  color:#ff3b3b; transform:translate(-3px,1px);
+  opacity:.85;
+  animation: glitchA .14s steps(2) infinite;
+}
+.glitch.is-glitching::after{
+  color:var(--activation); transform:translate(3px,-1px);
+  opacity:.85;
+  animation: glitchB .12s steps(2) infinite;
+}
+@keyframes glitchA{
+  0%,100%{ clip-path: inset(8% 0 70% 0); }
+  50%   { clip-path: inset(45% 0 30% 0); }
+}
+@keyframes glitchB{
+  0%,100%{ clip-path: inset(60% 0 12% 0); }
+  50%   { clip-path: inset(20% 0 55% 0); }
+}
+
+/* ====================================================================
+   SECTION SCAFFOLD shared
+   ==================================================================== */
+section.block{
+  position:relative; z-index:2;
+}
+.section-mark{
+  display:flex; align-items:center; gap:14px;
+  padding:0 36px;
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.24em; text-transform:uppercase;
+  opacity:.6;
+}
+.section-mark .rule{ flex:1; height:1px; background:currentColor; opacity:.4; }
+
+/* ===== ABOUT ========================================================= */
+.about{
+  background:var(--red);
+  color:#F5EDD6;
+  padding:140px 36px 160px;
+  position:relative;
+  overflow:hidden;
+}
+.about::before{
+  content:""; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(196,146,42,.18), transparent 55%),
+    radial-gradient(circle at 10% 90%, rgba(0,0,0,.25), transparent 55%);
+  pointer-events:none;
+}
+.about .inner{
+  position:relative;
+  max-width:1240px; margin:0 auto;
+  display:grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap:80px;
+  align-items:center;
+}
+.about .ornament{
+  position:relative;
+  aspect-ratio: 4 / 5;
+  display:grid; place-items:center;
+}
+.about .ornament .lotus{
+  position:absolute; inset:0;
+  background:url("assets/lotus.png") center/contain no-repeat;
+  mix-blend-mode:screen;
+  opacity:.85;
+  animation: bob 9s ease-in-out infinite;
+}
+@keyframes bob{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
+}
+.about .ornament .ring{
+  position:absolute; inset:6%;
+  border:1px solid rgba(245,237,214,.25); border-radius:50%;
+}
+.about .ornament .ring.b{ inset:14%; border-color:rgba(196,146,42,.45); }
+.about .ornament .ring.c{ inset:22%; border-color:rgba(245,237,214,.15); }
+.about .ornament .vlabel{
+  position:absolute; left:-8px; top:50%;
+  transform:rotate(-90deg) translateX(50%);
+  transform-origin: top left;
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.3em; text-transform:uppercase;
+  opacity:.6;
+}
+.about h2{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-size:clamp(56px, 6vw, 104px);
+  line-height:.96;
+  letter-spacing:-.02em;
+  margin-bottom:32px;
+}
+.about h2 em{ font-style:italic; color:var(--gold); font-weight:400; }
+.about p{
+  font-size:clamp(17px,1.3vw,20px); line-height:1.6;
+  max-width:54ch; opacity:.92;
+  margin-bottom:20px;
+  font-family:'Cormorant Garamond', serif; font-weight:400;
+}
+.about p .accent{ color:var(--gold); font-style:italic; }
+.about .signature{
+  margin-top:32px;
+  display:flex; align-items:center; gap:18px;
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.24em; text-transform:uppercase;
+  opacity:.75;
+}
+.about .signature .dot{ width:6px; height:6px; background:var(--gold); border-radius:50%; }
+
+/* ===== THE WORK ====================================================== */
+.work{
+  background:var(--paper);
+  color:var(--ink);
+  padding:120px 0 40px;
+}
+.work .head{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding:0 36px 48px;
+  max-width:1240px; margin:0 auto;
+  gap:32px;
+}
+.work .head h2{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-size:clamp(56px, 6vw, 96px);
+  line-height:.95; letter-spacing:-.02em;
+}
+.work .head h2 em{ font-style:italic; color:var(--red); }
+.work .head .lede{
+  max-width:360px;
+  font-family:'Cormorant Garamond', serif; font-size:18px; line-height:1.55;
+  color:var(--ink-soft);
+}
+.chapters{
+  max-width:1240px; margin:0 auto;
+  border-top:1px solid var(--rule);
+}
+.chapter{
+  position:relative;
+  display:grid;
+  grid-template-columns: 88px 1fr auto;
+  gap:32px;
+  align-items:center;
+  padding:36px 36px;
+  border-bottom:1px solid var(--rule);
+  cursor:pointer;
+  transition: background .35s ease, color .35s ease, padding .35s ease;
+  overflow:hidden;
+  text-decoration:none;
+  color:inherit;
+}
+.chapter:hover{ background:var(--ink); color:var(--paper); padding-top:48px; padding-bottom:48px; }
+.chapter:hover .arrow{ color:var(--gold); transform: translateX(8px); }
+.chapter:hover .desc{ opacity:1; max-height:80px; margin-top:10px; }
+.chapter:hover .tags{ opacity:.9; }
+.chapter:hover .num{ color:var(--gold); }
+
+.chapter .num{
+  font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:500;
+  font-size:44px; color:var(--ink-soft);
+  transition: color .3s;
+}
+.chapter .ttl{
+  font-family:'Cormorant Garamond', serif; font-weight:500;
+  font-size:clamp(36px, 4vw, 60px); line-height:1;
+  letter-spacing:-.01em;
+}
+.chapter .desc{
+  opacity:0; max-height:0; margin-top:0;
+  font-family:'Cormorant Garamond', serif; font-size:17px; line-height:1.5;
+  max-width:54ch;
+  transition: opacity .35s ease, max-height .35s ease, margin .35s ease;
+  overflow:hidden;
+}
+.chapter .tags{
+  margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;
+  opacity:.55; transition: opacity .3s;
+}
+.chapter .tags span{
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.18em; text-transform:uppercase;
+  padding:4px 10px; border:1px solid currentColor; border-radius:99px;
+}
+.chapter .arrow{
+  font-family:'Cormorant Garamond', serif; font-style:italic;
+  font-size:36px; color:var(--ink-soft);
+  transition: transform .3s, color .3s;
+}
+.chapter .status{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'JetBrains Mono', monospace; font-size:9px;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:var(--red);
+  margin-left:14px; vertical-align:middle;
+}
+.chapter .status::before{
+  content:""; width:6px; height:6px; border-radius:50%; background:var(--red);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+
+/* ===== LIBRARY (5 horizontal flip cards) ============================ */
+.library{
+  background:var(--paper);
+  padding:80px 0 0;
+}
+.library .head{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding:0 36px 36px;
+  max-width:1240px; margin:0 auto;
+  gap:32px;
+}
+.library .head h2{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-size:clamp(48px, 5vw, 80px);
+  line-height:.95; letter-spacing:-.02em;
+}
+.library .head h2 em{ font-style:italic; color:var(--gold); }
+.library .head .lede{
+  max-width:340px;
+  font-family:'Cormorant Garamond', serif; font-size:17px; line-height:1.55;
+  color:var(--ink-soft);
+}
+.lib-grid{
+  display:grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+.lib-card{
+  position:relative;
+  height:100vh;
+  min-height:640px;
+  perspective:1400px;
+  border-right:1px solid var(--rule);
+}
+.lib-card:last-child{ border-right:none; }
+.lib-card .flipper{
+  position:absolute; inset:0;
+  transform-style:preserve-3d;
+  transition: transform .65s cubic-bezier(.7,.05,.2,1);
+}
+.lib-card:hover .flipper{ transform:rotateY(180deg); }
+.lib-card .face{
+  position:absolute; inset:0;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  display:flex; flex-direction:column; align-items:center;
+  padding:48px 24px 40px;
+}
+.lib-card .face.back{
+  transform:rotateY(180deg);
+  justify-content:center; gap:24px;
+}
+.lib-card .num{
+  align-self:flex-start;
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.24em; opacity:.55;
+}
+.lib-card .gfx{
+  flex:1; width:100%; display:grid; place-items:center;
+  margin:24px 0;
+}
+.lib-card .gfx svg{ width:70%; max-width:200px; height:auto; overflow:visible; }
+.lib-card .ttl{
+  font-family:'Cormorant Garamond', serif; font-weight:500;
+  font-size:64px; line-height:1; letter-spacing:-.01em;
+  text-align:center;
+}
+.lib-card .ttl em{ font-style:italic; font-weight:400; }
+.lib-card .hint{
+  margin-top:14px;
+  font-family:'JetBrains Mono', monospace; font-size:9px;
+  letter-spacing:.3em; text-transform:uppercase;
+  opacity:.5;
+}
+.lib-card .btn{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:12px 22px;
+  font-family:'JetBrains Mono', monospace; font-size:11px;
+  letter-spacing:.2em; text-transform:uppercase;
+  border:1px solid currentColor; border-radius:99px;
+  color:inherit; text-decoration:none;
+  transition: background .25s, color .25s;
+}
+.lib-card .btn:hover{ background:currentColor; }
+.lib-card .btn:hover .lbl{ color:var(--bgcol, var(--paper)); mix-blend-mode:difference; }
+.lib-card .back-cap{
+  font-family:'Cormorant Garamond', serif; font-style:italic;
+  font-size:18px; text-align:center; max-width:22ch;
+  opacity:.85; line-height:1.4;
+}
+.lib-card .back-ttl{
+  font-family:'Cormorant Garamond', serif; font-weight:500;
+  font-size:38px; line-height:1;
+}
+
+/* per-card palettes */
+.lib-card.listen  .face{ background:#0D1018; color:#e9e2c8; --bgcol:#0D1018; }
+.lib-card.read    .face{ background:var(--paper-2); color:var(--ink); --bgcol:var(--paper-2); }
+.lib-card.write   .face{
+  background:#F8F1DC; color:var(--ink); --bgcol:#F8F1DC;
+  background-image:
+    linear-gradient(rgba(26,10,0,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,10,0,.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.lib-card.speak   .face{ background:#1A0F08; color:#F5EDD6; --bgcol:#1A0F08; }
+.lib-card.protect .face{
+  background:var(--red-deep); color:#F5EDD6; --bgcol:var(--red-deep);
+  background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 2px, transparent 2px 12px);
+}
+
+/* ===== CONNECT ======================================================= */
+.connect{
+  background:var(--paper);
+  padding:160px 36px 80px;
+  text-align:center;
+  position:relative;
+}
+.connect h2{
+  font-family:'Cormorant Garamond', serif;
+  font-weight:500;
+  font-size:clamp(96px, 14vw, 220px);
+  line-height:.85; letter-spacing:-.03em;
+  margin-bottom:8px;
+}
+.connect h2 em{ font-style:italic; color:var(--red); font-weight:400; }
+.connect .kicker{
+  font-family:'JetBrains Mono', monospace; font-size:11px;
+  letter-spacing:.32em; text-transform:uppercase;
+  color:var(--ink-soft);
+  margin-bottom:24px;
+}
+.connect .email{
+  display:inline-block;
+  font-family:'Cormorant Garamond', serif; font-weight:500;
+  font-size:clamp(28px, 3vw, 42px);
+  color:var(--ink); text-decoration:none;
+  margin:32px 0 12px;
+  position:relative;
+  padding-bottom:6px;
+}
+.connect .email::after{
+  content:""; position:absolute; left:0; right:0; bottom:0;
+  height:1px; background:var(--ink);
+  transform-origin:left;
+  transition: transform .4s ease;
+}
+.connect .email:hover::after{ transform:scaleX(.5); }
+.connect .ig{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Cormorant Garamond', serif; font-style:italic;
+  font-size:20px; color:var(--ink-soft); text-decoration:none;
+  margin-top:6px;
+}
+.connect .ig::before{
+  content:""; width:14px; height:14px;
+  border:1.2px solid currentColor; border-radius:4px;
+  position:relative;
+}
+.connect .closing{
+  max-width:580px; margin:64px auto 56px;
+  font-family:'Cormorant Garamond', serif; font-style:italic;
+  font-size:20px; line-height:1.5; color:var(--ink-soft);
+}
+.connect .colophon{
+  width:40px; height:40px; margin:48px auto 18px;
+  background:url("assets/lotus.png") center/contain no-repeat;
+  filter: grayscale(.4) contrast(.95);
+  opacity:.55;
+}
+.connect .colo-meta{
+  font-family:'JetBrains Mono', monospace; font-size:10px;
+  letter-spacing:.3em; text-transform:uppercase;
+  color:var(--ink-soft); opacity:.55;
+}
+
+/* ===== mobile ========================================================= */
+@media (max-width:880px){
+  .nav{ padding:14px 18px; }
+  .nav .links{ gap:18px; }
+  .hero-meta-tl, .hero-meta-tr{ display:none; }
+  .about{ padding:80px 22px 100px; }
+  .about .inner{ grid-template-columns:1fr; gap:36px; }
+  .about .ornament{ max-width:300px; margin:0 auto; }
+  .work{ padding:80px 0 20px; }
+  .work .head, .library .head{ flex-direction:column; align-items:flex-start; padding:0 22px 28px; }
+  .chapter{ grid-template-columns: 56px 1fr 28px; gap:18px; padding:24px 22px; }
+  .lib-grid{ grid-template-columns: 1fr; }
+  .lib-card{ border-right:none; border-bottom:1px solid var(--rule); height:auto; min-height:380px; }
+  .lib-card:last-child{ border-bottom:none; }
+  .connect{ padding:80px 22px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- =========================== NAV ============================ -->
+<header class="nav" id="nav">
+  <a class="brand" href="#" aria-label="Garv Aggarwal — home">
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#resources">Resources</a>
+    <a href="#connect">Connect</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- =========================== HERO =========================== -->
+  <section class="hero-wrap" id="hero" aria-label="Sanskrit, the language of the universe">
+
+    <div class="sticky-stage">
+
+      <!-- cream layer -->
+      <div class="layer-cream">
+        <div class="hero-stage">
+          <!-- front lotus (pink, day) — in front of text -->
+          <div class="lotus front pink" aria-hidden="true"></div>
+          <!-- back lotus (pink, day) — behind text -->
+          <div class="lotus back pink" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- night layer (fades in on scroll) -->
+      <div class="layer-night" id="night-layer" aria-hidden="true">
+        <div class="grid"></div>
+        <canvas id="neuralCanvas"></canvas>
+        <div class="hero-stage">
+          <!-- front lotus (wire, night) -->
+          <div class="lotus front wire" id="lotus-front-wire" aria-hidden="true"></div>
+          <!-- back lotus (wire, night) -->
+          <div class="lotus back wire" id="lotus-back-wire" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- text overlay -->
+      <div class="hero-text">
+        <div class="hero-word display glitch" id="hero-word" data-text="Sanskrit">Sanskrit</div>
+      </div>
+      <div class="hero-sub italic-serif" id="hero-sub">the language of the universe</div>
+
+      <!-- meta corners -->
+      <div class="hero-meta-tl">
+        Sanskrit · Saṁskṛta<br/>
+        <span style="opacity:.6">est. — present.</span>
+      </div>
+      <div class="hero-meta-tr">
+        Tradition × <span style="color:var(--red)">Innovation</span><br/>
+        <span style="opacity:.6">a portfolio of practices</span>
+      </div>
+
+      <!-- scroll hint -->
+      <div class="hero-scrollhint" id="scrollhint">
+        <span>scroll</span>
+        <span class="line"></span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================== ABOUT ============================ -->
+  <section class="block about" id="about" aria-labelledby="about-h">
+    <div class="inner">
+      <div class="ornament" aria-hidden="true">
+        <div class="ring"></div>
+        <div class="ring b"></div>
+        <div class="ring c"></div>
+        <div class="lotus"></div>
+        <div class="vlabel">vivakṣu · lotus of speech</div>
+      </div>
+      <div>
+        <div class="section-mark" style="padding:0 0 14px;">
+          <span>01</span><span>About</span><span class="rule"></span>
+        </div>
+        <h2 id="about-h">Who I <em>am</em>.</h2>
+        <p>I'm Garv. I work where <span class="accent">Sanskrit</span> meets <span class="accent">deep learning</span> — teaching the language as a living system, and using modern models to understand its inner structure.</p>
+        <p>My belief is simple: Sanskrit isn't a relic to be archived. It's an instrument, beautifully engineered, still in tune. The work on this site is one person's attempt to keep it that way — in print, on camera, in code.</p>
+        <div class="signature">
+          <span class="dot"></span>
+          <span>Garv Aggarwal — New Delhi</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== WORK ============================= -->
+  <section class="block work" id="work" aria-labelledby="work-h">
+    <div class="head">
+      <h2 id="work-h">The <em>Work</em>.</h2>
+      <p class="lede">Four practices. They overlap more than the labels suggest — each one is a different angle on the same question.</p>
+    </div>
+    <div class="chapters">
+
+      <a class="chapter" href="pages/work-short-films.html">
+        <div class="num">01</div>
+        <div>
+          <div class="ttl">Short Films</div>
+          <div class="desc">Scripting, acting, editing in Premiere Pro and DaVinci Resolve. Stories built around language as character.</div>
+          <div class="tags"><span>Direction</span><span>Script</span><span>Edit</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <a class="chapter" href="pages/work-nlp.html">
+        <div class="num">02</div>
+        <div>
+          <div class="ttl">Deep Learning &amp; NLP</div>
+          <div class="desc">Sanskrit language models, morphological parsing, embedding the deep structure of an ancient grammar into modern architectures.</div>
+          <div class="tags"><span>Research</span><span>NLP</span><span>Sanskrit</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <a class="chapter" href="pages/work-education.html">
+        <div class="num">03</div>
+        <div>
+          <div class="ttl">Sanskrit Education</div>
+          <div class="desc">A YouTube podcast, ongoing teaching, and a growing shelf of public resources — so the door stays open for the next curious person.</div>
+          <div class="tags"><span>Podcast</span><span>Teaching</span><span>Public</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+      <a class="chapter" href="pages/work-ai-platform.html">
+        <div class="num">04</div>
+        <div>
+          <div class="ttl">AI Platform <span class="status">in build</span></div>
+          <div class="desc">An AI-enabled Sanskrit learning platform — adaptive lessons, model-assisted reading, dictionaries that understand context. Currently in build.</div>
+          <div class="tags"><span>Product</span><span>AI</span><span>Education</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- =========================== LIBRARY ========================== -->
+  <section class="block library" id="resources" aria-labelledby="lib-h">
+    <div class="head">
+      <h2 id="lib-h">The <em>Library</em>.</h2>
+      <p class="lede">Five practices for keeping a language alive. Hover any card to open it.</p>
+    </div>
+    <div class="lib-grid">
+
+      <div class="lib-card listen">
+        <div class="flipper">
+          <div class="face front">
+            <div class="num">01</div>
+            <div class="gfx" aria-label="airpods">
+              <svg viewBox="0 0 120 80" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="32" cy="22" rx="14" ry="10"/>
+                <path d="M28 32 L28 60 Q28 66 34 66 L36 66 Q42 66 42 60 L42 38"/>
+                <ellipse cx="88" cy="22" rx="14" ry="10"/>
+                <path d="M84 32 L84 60 Q84 66 90 66 L92 66 Q98 66 98 60 L98 38"/>
+                <circle cx="36" cy="58" r="1.4" fill="currentColor"/>
+                <circle cx="92" cy="58" r="1.4" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="ttl">Listen</div>
+            <div class="hint">hover →</div>
+          </div>
+          <div class="face back">
+            <div class="back-ttl">Listen</div>
+            <div class="back-cap">Recitations, conversations, the language as sound first.</div>
+            <a class="btn" href="pages/library-listen.html"><span class="lbl">Open podcast ↗</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-card read">
+        <div class="flipper">
+          <div class="face front">
+            <div class="num">02</div>
+            <div class="gfx" aria-label="open book">
+              <svg viewBox="0 0 140 90" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M70 18 C 60 14, 30 12, 14 16 L 14 74 C 30 70, 60 72, 70 76"/>
+                <path d="M70 18 C 80 14, 110 12, 126 16 L 126 74 C 110 70, 80 72, 70 76"/>
+                <path d="M70 18 L 70 76"/>
+                <path d="M24 28 L 60 28 M24 38 L 56 38 M24 48 L 60 48"/>
+                <path d="M80 28 L 116 28 M80 38 L 112 38 M80 48 L 116 48"/>
+              </svg>
+            </div>
+            <div class="ttl">Read</div>
+            <div class="hint">hover →</div>
+          </div>
+          <div class="face back">
+            <div class="back-ttl">Read</div>
+            <div class="back-cap">Texts, dictionaries, commentary. The slow inheritance.</div>
+            <a class="btn" href="pages/library-read.html"><span class="lbl">Open library ↗</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-card write">
+        <div class="flipper">
+          <div class="face front">
+            <div class="num">03</div>
+            <div class="gfx" aria-label="mechanical pencil">
+              <svg viewBox="0 0 160 50" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 22 L 10 28 L 22 28 L 22 22 Z"/>
+                <path d="M22 20 L 100 20 L 100 30 L 22 30 Z"/>
+                <path d="M100 20 L 116 20 L 116 30 L 100 30"/>
+                <path d="M116 22 L 130 22 L 134 25 L 130 28 L 116 28"/>
+                <path d="M134 25 L 148 25"/>
+                <path d="M44 20 L 44 30 M52 20 L 52 30 M60 20 L 60 30"/>
+                <path d="M82 18 L 82 32"/>
+              </svg>
+            </div>
+            <div class="ttl">Write</div>
+            <div class="hint">hover →</div>
+          </div>
+          <div class="face back">
+            <div class="back-ttl">Write</div>
+            <div class="back-cap">Essays, translations, notes — thought against the page.</div>
+            <a class="btn" href="pages/library-write.html"><span class="lbl">Open notebook ↗</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-card speak">
+        <div class="flipper">
+          <div class="face front">
+            <div class="num">04</div>
+            <div class="gfx" aria-label="phone camera">
+              <svg viewBox="0 0 80 130" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="10" y="8" width="60" height="114" rx="10" ry="10"/>
+                <rect x="22" y="22" width="36" height="34" rx="6" ry="6"/>
+                <circle cx="32" cy="38" r="6"/>
+                <circle cx="32" cy="38" r="2.4" fill="currentColor"/>
+                <circle cx="48" cy="32" r="2.4"/>
+                <circle cx="48" cy="44" r="2.4"/>
+                <path d="M28 110 L 52 110"/>
+              </svg>
+            </div>
+            <div class="ttl">Speak</div>
+            <div class="hint">hover →</div>
+          </div>
+          <div class="face back">
+            <div class="back-ttl">Speak</div>
+            <div class="back-cap">Recordings and recitations — the mouth as instrument.</div>
+            <a class="btn" href="pages/library-speak.html"><span class="lbl">Open reels ↗</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="lib-card protect">
+        <div class="flipper">
+          <div class="face front">
+            <div class="num">05</div>
+            <div class="gfx" aria-label="sword">
+              <svg viewBox="0 0 60 160" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M30 8 L 24 90 L 30 100 L 36 90 Z"/>
+                <path d="M30 8 L 30 100"/>
+                <path d="M10 102 L 50 102"/>
+                <path d="M10 102 L 10 108 L 50 108 L 50 102"/>
+                <path d="M30 108 L 30 138"/>
+                <path d="M22 138 L 38 138 L 38 150 L 22 150 Z"/>
+                <circle cx="30" cy="154" r="3.5"/>
+              </svg>
+            </div>
+            <div class="ttl">Protect</div>
+            <div class="hint">hover →</div>
+          </div>
+          <div class="face back">
+            <div class="back-ttl">Protect</div>
+            <div class="back-cap">Defending the language — against neglect, slow forgetting.</div>
+            <a class="btn" href="pages/library-protect.html"><span class="lbl">Open manifesto ↗</span></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================== CONNECT ========================== -->
+  <section class="block connect" id="connect" aria-labelledby="connect-h">
+    <div class="kicker">· 05 — get in touch ·</div>
+    <h2 id="connect-h"><em>Connect</em>.</h2>
+    <a class="email" href="mailto:aggarwalgarv.4@gmail.com">aggarwalgarv.4@gmail.com</a><br/>
+    <a class="ig" href="https://instagram.com/garvagrwl" target="_blank" rel="noopener">@garvagrwl on Instagram</a>
+    <p class="closing">"Whether you're a curious learner, a researcher, or someone who felt something reading this page — write to me."</p>
+    <div class="colophon" aria-hidden="true"></div>
+    <div class="colo-meta">Garv Aggarwal · © mmxxvi</div>
+  </section>
+
+</main>
+
+<script>
+/* ====================================================================
+   NAV — frosted-glass scroll state
+   ==================================================================== */
+const nav  = document.getElementById('nav');
+const hero = document.getElementById('hero');
+const word = document.getElementById('hero-word');
+const sub  = document.getElementById('hero-sub');
+
+/* ====================================================================
+   SCROLL — tie scroll fraction to --scroll-p, drive glitch + lotus
+   ==================================================================== */
+const SCRAMBLE_CHARS = 'अ@#%&kṛतḥ░▒▓01ŚLgsḷ\\/<>ṇvr';
+let glitchActive = false;
+
+function pickScramble(target){
+  return target.split('').map(c=> c===' ' ? ' ' : SCRAMBLE_CHARS[Math.floor(Math.random()*SCRAMBLE_CHARS.length)]).join('');
+}
+
+function onScroll(){
+  nav.classList.toggle('is-scrolled', window.scrollY > 8);
+
+  const r = hero.getBoundingClientRect();
+  const total = hero.offsetHeight - window.innerHeight;
+  const scrolled = Math.min(Math.max(-r.top, 0), total);
+  const p = total > 0 ? scrolled / total : 0;
+
+  // remap so transition happens between 0.15 and 0.75
+  const t = Math.min(Math.max((p - 0.15) / 0.6, 0), 1);
+  hero.style.setProperty('--scroll-p', t);
+
+  // hide scroll hint
+  document.getElementById('scrollhint').style.opacity = String(Math.max(0, 1 - p*4));
+
+  // fade wire lotuses in with scroll
+  const frontWire = document.getElementById('lotus-front-wire');
+  const backWire  = document.getElementById('lotus-back-wire');
+  if (frontWire){ frontWire.style.opacity = t; }
+  if (backWire) { backWire.style.opacity  = t * 0.8; }
+
+  // word morphing: Sanskrit → Deep Learning
+  const a = 'Sanskrit';
+  const b = 'Deep Learning';
+  if (t < 0.35){
+    if (word.textContent !== a){ word.textContent = a; word.dataset.text = a; }
+    word.classList.remove('is-glitching');
+    glitchActive = false;
+  } else if (t < 0.65){
+    if (!glitchActive){ glitchActive = true; word.classList.add('is-glitching'); }
+    const target = (t < 0.5) ? a.padEnd(b.length, ' ') : b;
+    word.textContent = pickScramble(target);
+    word.dataset.text = word.textContent;
+  } else {
+    if (word.textContent !== b){ word.textContent = b; word.dataset.text = b; }
+    word.classList.remove('is-glitching');
+    glitchActive = false;
+  }
+
+  // subtitle swap
+  if (t > 0.7){
+    sub.textContent = 'finding the deep structure of meaning';
+  } else if (t < 0.3){
+    sub.textContent = 'the language of the universe';
+  }
+}
+window.addEventListener('scroll', onScroll, { passive:true });
+onScroll();
+
+/* ====================================================================
+   Neural-network canvas
+   ==================================================================== */
+(function(){
+  const c = document.getElementById('neuralCanvas');
+  const ctx = c.getContext('2d');
+  let nodes = [];
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let w=0, h=0;
+
+  function resize(){
+    const rect = c.getBoundingClientRect();
+    w = rect.width; h = rect.height;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    seed();
+  }
+  function seed(){
+    const N = Math.round((w*h)/22000);
+    nodes = [];
+    for (let i=0;i<N;i++){
+      nodes.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        vx: (Math.random()-.5)*.18,
+        vy: (Math.random()-.5)*.18,
+        r: Math.random()*1.6 + .6,
+        twinkle: Math.random()*Math.PI*2
+      });
+    }
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,w,h);
+    for (let i=0;i<nodes.length;i++){
+      const a = nodes[i];
+      a.x += a.vx; a.y += a.vy;
+      if (a.x<-10) a.x=w+10; if (a.x>w+10) a.x=-10;
+      if (a.y<-10) a.y=h+10; if (a.y>h+10) a.y=-10;
+      for (let j=i+1;j<nodes.length;j++){
+        const b = nodes[j];
+        const dx = a.x-b.x, dy=a.y-b.y;
+        const d2 = dx*dx + dy*dy;
+        if (d2 < 140*140){
+          const o = (1 - Math.sqrt(d2)/140) * .35;
+          ctx.strokeStyle = `rgba(0,255,178,${o.toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.stroke();
+        }
+      }
+    }
+    for (const n of nodes){
+      n.twinkle += 0.02;
+      const tw = .65 + Math.sin(n.twinkle)*.35;
+      ctx.fillStyle = `rgba(0,255,178,${(0.55*tw).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

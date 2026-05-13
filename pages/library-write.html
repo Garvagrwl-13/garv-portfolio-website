@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Write — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="write"]{
+    background: #F8F1DC;
+    --page-bg: #F8F1DC;
+    --accent: var(--ink);
+    --accent-soft: rgba(26,10,0,.06);
+  }
+  /* gridded paper backdrop */
+  body[data-page="write"]::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(rgba(26,10,0,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,10,0,.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 90%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 90%);
+  }
+
+  .lib-hero{
+    padding:160px 36px 64px;
+    max-width:1280px; margin:0 auto;
+    position:relative; z-index:2;
+  }
+  .lib-hero .crumb{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.6;
+    margin-bottom:32px;
+  }
+  .lib-hero .crumb a{ color:inherit; text-decoration:none; }
+  .lib-hero .crumb .dot{ width:5px; height:5px; border-radius:50%; background: var(--red); }
+  .lib-hero h1{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(64px, 9vw, 156px);
+    line-height:.92; letter-spacing:-.025em;
+  }
+  .lib-hero h1 em{
+    font-style:italic;
+    font-weight:400;
+    background:linear-gradient(transparent 70%, rgba(139,26,26,.25) 70%);
+  }
+  .lib-hero .lede{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(20px, 1.6vw, 26px);
+    line-height:1.5; max-width:62ch; color: var(--ink-soft);
+    margin-top:14px;
+  }
+  .lib-hero .meta{
+    display:flex; gap:28px; flex-wrap:wrap;
+    margin-top:36px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.6;
+  }
+
+  /* featured essay (a "page" pulled from a notebook) */
+  .featured{
+    max-width:980px; margin:60px auto 100px;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .featured .sheet{
+    background: #FDF7E2;
+    border:1px solid rgba(26,10,0,.12);
+    border-left:3px solid var(--red);
+    box-shadow: 0 14px 36px rgba(26,10,0,.10);
+    padding:48px 56px 40px;
+    position:relative;
+    background-image:
+      linear-gradient(rgba(26,10,0,.06) 1px, transparent 1px);
+    background-size: 100% 28px;
+    background-position: 0 -5px;
+  }
+  .featured .sheet::before{
+    content:"selected"; position:absolute; top:-12px; left:24px;
+    background: var(--red); color:#F5EDD6;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.24em; text-transform:uppercase;
+    padding:4px 12px;
+  }
+  .featured .sheet .when{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.55;
+    margin-bottom:14px;
+  }
+  .featured .sheet h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(40px, 5vw, 64px);
+    line-height:1; letter-spacing:-.02em;
+    margin-bottom:20px;
+  }
+  .featured .sheet h2 em{ font-style:italic; }
+  .featured .sheet p{
+    font-family:'Cormorant Garamond', serif;
+    font-size:20px; line-height:1.55;
+    color: var(--ink);
+    margin-bottom:14px;
+  }
+  .featured .sheet p em{ font-style:italic; }
+  .featured .sheet p::first-letter{ /* drop cap on first */ }
+  .featured .sheet > p:first-of-type::first-letter{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    float:left; font-size:64px; line-height:.8;
+    margin: 6px 12px 0 0; color: var(--red);
+  }
+  .featured .sheet .read-more{
+    display:inline-block; margin-top:18px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: var(--red); text-decoration:none;
+    border-bottom:1px solid var(--red); padding-bottom:2px;
+  }
+
+  /* archive list */
+  .arch{
+    max-width:1280px; margin:0 auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .arch-head{
+    display:flex; align-items:baseline; gap:18px;
+    margin-bottom:24px;
+  }
+  .arch-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:.95; letter-spacing:-.015em;
+  }
+  .arch-head h2 em{ font-style:italic; color: var(--red); }
+  .arch-head .rule{ flex:1; height:1px; background: currentColor; opacity:.18; }
+  .arch-head .count{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+  }
+  .year-group{
+    margin-bottom:48px;
+  }
+  .year-label{
+    display:flex; align-items:baseline; gap:18px;
+    padding:14px 0;
+    margin-bottom:8px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic; font-weight:500;
+    font-size:32px; color: var(--ink-soft);
+    border-bottom:1px solid var(--rule);
+  }
+  .year-label .n{
+    font-family:'JetBrains Mono', monospace; font-style:normal;
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+    opacity:.55;
+  }
+  .entry{
+    display:grid;
+    grid-template-columns: 80px 1fr 140px 90px 40px;
+    gap:20px;
+    align-items:baseline;
+    padding:18px 0;
+    border-bottom:1px solid var(--rule);
+    text-decoration:none; color:inherit;
+    font-family:'Cormorant Garamond', serif;
+    transition: padding .2s ease, background .2s ease;
+  }
+  .entry:hover{ padding-left:8px; background: rgba(139,26,26,.04); }
+  .entry:hover .ttl em{ color: var(--red); }
+  .entry .date{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; opacity:.55;
+  }
+  .entry .ttl{
+    font-size:22px; line-height:1.3;
+  }
+  .entry .ttl em{ font-style:italic; transition: color .2s; }
+  .entry .ex{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:14px; color: var(--ink-soft); margin-top:2px;
+  }
+  .entry .kind{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.6;
+    text-align:right;
+  }
+  .entry .len{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.18em; opacity:.55; text-align:right;
+  }
+  .entry .arrow{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:24px; opacity:.5; text-align:right;
+  }
+  .entry:hover .arrow{ opacity:1; color: var(--red); }
+
+  @media (max-width:880px){
+    .lib-hero{ padding:120px 22px 48px; }
+    .featured{ padding:0 22px; }
+    .featured .sheet{ padding:32px 24px; }
+    .arch{ padding:0 22px; }
+    .entry{ grid-template-columns: 1fr; gap:6px; padding:18px 0; }
+    .entry .kind, .entry .len, .entry .arrow{ display:none; }
+  }
+</style>
+</head>
+<body data-page="write">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work">Work</a>
+    <a href="../index.html#resources" class="current">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="lib-hero">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#resources">The Library</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>03 — Write</span>
+    </div>
+    <h1><em>Write</em>.</h1>
+    <p class="lede">Essays, translations, notes — thought against the page. Some are long. Most are not. All of them are in revision.</p>
+    <div class="meta">
+      <span>47 pieces</span>
+      <span>2021 → present</span>
+      <span>Essay · note · translation · field</span>
+    </div>
+  </section>
+
+  <!-- ===== featured ===== -->
+  <section class="featured">
+    <article class="sheet">
+      <div class="when">2025 · October · essay</div>
+      <h2>An apology for <em>memorisation</em>.</h2>
+      <p>Rote learning has a bad name. We treat it as the opposite of understanding — the thing teachers do when they've run out of better ideas. But Sanskrit pedagogy, for two and a half millennia, has treated it as something closer to prayer.</p>
+      <p>The student who has the Aṣṭādhyāyī by heart does not know less than the one who can look it up. She knows it differently. The whole grammar sits in her mouth, available the way a melody is available — not as data to be retrieved but as <em>shape</em> already in motion.</p>
+      <p>What I want to argue in this essay is small: that there is a kind of attention which only memorisation produces, and that we have, somewhat unwisely, decided we can live without it.</p>
+      <a class="read-more" href="#">Continue reading ↗</a>
+    </article>
+  </section>
+
+  <!-- ===== archive ===== -->
+  <section class="arch">
+    <div class="arch-head">
+      <h2><em>Archive</em>.</h2>
+      <div class="rule"></div>
+      <span class="count">47 entries</span>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2025 <span class="n">— 14 pieces</span></div>
+
+      <a class="entry" href="#">
+        <span class="date">10 · 21</span>
+        <span class="ttl"><em>An apology for memorisation</em><br/><span class="ex">on rote learning, and what attention it makes possible</span></span>
+        <span class="kind">Essay · long</span>
+        <span class="len">2,800 w · 14m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">09 · 04</span>
+        <span class="ttl">Why Sanskrit is a <em>benchmark</em>, not a relic<br/><span class="ex">a long argument with a short title</span></span>
+        <span class="kind">Essay</span>
+        <span class="len">3,400 w · 17m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">08 · 12</span>
+        <span class="ttl">Three reasons people fail at <em>sandhi</em></span>
+        <span class="kind">Note</span>
+        <span class="len">900 w · 5m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">06 · 28</span>
+        <span class="ttl">Translating the <em>Meghadūta</em>, verse by verse — opening</span>
+        <span class="kind">Translation</span>
+        <span class="len">in progress</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">04 · 14</span>
+        <span class="ttl">What Pāṇini got <em>right</em> about transformers</span>
+        <span class="kind">Note</span>
+        <span class="len">2,400 w · 12m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">02 · 03</span>
+        <span class="ttl">A week in <em>Varanasi</em>, listening</span>
+        <span class="kind">Field note</span>
+        <span class="len">1,400 w · 7m</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2024 <span class="n">— 18 pieces</span></div>
+
+      <a class="entry" href="#">
+        <span class="date">11 · 30</span>
+        <span class="ttl"><em>Sandhi, restated</em><br/><span class="ex">a paper, with apology for length</span></span>
+        <span class="kind">Pre-print</span>
+        <span class="len">14 pages</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">10 · 09</span>
+        <span class="ttl">On the politics of <em>correct</em></span>
+        <span class="kind">Essay</span>
+        <span class="len">2,100 w · 11m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">07 · 21</span>
+        <span class="ttl">Why Sanskrit is a <em>benchmark</em> (draft 0)</span>
+        <span class="kind">Note</span>
+        <span class="len">draft</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">05 · 04</span>
+        <span class="ttl">A field guide to <em>devanāgarī</em></span>
+        <span class="kind">Note</span>
+        <span class="len">1,800 w · 9m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">02 · 11</span>
+        <span class="ttl">Reading <em>Kālidāsa</em> for the first time</span>
+        <span class="kind">Essay</span>
+        <span class="len">2,200 w · 11m</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2023 <span class="n">— 11 pieces</span></div>
+
+      <a class="entry" href="#">
+        <span class="date">10 · 16</span>
+        <span class="ttl">A tiny corpus is enough, <em>sometimes</em></span>
+        <span class="kind">Note</span>
+        <span class="len">1,100 w · 6m</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">06 · 02</span>
+        <span class="ttl"><em>Aṣṭādhyāyī</em> as a graph</span>
+        <span class="kind">Talk · slides</span>
+        <span class="len">28 slides</span>
+        <span class="arrow">→</span>
+      </a>
+
+      <a class="entry" href="#">
+        <span class="date">03 · 09</span>
+        <span class="ttl">Why I'm <em>making</em> short films</span>
+        <span class="kind">Field note</span>
+        <span class="len">800 w · 4m</span>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">03 / 05 — Write · Garv Aggarwal</div>
+    </div>
+    <div class="next">next room: <a href="library-speak.html">Speak →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+</script>
+</body>
+</html>

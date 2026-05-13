@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sanskrit Education — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="education"]{
+    --accent: var(--gold);
+    --accent-soft: rgba(196,146,42,.12);
+  }
+
+  /* ===== filter row ===== */
+  .filters{
+    max-width:1280px; margin:0 auto 36px;
+    padding:0 36px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    position:relative; z-index:2;
+  }
+  .filters .lbl{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+  }
+  .filters .chips{ display:flex; gap:6px; flex-wrap:wrap; }
+  .filters button{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase;
+    padding:8px 14px;
+    background:transparent; color:inherit;
+    border:1px solid var(--rule); border-radius:99px;
+    cursor:pointer; opacity:.7; transition: all .2s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .filters button:hover{ opacity:1; }
+  .filters button.active{
+    background:var(--ink); color:var(--paper);
+    border-color:var(--ink); opacity:1;
+  }
+  .filters button .dot{
+    width:6px; height:6px; border-radius:50%; background:currentColor;
+  }
+  .filters button.f-podcast .dot{ background:var(--accent); }
+  .filters button.f-write .dot{ background:var(--ink); }
+  .filters button.f-teach .dot{ background:var(--red); }
+
+  /* ===== feed ===== */
+  .feed{
+    max-width:1280px; margin:0 auto;
+    padding:0 36px 40px;
+    position:relative; z-index:2;
+    display:grid; gap:18px;
+  }
+  .card{
+    display:grid; grid-template-columns: 110px 1fr 200px; gap:32px;
+    padding:28px 32px;
+    background: var(--accent-soft);
+    border:1px solid var(--rule);
+    border-radius:6px;
+    align-items:center;
+    cursor:pointer; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(26,10,0,.08);
+    border-color: var(--accent);
+  }
+  .card .type{
+    display:flex; flex-direction:column; gap:8px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.24em; text-transform:uppercase;
+  }
+  .card .type .badge{
+    display:inline-flex; align-items:center; gap:7px;
+    align-self:flex-start;
+    padding:4px 9px; border-radius:99px;
+    background:rgba(26,10,0,.07);
+  }
+  .card .type .badge .d{ width:6px; height:6px; border-radius:50%; }
+  .card .type .when{ opacity:.55; font-size:10px; }
+
+  .card .body h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:28px; line-height:1.15; letter-spacing:-.01em;
+    margin-bottom:6px;
+  }
+  .card .body h3 em{ font-style:italic; }
+  .card .body .ex{
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px; line-height:1.5; color:var(--ink-soft);
+    max-width:62ch;
+  }
+  .card .body .ex em{ font-style:italic; }
+  .card .meta{
+    text-align:right;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase; opacity:.6;
+    display:flex; flex-direction:column; gap:6px; align-items:flex-end;
+  }
+  .card .meta .cta{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; letter-spacing:0; color:var(--accent);
+    opacity:1;
+  }
+
+  /* podcast card variant — YouTube-thumb frame */
+  .card.podcast{
+    background: #0D1018; color:#e9e2c8;
+    border-color:transparent;
+  }
+  .card.podcast .body h3 em{ color: var(--accent); }
+  .card.podcast .body .ex{ color: rgba(233,226,200,.7); }
+  .card.podcast .meta{ color: rgba(233,226,200,.65); }
+  .card.podcast .meta .cta{ color: var(--accent); }
+  .card.podcast .thumb{
+    width:160px; height:90px; border-radius:4px;
+    position:relative; overflow:hidden;
+    background: linear-gradient(135deg, #1c2b48, #0a162a);
+  }
+  .card.podcast .thumb::after{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(196,146,42,.5), transparent 60%),
+      radial-gradient(circle at 75% 70%, rgba(139,26,26,.4), transparent 60%);
+  }
+  .card.podcast .thumb .ep{
+    position:absolute; bottom:6px; left:6px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.18em; padding:2px 6px;
+    background: rgba(0,0,0,.7); border-radius:3px;
+    z-index:2;
+  }
+  .card.podcast .thumb .play{
+    position:absolute; inset:0; display:grid; place-items:center;
+    color:#fff; opacity:.9;
+  }
+  .card.podcast .thumb .play svg{ width:30px; height:30px; }
+  .card.podcast .type .badge{ background: rgba(255,255,255,.07); color: var(--accent); }
+
+  /* write card variant */
+  .card.write{
+    background:#F8F1DC;
+    background-image:
+      linear-gradient(rgba(26,10,0,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,10,0,.06) 1px, transparent 1px);
+    background-size: 22px 22px;
+    border-color:rgba(26,10,0,.08);
+  }
+  .card.write .type .badge .d{ background: var(--ink); }
+
+  /* teach card variant */
+  .card.teach{
+    background: var(--red);
+    color:#F5EDD6;
+    border-color:transparent;
+  }
+  .card.teach .body h3 em{ color: var(--gold); }
+  .card.teach .body .ex{ color: rgba(245,237,214,.85); }
+  .card.teach .meta{ color: rgba(245,237,214,.8); }
+  .card.teach .meta .cta{ color: var(--gold); }
+  .card.teach .type .badge{ background: rgba(0,0,0,.18); }
+  .card.teach .type .badge .d{ background: var(--gold); }
+
+  /* hidden by filter */
+  .card.is-hidden{ display:none; }
+
+  /* podcast block: spotlight */
+  .spotlight{
+    max-width:1280px; margin:0 auto 60px;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .spot-card{
+    display:grid; grid-template-columns: 1.2fr 1fr; gap:0;
+    border-radius:8px; overflow:hidden;
+    background:#0D1018; color:#e9e2c8;
+    border:1px solid var(--rule);
+  }
+  .spot-card .visual{
+    position:relative; min-height:380px;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(196,146,42,.45), transparent 60%),
+      radial-gradient(circle at 75% 70%, rgba(139,26,26,.35), transparent 60%),
+      linear-gradient(135deg, #1c2b48, #0a162a);
+    display:grid; place-items:center;
+  }
+  .spot-card .visual::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1.2px);
+    background-size:5px 5px;
+  }
+  .spot-card .visual .play{
+    width:88px; height:88px; border:1.5px solid rgba(255,255,255,.6);
+    border-radius:50%;
+    display:grid; place-items:center;
+    color:#fff;
+    z-index:2;
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .spot-card .visual .play svg{ width:32px; height:32px; }
+  .spot-card:hover .visual .play{ transform:scale(1.06); border-color:var(--accent); color:var(--accent); }
+  .spot-card .visual .ep{
+    position:absolute; bottom:18px; left:18px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.8;
+    z-index:2;
+  }
+  .spot-card .content{
+    padding:40px 40px 36px;
+    display:flex; flex-direction:column; gap:18px; justify-content:space-between;
+  }
+  .spot-card .content .top .kicker{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:14px;
+  }
+  .spot-card .content h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(32px, 3.4vw, 48px);
+    line-height:1.02; letter-spacing:-.015em;
+    margin-bottom:14px;
+  }
+  .spot-card .content h3 em{ font-style:italic; color:var(--accent); }
+  .spot-card .content p{
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px; line-height:1.5; color:rgba(233,226,200,.78);
+  }
+  .spot-card .content .row{
+    display:flex; gap:24px; flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase;
+    opacity:.7;
+  }
+
+  /* teaching offers */
+  .offers{
+    max-width:1280px; margin:120px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .offers > h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(48px, 5vw, 80px); line-height:.95;
+    letter-spacing:-.02em; margin-bottom:14px;
+  }
+  .offers > h2 em{ font-style:italic; color:var(--accent); }
+  .offers > p{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color:var(--ink-soft);
+    max-width:62ch; margin-bottom:48px;
+  }
+  .offer-grid{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap:0;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+  }
+  .offer{
+    padding:36px 32px 32px;
+    border-right:1px solid var(--rule);
+    position:relative;
+  }
+  .offer:last-child{ border-right:none; }
+  .offer .id{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:36px; color:var(--accent); margin-bottom:18px;
+  }
+  .offer h4{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:28px; line-height:1.1; letter-spacing:-.01em;
+    margin-bottom:12px;
+  }
+  .offer p{
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px; line-height:1.55; color:var(--ink-soft);
+    margin-bottom:24px;
+  }
+  .offer .details{
+    display:flex; gap:18px; flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase; opacity:.6;
+    margin-bottom:24px;
+  }
+  .offer .cta{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase;
+    color:inherit; text-decoration:none;
+    border-bottom:1px solid currentColor; padding-bottom:2px;
+  }
+  .offer .cta:hover{ color:var(--accent); border-color:var(--accent); }
+  .offer.featured{ background: var(--accent-soft); }
+  .offer.featured::before{
+    content:"selected"; position:absolute; top:14px; right:14px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
+  }
+
+  @media (max-width:980px){
+    .spot-card{ grid-template-columns:1fr; }
+    .spot-card .visual{ min-height:220px; }
+    .card{ grid-template-columns: 1fr; gap:16px; padding:22px; }
+    .card.podcast{ grid-template-columns: 1fr; }
+    .card.podcast .thumb{ width:100%; height:160px; }
+    .card .meta{ align-items:flex-start; text-align:left; }
+    .offer-grid{ grid-template-columns:1fr; }
+    .offer{ border-right:none; border-bottom:1px solid var(--rule); }
+    .offer:last-child{ border-bottom:none; }
+    .filters, .feed, .spotlight, .offers{ padding:0 22px !important; }
+  }
+</style>
+</head>
+<body data-page="education">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work" class="current">Work</a>
+    <a href="../index.html#resources">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="page-head">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#work">The Work</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>03 — Sanskrit Education</span>
+    </div>
+    <h1>Sanskrit <em>Education</em>.</h1>
+    <p class="lede">Keeping the door open. A podcast, the writing around it, and the slow work of teaching one-to-one — different ways into the same room.</p>
+  </section>
+
+  <!-- ===== latest podcast spotlight ===== -->
+  <div class="section-mark"><span>Latest episode</span><span class="rule"></span></div>
+  <div class="spotlight">
+    <a class="spot-card" href="#" aria-label="Play latest episode">
+      <div class="visual">
+        <span class="ep">Episode 12 · 47 min</span>
+        <span class="play" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+      </div>
+      <div class="content">
+        <div class="top">
+          <div class="kicker">· Latest episode · podcast</div>
+          <h3>Why does a 3,000-year-old language still <em>scan</em>?</h3>
+          <p>A conversation about meter, memory, and what it means for a grammar to age well. With notes on Pāṇini and a long detour into the Ṛgveda.</p>
+        </div>
+        <div class="row">
+          <span>YouTube · Spotify</span>
+          <span>Hindi · 2025-10</span>
+          <span>Play ↗</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- ===== filters ===== -->
+  <div class="filters">
+    <span class="lbl">Filter:</span>
+    <div class="chips" id="chips">
+      <button data-f="all" class="active">All</button>
+      <button data-f="podcast" class="f-podcast"><span class="dot"></span>Podcast</button>
+      <button data-f="write" class="f-write"><span class="dot"></span>Writing</button>
+      <button data-f="teach" class="f-teach"><span class="dot"></span>Teaching</button>
+    </div>
+  </div>
+
+  <!-- ===== mixed feed ===== -->
+  <div class="feed" id="feed">
+
+    <a class="card podcast" data-type="podcast" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Podcast · Ep 11</span>
+        <span class="when">2025 · 09</span>
+      </div>
+      <div class="body">
+        <h3>The grammar of <em>silence</em></h3>
+        <p class="ex">When Pāṇini wrote <em>lopa</em> — "deletion" — he was talking about something every poet knows: the loudest syllable is the one that isn't there.</p>
+      </div>
+      <div class="meta">
+        <div class="thumb"><span class="ep">EP·11</span><span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <span class="cta">Play ↗</span>
+      </div>
+    </a>
+
+    <a class="card write" data-type="write" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Essay · long</span>
+        <span class="when">2025 · 08</span>
+      </div>
+      <div class="body">
+        <h3>An apology for <em>memorisation</em></h3>
+        <p class="ex">Rote learning has a bad name. Sanskrit pedagogy has, for two and a half millennia, treated it as a kind of prayer. Notes on what it does to attention.</p>
+      </div>
+      <div class="meta">
+        <span>2,800 words</span>
+        <span>14 min read</span>
+        <span class="cta">Read ↗</span>
+      </div>
+    </a>
+
+    <a class="card teach" data-type="teach" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>1:1 · 10 weeks</span>
+        <span class="when">2025 cohort</span>
+      </div>
+      <div class="body">
+        <h3>Beginner Sanskrit — <em>by ear, then by eye</em></h3>
+        <p class="ex">A ten-week course for people who've never tried. We start with sound — chant, recognise, repeat — and only then introduce the script and the cases.</p>
+      </div>
+      <div class="meta">
+        <span>3 seats / cohort</span>
+        <span>Hindi · English</span>
+        <span class="cta">Apply ↗</span>
+      </div>
+    </a>
+
+    <a class="card podcast" data-type="podcast" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Podcast · Ep 10</span>
+        <span class="when">2025 · 07</span>
+      </div>
+      <div class="body">
+        <h3>What <em>Yāska</em> would have made of search engines</h3>
+        <p class="ex">Etymology as an art, not a science. The Nirukta wasn't trying to be correct — it was trying to be useful. A small distinction with surprising consequences.</p>
+      </div>
+      <div class="meta">
+        <div class="thumb"><span class="ep">EP·10</span><span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <span class="cta">Play ↗</span>
+      </div>
+    </a>
+
+    <a class="card write" data-type="write" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Note · short</span>
+        <span class="when">2025 · 06</span>
+      </div>
+      <div class="body">
+        <h3>Three reasons people fail at <em>sandhi</em></h3>
+        <p class="ex">And how to think about it instead — not as a rule, but as a courtesy the language pays to the mouth that has to say it.</p>
+      </div>
+      <div class="meta">
+        <span>900 words</span>
+        <span>5 min read</span>
+        <span class="cta">Read ↗</span>
+      </div>
+    </a>
+
+    <a class="card teach" data-type="teach" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Group · 6 weeks</span>
+        <span class="when">Rolling</span>
+      </div>
+      <div class="body">
+        <h3>Reading the <em>Bhagavad Gītā</em> · group</h3>
+        <p class="ex">A small reading group. Six weeks, two chapters. We go slowly enough to argue. Open to anyone who can read Devanāgarī and is willing to be confused.</p>
+      </div>
+      <div class="meta">
+        <span>8 seats / group</span>
+        <span>English</span>
+        <span class="cta">Join ↗</span>
+      </div>
+    </a>
+
+    <a class="card podcast" data-type="podcast" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Podcast · Ep 09</span>
+        <span class="when">2025 · 04</span>
+      </div>
+      <div class="body">
+        <h3>Why translation is a kind of <em>theft</em></h3>
+        <p class="ex">And a kind of love, depending on the translator. A conversation about loss, fidelity, and the strange ethics of carrying a verse across a language barrier.</p>
+      </div>
+      <div class="meta">
+        <div class="thumb"><span class="ep">EP·09</span><span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>
+        <span class="cta">Play ↗</span>
+      </div>
+    </a>
+
+    <a class="card write" data-type="write" href="#">
+      <div class="type">
+        <span class="badge"><span class="d"></span>Field note</span>
+        <span class="when">2025 · 02</span>
+      </div>
+      <div class="body">
+        <h3>A week in <em>Varanasi</em>, listening</h3>
+        <p class="ex">Twelve hours a day of recitation at a paṭhaśālā on the ghats. What I noticed about the children's mouths, and the texture of <em>that</em> kind of attention.</p>
+      </div>
+      <div class="meta">
+        <span>1,400 words</span>
+        <span>·</span>
+        <span class="cta">Read ↗</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- ===== teaching offers ===== -->
+  <section class="offers">
+    <h2>Work <em>with me</em>.</h2>
+    <p>I take on a small number of students at a time. Below are the three formats currently open.</p>
+    <div class="offer-grid">
+      <div class="offer featured">
+        <div class="id">i.</div>
+        <h4>One-to-one · Beginner</h4>
+        <p>A custom ten-week path for someone starting fresh. Built around your goals — pronunciation, reading, conversation, or just curiosity.</p>
+        <div class="details">
+          <span>10 weeks · weekly</span>
+          <span>60 min</span>
+          <span>Online</span>
+        </div>
+        <a class="cta" href="#">Apply ↗</a>
+      </div>
+      <div class="offer">
+        <div class="id">ii.</div>
+        <h4>One-to-one · Intermediate</h4>
+        <p>For people who can already read and want to push into texts. We pick a work together — Gītā, Meghadūta, Kālidāsa — and we read.</p>
+        <div class="details">
+          <span>12 weeks · weekly</span>
+          <span>90 min</span>
+          <span>Online · Hindi or English</span>
+        </div>
+        <a class="cta" href="#">Apply ↗</a>
+      </div>
+      <div class="offer">
+        <div class="id">iii.</div>
+        <h4>Reading group</h4>
+        <p>A six-week reading group around one text. Limited to eight people. Pay-what-you-can. Currently reading: <em>Bhagavad Gītā</em>, chapters 1–2.</p>
+        <div class="details">
+          <span>6 weeks · weekly</span>
+          <span>90 min · group</span>
+          <span>Online</span>
+        </div>
+        <a class="cta" href="#">Join the list ↗</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">03 / 04 — Sanskrit Education · Garv Aggarwal</div>
+    </div>
+    <div class="next">next chapter: <a href="work-ai-platform.html">AI Platform →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+
+  // filter chips
+  const chips = document.querySelectorAll('#chips button');
+  const cards = document.querySelectorAll('#feed .card');
+  chips.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const f = b.dataset.f;
+      chips.forEach(c=> c.classList.toggle('active', c===b));
+      cards.forEach(card=>{
+        const show = (f==='all') || (card.dataset.type===f);
+        card.classList.toggle('is-hidden', !show);
+      });
+    });
+  });
+</script>
+</body>
+</html>

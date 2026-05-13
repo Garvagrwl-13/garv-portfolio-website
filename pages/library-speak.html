@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Speak — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="speak"]{
+    background: #1A0F08;
+    color: #F5EDD6;
+    --page-bg: #1A0F08;
+    --page-fg: #F5EDD6;
+    --accent: var(--gold);
+    --accent-soft: rgba(196,146,42,.12);
+    --rule: rgba(245,237,214,.10);
+  }
+  body[data-page="speak"]::before{
+    background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1.2px);
+    mix-blend-mode:normal; opacity:.5;
+  }
+  body[data-page="speak"] .nav .brand,
+  body[data-page="speak"] .nav .links a{ color: #F5EDD6; }
+  body[data-page="speak"] .nav.is-scrolled{
+    background: rgba(26,15,8,.78);
+    border-bottom-color: rgba(245,237,214,.08);
+  }
+  body[data-page="speak"] .nav .brand .lotus{
+    filter: invert(.9) sepia(.4) hue-rotate(20deg);
+  }
+
+  .lib-hero{
+    padding:160px 36px 64px;
+    max-width:1280px; margin:0 auto;
+    position:relative; z-index:2;
+  }
+  .lib-hero .crumb{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(245,237,214,.7);
+    margin-bottom:32px;
+  }
+  .lib-hero .crumb a{ color:inherit; text-decoration:none; }
+  .lib-hero .crumb a:hover{ color: var(--accent); }
+  .lib-hero .crumb .dot{ width:5px; height:5px; border-radius:50%; background:var(--accent); }
+  .lib-hero h1{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(64px, 9vw, 156px);
+    line-height:.92; letter-spacing:-.025em;
+  }
+  .lib-hero h1 em{ font-style:italic; color: var(--accent); font-weight:400; }
+  .lib-hero .lede{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(20px, 1.6vw, 26px);
+    line-height:1.5; max-width:62ch;
+    color: rgba(245,237,214,.75);
+    margin-top:14px;
+  }
+  .lib-hero .meta{
+    display:flex; gap:28px; flex-wrap:wrap;
+    margin-top:36px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase;
+    color: rgba(245,237,214,.6);
+  }
+  .lib-hero .meta a{
+    color: var(--accent); text-decoration:none;
+    border-bottom:1px solid currentColor; padding-bottom:1px;
+  }
+
+  /* reels grid */
+  .reels{
+    max-width:1280px; margin:0 auto;
+    padding:40px 36px 40px;
+    position:relative; z-index:2;
+  }
+  .reels-head{
+    display:flex; align-items:baseline; gap:18px;
+    margin-bottom:28px;
+  }
+  .reels-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:1; letter-spacing:-.015em;
+  }
+  .reels-head h2 em{ font-style:italic; color: var(--accent); }
+  .reels-head .rule{ flex:1; height:1px; background: currentColor; opacity:.15; }
+  .reels-head .count{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(245,237,214,.55);
+  }
+
+  .reel-grid{
+    display:grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap:18px;
+  }
+  .reel{
+    position:relative; overflow:hidden;
+    aspect-ratio: 9 / 16;
+    border-radius:6px;
+    text-decoration:none; color: inherit;
+    transition: transform .25s ease;
+    background:#0c0805;
+  }
+  .reel:hover{ transform: translateY(-4px); }
+  .reel:hover .reel-overlay{ opacity:1; }
+  .reel:hover .play{ transform: translate(-50%,-50%) scale(1.06); }
+
+  .reel .gfx{ position:absolute; inset:0; }
+  .reel .gfx::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(255,255,255,.04) 1px, transparent 1.2px);
+    background-size:4px 4px; mix-blend-mode:overlay;
+  }
+  .reel .gfx::after{
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.7) 100%);
+  }
+  .reel .devanagari{
+    position:absolute; top:14px; left:14px; right:14px; z-index:2;
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px; opacity:.7;
+  }
+  .reel .play{
+    position:absolute; top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    width:42px; height:42px; border-radius:50%;
+    background: rgba(0,0,0,.45);
+    border: 1px solid rgba(255,255,255,.4);
+    display:grid; place-items:center;
+    color:#fff; opacity:.85;
+    transition: transform .25s ease;
+    z-index:2;
+  }
+  .reel .play svg{ width:16px; height:16px; margin-left:2px; }
+  .reel .info{
+    position:absolute; left:14px; right:14px; bottom:14px;
+    z-index:3; color:#fff;
+  }
+  .reel .info .ttl{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:18px; line-height:1.15; letter-spacing:-.005em;
+  }
+  .reel .info .ttl em{ font-style:italic; }
+  .reel .info .row{
+    display:flex; gap:14px;
+    margin-top:6px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.18em; text-transform:uppercase; opacity:.75;
+  }
+  .reel .views{
+    position:absolute; top:14px; right:14px; z-index:2;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.18em; text-transform:uppercase;
+    padding:3px 8px; background:rgba(0,0,0,.55); border-radius:99px;
+    color:#fff;
+  }
+
+  /* reel gradient palettes */
+  .g-r1 .gfx{ background: linear-gradient(160deg, #6f1313 0%, #C4922A 100%); }
+  .g-r2 .gfx{ background: linear-gradient(180deg, #0a162a 0%, #1c2b48 50%, #4a3a1c 100%); }
+  .g-r3 .gfx{ background: linear-gradient(160deg, #1a0a00 0%, #5a3a16 60%, #c46d2a 100%); }
+  .g-r4 .gfx{ background: linear-gradient(180deg, #2a1810 0%, #6b2010 60%, #d05a3a 100%); }
+  .g-r5 .gfx{ background: linear-gradient(160deg, #3a2616 0%, #cfa86f 100%); }
+  .g-r6 .gfx{ background: linear-gradient(180deg, #08152e 0%, #1a3461 60%, #4a6f9e 100%); }
+  .g-r7 .gfx{ background: linear-gradient(160deg, #4a1020 0%, #aa3a4a 60%, #e8a37a 100%); }
+  .g-r8 .gfx{ background: linear-gradient(180deg, #1a0a00 0%, #0a0a0a 70%, #c4922a 100%); }
+  .g-r9 .gfx{ background: linear-gradient(160deg, #2b2b3a 0%, #4b3a55 60%, #8a6f8e 100%); }
+  .g-r10 .gfx{ background: linear-gradient(180deg, #2a1a02 0%, #6b3210 60%, #f8c060 100%); }
+
+  /* series block: a long-form recitation playlist */
+  .recitations{
+    max-width:1280px; margin:100px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .recitations h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:1;
+    letter-spacing:-.015em; margin-bottom:8px;
+  }
+  .recitations h2 em{ font-style:italic; color: var(--accent); }
+  .recitations > p{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color: rgba(245,237,214,.7);
+    max-width:62ch; margin-bottom:36px;
+  }
+  .recit-list{
+    display:grid; gap:0;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+  }
+  .recit{
+    display:grid;
+    grid-template-columns: 60px 1fr 160px 60px;
+    gap:24px; align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid var(--rule);
+    text-decoration:none; color:inherit;
+    transition: padding .2s ease, background .2s ease;
+  }
+  .recit:last-child{ border-bottom:none; }
+  .recit:hover{ padding-left:8px; background: rgba(245,237,214,.03); }
+  .recit:hover .play-mini{ background: var(--accent); color: #1A0F08; border-color: var(--accent); }
+  .play-mini{
+    width:36px; height:36px; border-radius:50%;
+    border:1px solid rgba(245,237,214,.4);
+    display:grid; place-items:center;
+    transition: all .2s;
+  }
+  .play-mini svg{ width:14px; height:14px; margin-left:2px; }
+  .recit .info .ttl{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:22px; line-height:1.2;
+  }
+  .recit .info .ttl em{ font-style:italic; }
+  .recit .info .sub{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:15px; color: rgba(245,237,214,.6);
+    margin-top:2px;
+  }
+  .recit .dur{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; opacity:.65; text-align:right;
+  }
+  .recit .arr{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:24px; opacity:.5; text-align:right;
+  }
+  .recit:hover .arr{ opacity:1; color: var(--accent); }
+
+  body[data-page="speak"] .foot{
+    border-top-color: var(--rule);
+  }
+  body[data-page="speak"] .foot .meta{ color: rgba(245,237,214,.55); }
+  body[data-page="speak"] .foot .colophon{ filter: invert(.9) sepia(.4); opacity:.5; }
+  body[data-page="speak"] .foot .next a:hover{ color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width:980px){
+    .lib-hero{ padding:120px 22px 48px; }
+    .reels{ padding:30px 22px; }
+    .reel-grid{ grid-template-columns: repeat(2, 1fr); }
+    .recitations{ padding:0 22px; }
+    .recit{ grid-template-columns: 40px 1fr 36px; gap:14px; }
+    .recit .dur{ display:none; }
+  }
+</style>
+</head>
+<body data-page="speak">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work">Work</a>
+    <a href="../index.html#resources" class="current">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="lib-hero">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#resources">The Library</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>04 — Speak</span>
+    </div>
+    <h1><em>Speak</em>.</h1>
+    <p class="lede">Recordings and recitations — the mouth as instrument. Short reels for the algorithm; longer recitations for anyone who'll sit still for them.</p>
+    <div class="meta">
+      <span>42 reels</span>
+      <span>11 recitations</span>
+      <span>Posted on <a href="https://instagram.com/garvagrwl" target="_blank" rel="noopener">@garvagrwl</a></span>
+    </div>
+  </section>
+
+  <!-- ===== reels grid ===== -->
+  <section class="reels">
+    <div class="reels-head">
+      <h2>Recent <em>reels</em></h2>
+      <div class="rule"></div>
+      <span class="count">10 of 42</span>
+    </div>
+
+    <div class="reel-grid">
+
+      <a class="reel g-r1" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">वाच्</span>
+        <span class="views">182K · 🇪🇾</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">What <em>vāc</em> really means</div>
+          <div class="row"><span>0:48</span><span>2025·10</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r2" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">सन्धि</span>
+        <span class="views">96K</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl"><em>Sandhi</em> in 60 seconds</div>
+          <div class="row"><span>1:00</span><span>2025·09</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r3" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">अग्निमीळे</span>
+        <span class="views">241K · 🇪🇾</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">The first verse of the <em>Ṛgveda</em></div>
+          <div class="row"><span>1:12</span><span>2025·08</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r4" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">रस</span>
+        <span class="views">73K</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">Nine <em>rasas</em> in one shot</div>
+          <div class="row"><span>0:54</span><span>2025·08</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r5" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">श्लोक</span>
+        <span class="views">52K</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">How to <em>chant</em> a śloka</div>
+          <div class="row"><span>0:42</span><span>2025·07</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r6" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">मेघ॰</span>
+        <span class="views">128K · 🇪🇾</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">Kālidāsa's opening verse — slow</div>
+          <div class="row"><span>1:20</span><span>2025·06</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r7" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">कारक</span>
+        <span class="views">88K</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">The six <em>kāraka</em>s, explained on a chai</div>
+          <div class="row"><span>0:58</span><span>2025·05</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r8" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">ॐ</span>
+        <span class="views">412K · 🇪🇾</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">What <em>oṁ</em> is — actually</div>
+          <div class="row"><span>1:00</span><span>2025·04</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r9" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">चन्दस्</span>
+        <span class="views">37K</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl"><em>Chandas</em> — meter, alive</div>
+          <div class="row"><span>0:52</span><span>2025·03</span></div>
+        </div>
+      </a>
+
+      <a class="reel g-r10" href="#">
+        <div class="gfx"></div>
+        <span class="devanagari">गायत्री</span>
+        <span class="views">198K</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <div class="info">
+          <div class="ttl">The <em>Gāyatrī</em>, with translation</div>
+          <div class="row"><span>1:08</span><span>2025·02</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== recitations ===== -->
+  <section class="recitations">
+    <h2>Long-form <em>recitations</em>.</h2>
+    <p>Whole texts, or long pieces of them. Headphones recommended.</p>
+    <div class="recit-list">
+
+      <a class="recit" href="#">
+        <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="info">
+          <div class="ttl"><em>Bhagavad Gītā</em> — chapter 2</div>
+          <div class="sub">72 verses · with pause for breath</div>
+        </div>
+        <span class="dur">24:14</span>
+        <span class="arr">→</span>
+      </a>
+
+      <a class="recit" href="#">
+        <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="info">
+          <div class="ttl"><em>Meghadūta</em> — pūrvamegha (1–66)</div>
+          <div class="sub">Kālidāsa · mandākrāntā meter</div>
+        </div>
+        <span class="dur">38:02</span>
+        <span class="arr">→</span>
+      </a>
+
+      <a class="recit" href="#">
+        <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="info">
+          <div class="ttl"><em>Ṛgveda</em> — maṇḍala 10, hymn 129</div>
+          <div class="sub">Nāsadīya · creation hymn</div>
+        </div>
+        <span class="dur">8:46</span>
+        <span class="arr">→</span>
+      </a>
+
+      <a class="recit" href="#">
+        <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="info">
+          <div class="ttl"><em>Īśopaniṣad</em> — full</div>
+          <div class="sub">18 mantras · with udātta marking</div>
+        </div>
+        <span class="dur">14:30</span>
+        <span class="arr">→</span>
+      </a>
+
+      <a class="recit" href="#">
+        <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="info">
+          <div class="ttl"><em>Aṣṭādhyāyī</em> — pratyāhāra-sūtras</div>
+          <div class="sub">14 sūtras · the famous opening</div>
+        </div>
+        <span class="dur">3:12</span>
+        <span class="arr">→</span>
+      </a>
+
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">04 / 05 — Speak · Garv Aggarwal</div>
+    </div>
+    <div class="next">next room: <a href="library-protect.html">Protect →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+</script>
+</body>
+</html>

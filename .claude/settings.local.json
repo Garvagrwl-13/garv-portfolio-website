@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/garvaggarwal -name \"garv-aggarwal-portfolio-website.zip\" 2>/dev/null | head -5)",
+      "Bash(cp -r \"/Users/garvaggarwal/Desktop/Garv Website/handoff_extracted/garv-aggarwal-portfolio-website/project/assets\" \"/Users/garvaggarwal/Desktop/Garv Website/assets\")",
+      "Bash(cp -r \"/Users/garvaggarwal/Desktop/Garv Website/handoff_extracted/garv-aggarwal-portfolio-website/project/uploads\" \"/Users/garvaggarwal/Desktop/Garv Website/uploads\")"
+    ]
+  }
+}

@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Platform — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="ai-platform"]{
+    background: #050A14;
+    color: #e9e2c8;
+    --page-bg: #050A14;
+    --page-fg: #e9e2c8;
+    --accent: var(--activation);
+    --accent-soft: rgba(0,255,178,.10);
+    --rule: rgba(255,255,255,.08);
+  }
+  body[data-page="ai-platform"]::before{
+    background-image: radial-gradient(rgba(255,255,255,.025) 1px, transparent 1.4px);
+    mix-blend-mode:normal; opacity:.7;
+  }
+
+  /* full-bleed neural backdrop */
+  .backdrop{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+  .backdrop .grid{
+    position:absolute; inset:-20px;
+    background-image:
+      linear-gradient(rgba(0,255,178,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,178,.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+  .backdrop canvas{ position:absolute; inset:0; width:100%; height:100%; }
+
+  body[data-page="ai-platform"] .nav .brand{ color:#e9e2c8; }
+  body[data-page="ai-platform"] .nav.is-scrolled{
+    background:rgba(5,10,20,.7);
+    border-bottom-color: rgba(255,255,255,.08);
+  }
+
+  /* hero block centered in page */
+  .ai-hero{
+    position:relative; z-index:2;
+    min-height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:120px 36px 80px;
+    max-width:1080px; margin:0 auto;
+  }
+  .ai-hero .kicker{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.32em; text-transform:uppercase;
+    color: var(--accent);
+    margin-bottom:28px;
+  }
+  .ai-hero .kicker .pulse{
+    width:8px; height:8px; border-radius:50%; background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: glow 1.6s ease-in-out infinite;
+  }
+  @keyframes glow{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%   { opacity:.4; transform:scale(.85); }
+  }
+  .ai-hero h1{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(72px, 11vw, 200px);
+    line-height:.92; letter-spacing:-.025em;
+    margin-bottom:24px;
+  }
+  .ai-hero h1 em{
+    font-style:italic; font-weight:400;
+    color: transparent;
+    background: linear-gradient(120deg, var(--activation) 0%, #6ee0ff 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+  }
+  .ai-hero .sub{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(22px, 1.8vw, 30px);
+    line-height:1.4;
+    max-width:60ch;
+    color: rgba(233,226,200,.78);
+    margin-bottom:48px;
+  }
+  .ai-hero .sub em{ color:var(--accent); font-style:normal; font-weight:500; }
+
+  /* in-build badge */
+  .build-row{
+    display:flex; align-items:center; gap:24px; flex-wrap:wrap;
+    margin-bottom:64px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(233,226,200,.6);
+  }
+  .build-row .stage{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:10px 18px;
+    border:1px solid var(--accent);
+    border-radius:99px;
+    color: var(--accent);
+  }
+  .build-row .stage::before{
+    content:""; width:6px; height:6px; border-radius:50%;
+    background: var(--accent); box-shadow: 0 0 10px var(--accent);
+    animation: glow 1.6s ease-in-out infinite;
+  }
+
+  /* mini status line */
+  .status-line{
+    display:flex; gap:0;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    margin-bottom:64px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase;
+  }
+  .status-line .cell{
+    flex:1; padding:18px 22px;
+    border-right:1px solid var(--rule);
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .status-line .cell:last-child{ border-right:none; }
+  .status-line .cell .k{ opacity:.55; }
+  .status-line .cell .v{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:24px; letter-spacing:0; color: var(--accent);
+    text-transform:none;
+  }
+
+  /* email waitlist */
+  .waitlist{ max-width:540px; }
+  .waitlist .ttl{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:32px; line-height:1.1; letter-spacing:-.01em;
+    margin-bottom:8px;
+  }
+  .waitlist .ttl em{ font-style:italic; color: var(--accent); }
+  .waitlist .hint{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color: rgba(233,226,200,.65);
+    margin-bottom:20px;
+  }
+  .waitlist form{
+    display:flex; gap:0;
+    border-bottom:1px solid rgba(255,255,255,.25);
+    transition: border-color .25s ease;
+  }
+  .waitlist form:focus-within{ border-color: var(--accent); }
+  .waitlist input{
+    flex:1;
+    background:transparent; border:none; outline:none;
+    color:inherit;
+    font-family:'Cormorant Garamond', serif;
+    font-size:22px;
+    padding:14px 0;
+  }
+  .waitlist input::placeholder{
+    color: rgba(233,226,200,.4);
+    font-style:italic;
+  }
+  .waitlist button{
+    background:transparent; border:none; cursor:pointer;
+    font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: var(--accent);
+    padding: 0 0 0 24px;
+  }
+  .waitlist button:hover{ color:#fff; }
+  .waitlist .small{
+    margin-top:14px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.24em; text-transform:uppercase;
+    opacity:.45;
+  }
+  .waitlist .ok{
+    display:none; margin-top:14px;
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color: var(--accent);
+  }
+  .waitlist.is-sent .ok{ display:block; }
+  .waitlist.is-sent form{ opacity:.4; pointer-events:none; }
+
+  /* foot override for night */
+  body[data-page="ai-platform"] .foot{
+    border-top-color: var(--rule);
+  }
+  body[data-page="ai-platform"] .foot .meta{ color: rgba(233,226,200,.55); }
+  body[data-page="ai-platform"] .foot .next a:hover{ color: var(--accent); border-color: var(--accent); }
+  body[data-page="ai-platform"] .foot .colophon{ filter: invert(.9) sepia(.2); opacity:.5; }
+
+  @media (max-width:760px){
+    .ai-hero{ padding:120px 22px 60px; }
+    .status-line{ flex-wrap:wrap; }
+    .status-line .cell{ flex: 1 1 50%; border-right:1px solid var(--rule); border-bottom:1px solid var(--rule); }
+    .waitlist input{ font-size:18px; }
+  }
+</style>
+</head>
+<body data-page="ai-platform" class="dark-grain no-grain">
+
+<div class="backdrop" aria-hidden="true">
+  <div class="grid"></div>
+  <canvas id="bg"></canvas>
+</div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work" class="current">Work</a>
+    <a href="../index.html#resources">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="ai-hero">
+    <div class="kicker">
+      <span class="pulse"></span>
+      <span>04 — AI Platform · in build</span>
+    </div>
+    <h1>An <em>AI</em><br/>for Sanskrit.</h1>
+    <p class="sub">A learning platform built from the inside out — adaptive lessons, model-assisted reading, dictionaries that <em>understand context</em>. Currently in build. More soon.</p>
+
+    <div class="build-row">
+      <span class="stage">currently · building</span>
+      <span>private alpha · 2026</span>
+      <span>—</span>
+      <span>announce list below</span>
+    </div>
+
+    <div class="status-line" aria-label="Build status">
+      <div class="cell"><span class="k">Phase</span><span class="v">Foundation</span></div>
+      <div class="cell"><span class="k">Engine</span><span class="v">Sanskrit-aware</span></div>
+      <div class="cell"><span class="k">Alpha</span><span class="v">Q2 · 2026</span></div>
+      <div class="cell"><span class="k">Built by</span><span class="v">One person</span></div>
+    </div>
+
+    <div class="waitlist" id="waitlist">
+      <div class="ttl">Be the first <em>through the door</em>.</div>
+      <p class="hint">I'll write once when alpha opens. No newsletter, no marketing — just the link.</p>
+      <form id="wl-form" autocomplete="off">
+        <input type="email" id="wl-email" placeholder="your@email.com" required aria-label="Email address" />
+        <button type="submit">Notify me ↗</button>
+      </form>
+      <div class="small">· estimated alpha · Q2 2026 ·</div>
+      <div class="ok">Got it — you're on the list.</div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">04 / 04 — AI Platform · Garv Aggarwal</div>
+    </div>
+    <div class="next">back to: <a href="../index.html#work">The Work →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+
+  // waitlist fake-submit
+  const wl = document.getElementById('waitlist');
+  document.getElementById('wl-form').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    wl.classList.add('is-sent');
+  });
+
+  // tiny neural-network canvas
+  (function(){
+    const c = document.getElementById('bg');
+    const ctx = c.getContext('2d');
+    let nodes=[]; const dpr = Math.min(window.devicePixelRatio||1, 2);
+    let w=0, h=0;
+    function resize(){
+      const r = c.getBoundingClientRect();
+      w = r.width; h = r.height;
+      c.width = w*dpr; c.height = h*dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      seed();
+    }
+    function seed(){
+      const N = Math.round((w*h)/26000);
+      nodes = [];
+      for (let i=0;i<N;i++){
+        nodes.push({
+          x: Math.random()*w, y: Math.random()*h,
+          vx: (Math.random()-.5)*.18, vy: (Math.random()-.5)*.18,
+          r: Math.random()*1.4+.5
+        });
+      }
+    }
+    function frame(){
+      ctx.clearRect(0,0,w,h);
+      for (let i=0;i<nodes.length;i++){
+        const a = nodes[i];
+        a.x += a.vx; a.y += a.vy;
+        if (a.x<0||a.x>w) a.vx*=-1;
+        if (a.y<0||a.y>h) a.vy*=-1;
+        for (let j=i+1;j<nodes.length;j++){
+          const b = nodes[j];
+          const dx = a.x-b.x, dy = a.y-b.y;
+          const d2 = dx*dx+dy*dy;
+          if (d2 < 16000){
+            const op = (1 - d2/16000) * .25;
+            ctx.strokeStyle = `rgba(0,255,178,${op})`;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+        ctx.fillStyle = 'rgba(0,255,178,.6)';
+        ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI*2); ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>

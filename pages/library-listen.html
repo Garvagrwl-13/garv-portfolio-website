@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Listen — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="listen"]{
+    --accent: var(--gold);
+    --accent-soft: rgba(196,146,42,.12);
+  }
+
+  /* full-bleed dark hero band */
+  .lib-hero{
+    background:#0D1018; color:#e9e2c8;
+    padding:160px 36px 80px;
+    position:relative; z-index:2;
+    overflow:hidden;
+  }
+  .lib-hero::before{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 18% 30%, rgba(196,146,42,.18), transparent 55%),
+      radial-gradient(circle at 80% 75%, rgba(139,26,26,.16), transparent 55%);
+  }
+  .lib-hero::after{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1.2px);
+    background-size: 5px 5px;
+  }
+  .lib-hero .inner{
+    max-width:1280px; margin:0 auto; position:relative; z-index:2;
+  }
+  .lib-hero .crumb{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color: rgba(233,226,200,.7);
+    margin-bottom:32px;
+  }
+  .lib-hero .crumb a{ color:inherit; text-decoration:none; }
+  .lib-hero .crumb a:hover{ color: var(--accent); }
+  .lib-hero .crumb .dot{ width:5px; height:5px; border-radius:50%; background:var(--accent); }
+  .lib-hero h1{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(64px, 9vw, 156px);
+    line-height:.92; letter-spacing:-.025em;
+    margin-bottom:14px;
+  }
+  .lib-hero h1 em{ font-style:italic; color: var(--accent); font-weight:400; }
+  .lib-hero .lede{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(20px, 1.6vw, 26px);
+    line-height:1.5; max-width:62ch;
+    color: rgba(233,226,200,.75);
+  }
+  .lib-hero .meta{
+    display:flex; gap:28px; flex-wrap:wrap;
+    margin-top:36px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.65;
+  }
+
+  /* nav variant on dark hero */
+  body[data-page="listen"] .nav .brand,
+  body[data-page="listen"] .nav .links a{ color:#e9e2c8; }
+  body[data-page="listen"] .nav.is-scrolled{
+    background: rgba(13,16,24,.78);
+    border-bottom-color: rgba(255,255,255,.08);
+  }
+  body[data-page="listen"] .nav .brand .lotus{
+    filter: invert(.9) sepia(.4) hue-rotate(20deg);
+  }
+
+  /* ===== layout switch ===== */
+  .var-switch{
+    max-width:1280px; margin:60px auto 36px;
+    padding:0 36px;
+    display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+    position:relative; z-index:2;
+  }
+  .var-switch .lbl{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+  }
+  .var-switch .opts{ display:flex; gap:8px; }
+  .var-switch button{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase;
+    padding:8px 14px;
+    background:transparent; color:inherit;
+    border:1px solid var(--rule); border-radius:99px;
+    cursor:pointer; opacity:.75; transition: all .2s;
+  }
+  .var-switch button.active{
+    background:var(--ink); color:var(--paper); border-color:var(--ink); opacity:1;
+  }
+
+  /* ===== episodes ===== */
+  .episodes{
+    max-width:1280px; margin:0 auto 40px;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+
+  /* shared thumb */
+  .ep-thumb{
+    position:relative; overflow:hidden;
+    background: linear-gradient(135deg, #1c2b48, #0a162a);
+    color:#fff;
+  }
+  .ep-thumb::after{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(196,146,42,.4), transparent 55%),
+      radial-gradient(circle at 75% 70%, rgba(139,26,26,.32), transparent 55%);
+  }
+  .ep-thumb .num{
+    position:absolute; bottom:8px; left:8px; z-index:2;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.2em; text-transform:uppercase;
+    padding:3px 8px; background: rgba(0,0,0,.7); border-radius:3px;
+  }
+  .ep-thumb .dur{
+    position:absolute; bottom:8px; right:8px; z-index:2;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.16em;
+    padding:3px 8px; background: rgba(0,0,0,.7); border-radius:3px;
+  }
+  .ep-thumb .play{
+    position:absolute; inset:0; display:grid; place-items:center;
+    z-index:2;
+  }
+  .ep-thumb .play svg{ width:36px; height:36px; opacity:.85; }
+  /* per-episode tint */
+  .ep-thumb.t1::after{ background: radial-gradient(circle at 35% 40%, rgba(196,146,42,.45), transparent 55%), radial-gradient(circle at 75% 70%, rgba(139,26,26,.25), transparent 55%); }
+  .ep-thumb.t2::after{ background: radial-gradient(circle at 30% 50%, rgba(0,255,178,.18), transparent 55%), radial-gradient(circle at 75% 30%, rgba(196,146,42,.35), transparent 55%); }
+  .ep-thumb.t3::after{ background: radial-gradient(circle at 30% 40%, rgba(220,80,60,.4), transparent 55%), radial-gradient(circle at 80% 80%, rgba(58,38,22,.4), transparent 55%); }
+  .ep-thumb.t4::after{ background: radial-gradient(circle at 40% 50%, rgba(245,237,214,.16), transparent 60%), radial-gradient(circle at 80% 30%, rgba(196,146,42,.35), transparent 55%); }
+  .ep-thumb.t5::after{ background: radial-gradient(circle at 40% 60%, rgba(139,26,26,.45), transparent 55%); }
+  .ep-thumb.t6::after{ background: radial-gradient(circle at 30% 40%, rgba(120,90,200,.32), transparent 55%), radial-gradient(circle at 80% 70%, rgba(196,146,42,.3), transparent 55%); }
+  .ep-thumb.t7::after{ background: radial-gradient(circle at 50% 50%, rgba(196,146,42,.4), transparent 60%); }
+  .ep-thumb.t8::after{ background: radial-gradient(circle at 30% 40%, rgba(40,120,160,.4), transparent 55%); }
+  .ep-thumb.t9::after{ background: radial-gradient(circle at 30% 30%, rgba(196,146,42,.45), transparent 55%), radial-gradient(circle at 75% 75%, rgba(220,80,60,.35), transparent 55%); }
+  .ep-thumb.t10::after{ background: radial-gradient(circle at 50% 40%, rgba(58,38,22,.5), transparent 55%); }
+  .ep-thumb.t11::after{ background: radial-gradient(circle at 30% 60%, rgba(0,255,178,.16), transparent 55%); }
+  .ep-thumb.t12::after{ background: radial-gradient(circle at 40% 40%, rgba(196,146,42,.5), transparent 55%); }
+
+  /* ===== GRID variation ===== */
+  body[data-layout="grid"] .episodes{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:32px 28px;
+  }
+  body[data-layout="grid"] .ep{
+    display:flex; flex-direction:column; gap:14px;
+    text-decoration:none; color:inherit;
+    transition: transform .2s ease;
+  }
+  body[data-layout="grid"] .ep:hover{ transform:translateY(-3px); }
+  body[data-layout="grid"] .ep:hover .ep-thumb .play svg{ opacity:1; }
+  body[data-layout="grid"] .ep-thumb{
+    aspect-ratio: 16 / 9;
+    border-radius:6px;
+  }
+  body[data-layout="grid"] .ep .info{ display:flex; flex-direction:column; gap:6px; }
+  body[data-layout="grid"] .ep .info h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:22px; line-height:1.2; letter-spacing:-.005em;
+  }
+  body[data-layout="grid"] .ep .info h3 em{ font-style:italic; }
+  body[data-layout="grid"] .ep .info .desc{
+    font-family:'Cormorant Garamond', serif; font-size:15px; line-height:1.45;
+    color: var(--ink-soft);
+    max-width:48ch;
+  }
+  body[data-layout="grid"] .ep .info .row{
+    display:flex; gap:14px; flex-wrap:wrap;
+    margin-top:4px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.55;
+  }
+
+  /* ===== LIST variation ===== */
+  body[data-layout="list"] .episodes{
+    display:flex; flex-direction:column;
+    border-top:1px solid var(--rule);
+  }
+  body[data-layout="list"] .ep{
+    display:grid;
+    grid-template-columns: 200px 1fr 140px 40px;
+    gap:28px;
+    align-items:center;
+    padding:22px 0;
+    border-bottom:1px solid var(--rule);
+    text-decoration:none; color:inherit;
+    transition: padding .2s ease;
+  }
+  body[data-layout="list"] .ep:hover{ padding-left:14px; }
+  body[data-layout="list"] .ep:hover h3 em{ color: var(--accent); }
+  body[data-layout="list"] .ep-thumb{
+    width:200px; height:112px;
+    border-radius:4px;
+  }
+  body[data-layout="list"] .ep .info h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:26px; line-height:1.15; letter-spacing:-.005em;
+    margin-bottom:6px;
+  }
+  body[data-layout="list"] .ep .info h3 em{ font-style:italic; transition: color .2s; }
+  body[data-layout="list"] .ep .info .desc{
+    font-family:'Cormorant Garamond', serif; font-size:16px;
+    color: var(--ink-soft); max-width:62ch;
+  }
+  body[data-layout="list"] .ep .when{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.2em; text-transform:uppercase; opacity:.6;
+    text-align:right;
+  }
+  body[data-layout="list"] .ep .arrow{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:28px; color: var(--ink-soft);
+    text-align:right;
+  }
+  body[data-layout="list"] .ep:hover .arrow{ color: var(--accent); }
+
+  /* subscribe strip */
+  .subscribe{
+    max-width:1280px; margin:120px auto 0;
+    padding:60px 36px;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+    text-align:center;
+    position:relative; z-index:2;
+  }
+  .subscribe h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:1; letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .subscribe h2 em{ font-style:italic; color: var(--accent); }
+  .subscribe p{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; color: var(--ink-soft); margin-bottom:24px;
+  }
+  .subscribe .row{
+    display:flex; gap:16px; justify-content:center; flex-wrap:wrap;
+  }
+  .subscribe .row a{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    padding:11px 22px;
+    color:inherit; text-decoration:none;
+    border:1px solid currentColor; border-radius:99px;
+    transition: background .2s, color .2s;
+  }
+  .subscribe .row a:hover{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  @media (max-width:980px){
+    .lib-hero{ padding:120px 22px 60px; }
+    body[data-layout="grid"] .episodes{ grid-template-columns: 1fr; padding:0 22px; }
+    body[data-layout="list"] .ep{ grid-template-columns: 120px 1fr; gap:16px; }
+    body[data-layout="list"] .ep-thumb{ width:120px; height:68px; }
+    body[data-layout="list"] .ep .when, body[data-layout="list"] .ep .arrow{ display:none; }
+    .var-switch, .subscribe{ padding:60px 22px; }
+    .var-switch{ padding:0 22px; margin-top:40px; }
+  }
+</style>
+</head>
+<body data-page="listen" data-layout="grid">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work">Work</a>
+    <a href="../index.html#resources" class="current">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <section class="lib-hero">
+    <div class="inner">
+      <div class="crumb">
+        <a href="../index.html">Garv Aggarwal</a>
+        <span>·</span>
+        <a href="../index.html#resources">The Library</a>
+        <span>·</span>
+        <span class="dot"></span>
+        <span>01 — Listen</span>
+      </div>
+      <h1><em>Listen</em>.</h1>
+      <p class="lede">Recitations, conversations, the language as sound first. A long-form podcast and a growing shelf of recordings — mostly in Hindi, sometimes in English, often with chant.</p>
+      <div class="meta">
+        <span>12 episodes · ongoing</span>
+        <span>Avg. 42 min</span>
+        <span>YouTube · Spotify · Apple</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="var-switch">
+    <span class="lbl">View as</span>
+    <div class="opts" id="layout-opts">
+      <button data-l="grid">Grid</button>
+      <button data-l="list">List</button>
+    </div>
+  </div>
+
+  <div class="episodes" id="eps">
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t1">
+        <span class="num">EP·12</span><span class="dur">47:18</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>Why does a 3,000-year-old language still <em>scan</em>?</h3>
+        <p class="desc">On meter and memory, with notes on Pāṇini and a long detour into the Ṛgveda.</p>
+        <div class="row"><span>2025 · 10</span><span>Hindi</span></div>
+      </div>
+      <span class="when">2025 · 10</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t2">
+        <span class="num">EP·11</span><span class="dur">39:22</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>The grammar of <em>silence</em></h3>
+        <p class="desc">Pāṇini's <em>lopa</em> — deletion — and what every poet knows about the loudest syllable.</p>
+        <div class="row"><span>2025 · 09</span><span>Hindi</span></div>
+      </div>
+      <span class="when">2025 · 09</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t3">
+        <span class="num">EP·10</span><span class="dur">52:01</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>What <em>Yāska</em> would have made of search engines</h3>
+        <p class="desc">Etymology as art, not science. The Nirukta wasn't trying to be correct — it was trying to be useful.</p>
+        <div class="row"><span>2025 · 07</span><span>Hindi</span></div>
+      </div>
+      <span class="when">2025 · 07</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t4">
+        <span class="num">EP·09</span><span class="dur">44:55</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>Why translation is a kind of <em>theft</em></h3>
+        <p class="desc">And a kind of love, depending on the translator. On loss and fidelity.</p>
+        <div class="row"><span>2025 · 04</span><span>English</span></div>
+      </div>
+      <span class="when">2025 · 04</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t5">
+        <span class="num">EP·08</span><span class="dur">36:12</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3><em>Rasa</em>, in modern terms</h3>
+        <p class="desc">The aesthetic theory of the <em>Nāṭyaśāstra</em>, read against contemporary affect theory.</p>
+        <div class="row"><span>2025 · 02</span><span>English</span></div>
+      </div>
+      <span class="when">2025 · 02</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t6">
+        <span class="num">EP·07</span><span class="dur">58:30</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>Conversation with a <em>vaidika</em></h3>
+        <p class="desc">An hour with a Vedic scholar from Pune. We talk about training, error, and the politics of correct.</p>
+        <div class="row"><span>2024 · 12</span><span>Hindi · guest</span></div>
+      </div>
+      <span class="when">2024 · 12</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t7">
+        <span class="num">EP·06</span><span class="dur">31:44</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>Five myths about <em>Sanskrit</em></h3>
+        <p class="desc">It isn't dead. It isn't holy. It isn't all priests. Five things people say, and what's actually true.</p>
+        <div class="row"><span>2024 · 10</span><span>Hindi</span></div>
+      </div>
+      <span class="when">2024 · 10</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t8">
+        <span class="num">EP·05</span><span class="dur">49:02</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>Reading <em>Kālidāsa</em> for the first time</h3>
+        <p class="desc">The Meghadūta, slowly. We read the opening verses together and stop on the second.</p>
+        <div class="row"><span>2024 · 08</span><span>Hindi</span></div>
+      </div>
+      <span class="when">2024 · 08</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <a class="ep" href="#">
+      <div class="ep-thumb t9">
+        <span class="num">EP·04</span><span class="dur">42:11</span>
+        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+      </div>
+      <div class="info">
+        <h3>A field guide to <em>devanāgarī</em></h3>
+        <p class="desc">Why the script is shaped the way it is. A short history and a longer apology.</p>
+        <div class="row"><span>2024 · 06</span><span>English</span></div>
+      </div>
+      <span class="when">2024 · 06</span>
+      <span class="arrow">→</span>
+    </a>
+
+  </div>
+
+  <section class="subscribe">
+    <h2>Subscribe <em>where you listen</em>.</h2>
+    <p>New episodes every three to five weeks. No ads, ever.</p>
+    <div class="row">
+      <a href="#">YouTube ↗</a>
+      <a href="#">Spotify ↗</a>
+      <a href="#">Apple Podcasts ↗</a>
+      <a href="#">RSS ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">01 / 05 — Listen · Garv Aggarwal</div>
+    </div>
+    <div class="next">next room: <a href="library-read.html">Read →</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+
+  // layout switcher
+  const opts = document.querySelectorAll('#layout-opts button');
+  opts.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.body.dataset.layout = b.dataset.l;
+      opts.forEach(o=> o.classList.toggle('active', o===b));
+      try{ localStorage.setItem('gv:listen-l', b.dataset.l); }catch(e){}
+    });
+  });
+  try{
+    const saved = localStorage.getItem('gv:listen-l');
+    if (saved) document.body.dataset.layout = saved;
+  }catch(e){}
+  opts.forEach(o=> o.classList.toggle('active', o.dataset.l === document.body.dataset.layout));
+</script>
+</body>
+</html>

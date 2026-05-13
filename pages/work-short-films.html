@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Short Films — Garv Aggarwal</title>
+<link rel="stylesheet" href="_shared.css" />
+<style>
+  body[data-page="short-films"]{
+    --accent: var(--red);
+    --accent-soft: rgba(139,26,26,.10);
+  }
+
+  /* ============ variation switcher ============ */
+  .var-switch{
+    max-width:1280px; margin:0 auto 56px;
+    padding:0 36px;
+    display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  .var-switch .lbl{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+  }
+  .var-switch .opts{ display:flex; gap:8px; flex-wrap:wrap; }
+  .var-switch button{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase;
+    padding:9px 14px;
+    background:transparent; color:inherit;
+    border:1px solid var(--rule); border-radius:99px;
+    cursor:pointer; opacity:.75; transition: all .2s;
+  }
+  .var-switch button:hover{ opacity:1; }
+  .var-switch button.active{
+    background:var(--ink); color:var(--paper);
+    border-color:var(--ink); opacity:1;
+  }
+
+  /* ============ stills — base ============ */
+  .gallery{
+    max-width:1280px; margin:0 auto;
+    padding:0 36px 60px;
+    position:relative; z-index:2;
+  }
+  .still{
+    position:relative;
+    overflow:hidden;
+    color:var(--paper);
+    border:1px solid rgba(0,0,0,.06);
+    box-shadow: 0 12px 32px rgba(26,10,0,.08);
+  }
+  .still .gfx{
+    position:absolute; inset:0;
+    background-blend-mode: overlay;
+  }
+  .still::after{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(rgba(0,0,0,.5) 1px, transparent 1.2px);
+    background-size:3px 3px;
+    mix-blend-mode:overlay;
+    opacity:.5; pointer-events:none;
+  }
+  .still .info{
+    position:absolute; left:18px; right:18px; bottom:16px;
+    z-index:3;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:12px;
+  }
+  .still .ttl{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500; font-size:32px; line-height:1; letter-spacing:-.01em;
+  }
+  .still .ttl em{ font-style:italic; font-weight:400; opacity:.85; }
+  .still .ttl .dev{ font-family:'Cormorant Garamond', serif; font-style:italic; font-size:13px; opacity:.7; margin-left:6px; }
+  .still .meta{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.85;
+    text-align:right; line-height:1.4;
+  }
+  .still .badge{
+    position:absolute; top:14px; left:14px; z-index:3;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase;
+    padding:4px 9px; border:1px solid currentColor; border-radius:99px;
+    opacity:.8;
+  }
+  .still .devanagari{
+    position:absolute; top:18px; right:18px; z-index:3;
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px; opacity:.55;
+    letter-spacing:0;
+  }
+
+  /* per-film gradient palettes */
+  .g-vac     { background:linear-gradient(160deg, #6f1313 0%, #8B1A1A 38%, #C4922A 100%); }
+  .g-naimisha{ background:linear-gradient(180deg, #08152e 0%, #1a3461 60%, #0c1c33 100%); }
+  .g-yajna   { background:linear-gradient(180deg, #1a0a00 0%, #6b1d05 50%, #d05a1a 100%); }
+  .g-aksara  { background:linear-gradient(160deg, #0a0a0a 0%, #1a0a00 70%, #2a1e10 100%); }
+  .g-smaranaa{ background:linear-gradient(180deg, #3a2616 0%, #6b4a2a 50%, #cfa86f 100%); }
+  .g-drsti   { background:linear-gradient(160deg, #2a1a02 0%, #5e3e10 55%, #C4922A 100%); }
+  .g-rasa    { background:linear-gradient(160deg, #4a1020 0%, #8a2540 40%, #e8a37a 100%); }
+  .g-antar   { background:linear-gradient(180deg, #2b2b3a 0%, #4b3a55 60%, #8a6f8e 100%); }
+
+  /* ===================================================
+     VARIATION A — irregular masonry grid
+     =================================================== */
+  body[data-layout="grid"] .gallery{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 110px;
+    gap:18px;
+  }
+  body[data-layout="grid"] .still:nth-child(1){ grid-column: span 7; grid-row: span 4; }
+  body[data-layout="grid"] .still:nth-child(2){ grid-column: span 5; grid-row: span 3; }
+  body[data-layout="grid"] .still:nth-child(3){ grid-column: span 5; grid-row: span 4; }
+  body[data-layout="grid"] .still:nth-child(4){ grid-column: span 4; grid-row: span 3; }
+  body[data-layout="grid"] .still:nth-child(5){ grid-column: span 3; grid-row: span 4; }
+  body[data-layout="grid"] .still:nth-child(6){ grid-column: span 5; grid-row: span 3; }
+  body[data-layout="grid"] .still:nth-child(7){ grid-column: span 4; grid-row: span 3; }
+  body[data-layout="grid"] .still:nth-child(8){ grid-column: span 8; grid-row: span 4; }
+  body[data-layout="grid"] .still:nth-child(9){ grid-column: span 4; grid-row: span 4; }
+
+  /* ===================================================
+     VARIATION B — pinboard (scattered, tilted)
+     =================================================== */
+  body[data-layout="pin"] .gallery{
+    display:grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 90px;
+    gap:0;
+    padding-bottom:80px;
+  }
+  body[data-layout="pin"] .still{
+    box-shadow: 0 16px 40px rgba(26,10,0,.22), 0 2px 4px rgba(26,10,0,.18);
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  body[data-layout="pin"] .still:hover{
+    transform: rotate(0deg) translateY(-6px) scale(1.02) !important;
+    box-shadow: 0 28px 64px rgba(26,10,0,.32);
+    z-index:10;
+  }
+  body[data-layout="pin"] .still::before{
+    /* tape */
+    content:""; position:absolute; top:-10px; left:50%;
+    width:64px; height:18px;
+    background:rgba(245,237,214,.65);
+    border:1px solid rgba(26,10,0,.12);
+    transform: translateX(-50%) rotate(-3deg);
+    z-index:4;
+    box-shadow: 0 2px 4px rgba(26,10,0,.12);
+  }
+  body[data-layout="pin"] .still:nth-child(1){ grid-column: 1 / span 5; grid-row: 1 / span 5; transform: rotate(-2.4deg); }
+  body[data-layout="pin"] .still:nth-child(2){ grid-column: 7 / span 4; grid-row: 1 / span 4; transform: rotate(1.8deg); }
+  body[data-layout="pin"] .still:nth-child(3){ grid-column: 4 / span 5; grid-row: 5 / span 5; transform: rotate(2deg); z-index:2; }
+  body[data-layout="pin"] .still:nth-child(4){ grid-column: 9 / span 4; grid-row: 4 / span 4; transform: rotate(-1.6deg); }
+  body[data-layout="pin"] .still:nth-child(5){ grid-column: 1 / span 3; grid-row: 7 / span 4; transform: rotate(-1deg); }
+  body[data-layout="pin"] .still:nth-child(6){ grid-column: 8 / span 5; grid-row: 8 / span 4; transform: rotate(2.2deg); }
+  body[data-layout="pin"] .still:nth-child(7){ grid-column: 4 / span 4; grid-row: 10 / span 3; transform: rotate(-2.6deg); }
+  body[data-layout="pin"] .still:nth-child(8){ grid-column: 1 / span 5; grid-row: 11 / span 4; transform: rotate(1.4deg); }
+  body[data-layout="pin"] .still:nth-child(9){ grid-column: 8 / span 5; grid-row: 12 / span 4; transform: rotate(-1.2deg); }
+
+  /* ===================================================
+     VARIATION C — cinematic columns
+     =================================================== */
+  body[data-layout="cinema"] .gallery{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:36px 36px;
+    align-items:start;
+  }
+  body[data-layout="cinema"] .still{
+    width:100%;
+    height: 0; padding-bottom: 60%;
+    border:none;
+    box-shadow: 0 14px 40px rgba(26,10,0,.14);
+  }
+  body[data-layout="cinema"] .still:nth-child(odd){ margin-top:0; }
+  body[data-layout="cinema"] .still:nth-child(even){ margin-top:80px; }
+  body[data-layout="cinema"] .still:nth-child(3n){ padding-bottom: 72%; }
+  body[data-layout="cinema"] .still:nth-child(5n){ padding-bottom: 50%; }
+  body[data-layout="cinema"] .still .ttl{ font-size:40px; }
+
+  /* ===================================================
+     DIRECTOR'S NOTE
+     =================================================== */
+  .note{
+    max-width:1280px; margin:120px auto 0;
+    padding:0 36px;
+    display:grid; grid-template-columns: 1fr 1.4fr; gap:80px;
+    position:relative; z-index:2;
+  }
+  .note .left .mark{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+    margin-bottom:18px;
+  }
+  .note .left h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(40px, 4vw, 64px); line-height:.96;
+    letter-spacing:-.02em;
+  }
+  .note .left h3 em{ font-style:italic; color:var(--accent); font-weight:400; }
+  .note .right p{
+    font-family:'Cormorant Garamond', serif; font-size:20px; line-height:1.55;
+    color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+  .note .right .stack{
+    margin-top:32px;
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .note .right .stack .pill{ opacity:.8; }
+
+  @media (max-width:880px){
+    .var-switch{ padding:0 22px; }
+    .gallery{ padding:0 22px 40px !important; gap:14px !important; }
+    body[data-layout="grid"] .gallery,
+    body[data-layout="pin"] .gallery{
+      grid-template-columns: 1fr !important;
+      grid-auto-rows: 180px !important;
+    }
+    body[data-layout="grid"] .still,
+    body[data-layout="pin"] .still{
+      grid-column: 1 / -1 !important; grid-row: span 2 !important; transform:none !important;
+    }
+    body[data-layout="pin"] .still::before{ display:none; }
+    body[data-layout="cinema"] .gallery{ grid-template-columns:1fr !important; }
+    body[data-layout="cinema"] .still:nth-child(even){ margin-top:0; }
+    .note{ grid-template-columns:1fr; gap:32px; padding:0 22px; }
+  }
+</style>
+</head>
+<body data-page="short-films" data-layout="grid">
+
+<header class="nav" id="nav">
+  <a class="brand" href="../index.html" aria-label="Back to home">
+    <span class="back-arrow">←</span>
+    <span class="lotus" aria-hidden="true"></span>
+    <span class="name">Garv Aggarwal</span>
+  </a>
+  <nav class="links" aria-label="primary">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work" class="current">Work</a>
+    <a href="../index.html#resources">Resources</a>
+    <a href="../index.html#connect">Connect</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ===== HEAD ===== -->
+  <section class="page-head">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <a href="../index.html#work">The Work</a>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>01 — Short Films</span>
+    </div>
+    <h1>Short <em>Films</em>.</h1>
+    <p class="lede">A mood-board, not a filmography. Scripts, characters, and language built around the body of Sanskrit — sometimes literal, sometimes a frequency in the background.</p>
+    <div class="meta">
+      <span><strong>09</strong> · films</span>
+      <span><strong>2021 →</strong> · present</span>
+      <span><strong>Hindi · Sanskrit · English</strong></span>
+      <span><strong>Premiere Pro · DaVinci</strong></span>
+    </div>
+  </section>
+
+  <!-- ===== LAYOUT SWITCH ===== -->
+  <div class="var-switch">
+    <span class="lbl">Mood-board layout</span>
+    <div class="opts" id="layout-opts">
+      <button data-l="grid">A · Irregular grid</button>
+      <button data-l="pin">B · Pinboard</button>
+      <button data-l="cinema">C · Cinematic columns</button>
+    </div>
+  </div>
+
+  <!-- ===== GALLERY ===== -->
+  <div class="section-mark"><span>↧</span><span>Stills · 2021 →</span><span class="rule"></span></div>
+  <div class="gallery">
+
+    <article class="still">
+      <div class="gfx g-vac"></div>
+      <span class="devanagari">वाच्</span>
+      <span class="badge">selected</span>
+      <div class="info">
+        <div class="ttl">Vāc <em>· voice</em></div>
+        <div class="meta">2023<br/>12 min · color</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-naimisha"></div>
+      <span class="devanagari">नैमिष</span>
+      <div class="info">
+        <div class="ttl">Naimiṣa</div>
+        <div class="meta">2024<br/>essay · 8 min</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-yajna"></div>
+      <span class="devanagari">यज्ञ</span>
+      <span class="badge">festival</span>
+      <div class="info">
+        <div class="ttl">Yajña</div>
+        <div class="meta">2022<br/>16 min · 4:3</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-aksara"></div>
+      <span class="devanagari">अक्षर</span>
+      <div class="info">
+        <div class="ttl">Akṣara</div>
+        <div class="meta">2023<br/>9 min · b&amp;w</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-smaranaa"></div>
+      <span class="devanagari">स्मरण</span>
+      <div class="info">
+        <div class="ttl">Smaraṇa</div>
+        <div class="meta">2024<br/>22 min</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-drsti"></div>
+      <span class="devanagari">दृष्टि</span>
+      <div class="info">
+        <div class="ttl">Dṛṣṭi</div>
+        <div class="meta">2023<br/>6 min · vertical</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-rasa"></div>
+      <span class="devanagari">रस</span>
+      <div class="info">
+        <div class="ttl">Rasa <span class="dev">in dev</span></div>
+        <div class="meta">2025<br/>sketch</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-antar"></div>
+      <span class="devanagari">अन्तर्भाव</span>
+      <span class="badge">in development</span>
+      <div class="info">
+        <div class="ttl">Antarbhāva</div>
+        <div class="meta">2025<br/>feature · script</div>
+      </div>
+    </article>
+
+    <article class="still">
+      <div class="gfx g-vac" style="filter: hue-rotate(40deg) brightness(.85);"></div>
+      <span class="devanagari">प्रलाप</span>
+      <div class="info">
+        <div class="ttl">Pralāpa</div>
+        <div class="meta">2021<br/>student · 5 min</div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ===== DIRECTOR'S NOTE ===== -->
+  <section class="note">
+    <div class="left">
+      <div class="mark">→ Director's note</div>
+      <h3>The frame is a <em>śloka</em>. The cut is its <em>caesura</em>.</h3>
+    </div>
+    <div class="right">
+      <p>I think of film the way I think of a verse — as a meter you can fall into. Every script is an exercise in seeing what Sanskrit already knew about timing: when to hold a syllable, when to let it go, when one breath ends and the next begins.</p>
+      <p>The work isn't always <em>about</em> the language. But the language is always the spine — even when the dialogue is in Hindi, even when there is no dialogue at all. Especially then.</p>
+      <div class="stack">
+        <span class="pill">Direction</span>
+        <span class="pill">Script</span>
+        <span class="pill">Edit</span>
+        <span class="pill">Sound design</span>
+        <span class="pill">DaVinci · color</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== FOOT ===== -->
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">01 / 04 — Short Films · Garv Aggarwal</div>
+    </div>
+    <div class="next">next chapter: <a href="work-nlp.html">Deep Learning &amp; NLP →</a></div>
+  </div>
+</footer>
+
+<script>
+  // nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', ()=>{
+    nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  }, { passive:true });
+
+  // layout switcher
+  const opts = document.querySelectorAll('#layout-opts button');
+  opts.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      const l = b.dataset.l;
+      document.body.dataset.layout = l;
+      opts.forEach(o=> o.classList.toggle('active', o===b));
+      try{ localStorage.setItem('gv:sf-layout', l); }catch(e){}
+    });
+  });
+  // restore
+  try{
+    const saved = localStorage.getItem('gv:sf-layout');
+    if (saved){ document.body.dataset.layout = saved; }
+  }catch(e){}
+  // init active state
+  opts.forEach(o=> o.classList.toggle('active', o.dataset.l === document.body.dataset.layout));
+</script>
+
+</body>
+</html>
