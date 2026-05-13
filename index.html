@@ -98,9 +98,21 @@
 .lotus.pink{ background-image: url("assets/lotus-2-pink.png"); }
 .lotus.wire{
   background-image: url("assets/lotus-2-wire.png");
-  filter: drop-shadow(0 0 10px rgba(0,255,178,.45));
+  filter:
+    invert(1)
+    sepia(1)
+    hue-rotate(105deg)
+    saturate(4)
+    brightness(1.3)
+    drop-shadow(0 0 6px rgba(0,255,178,1))
+    drop-shadow(0 0 18px rgba(0,255,178,.7))
+    drop-shadow(0 0 40px rgba(0,255,178,.4));
+  mix-blend-mode: screen;
   opacity:0;
 }
+/* right-side (back) lotus uses a different image pair */
+.lotus.back.pink{ background-image: url("assets/lotus.png"); }
+.lotus.back.wire{ background-image: url("assets/lotus-wire.png"); }
 
 @keyframes bob-front{
   0%,100%{ transform: translateY(-32%) rotate(-9deg); }
@@ -610,9 +622,9 @@ section.block{ position:relative; z-index:2; }
       <div class="layer-cream">
         <div class="hero-stage">
           <!-- front lotus (pink, day) — in front of text -->
-          <div class="lotus front pink" aria-hidden="true"></div>
+          <div class="lotus front pink organic" aria-hidden="true"></div>
           <!-- back lotus (pink, day) — behind text -->
-          <div class="lotus back pink" aria-hidden="true"></div>
+          <div class="lotus back pink organic" aria-hidden="true"></div>
         </div>
       </div>
 
