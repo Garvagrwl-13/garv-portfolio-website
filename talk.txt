@@ -1,0 +1,53 @@
+The basic flow every time you make 
+    changes:
+                                       
+    git add .                          
+    git commit -m "describe what you   
+    changed"                           
+    git push                           
+                                       
+    What each command does:            
+                                       
+    - git add . — stages all changed   
+    files, telling git "include these  
+    in the next snapshot"              
+    - git commit -m "..." — saves a    
+    snapshot of those staged files     
+    locally with a message describing  
+    what changed                       
+    - git push — uploads your local    
+    commits to GitHub                  
+                                       
+    Analogy:                           
+    - add = putting files in a box     
+    - commit = sealing the box and     
+    labeling it                        
+    - push = shipping the box to GitHub
+                                       
+    Example workflow after editing     
+    index.html:                        
+    git add .                          
+    git commit -m "Update about section
+     text"                             
+    git push                           
+                                       
+    GitHub Pages then automatically    
+    rebuilds and your live site updates
+     within ~1 minute.                 
+                                       
+    Useful extras:                     
+    git status        # see which files
+     have changed                      
+    git log --oneline # see your commit
+     history                           
+                                       
+    The commit message can be anything 
+    descriptive — it's just for your   
+    own reference so you can look back 
+    and understand what each change
+    was.
+
+git rm -r --cached assets/                                              
+git add assets/                                                         
+git commit -m "Re-add updated asset files"
+git push

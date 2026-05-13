@@ -7,100 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
 <style>
-/* ====================================================================
-   GARV AGGARWAL — PORTFOLIO
-   palette: manuscript cream  +  deep sacred red  +  aged gold
-            night: deep space + neural blue + activation green
-   type:    Cormorant Garamond (display) · Inter (body) · JetBrains Mono (meta)
-   ==================================================================== */
-
-:root{
-  --paper:#F5EDD6;
-  --paper-2:#EFE5C5;
-  --ink:#1A0A00;
-  --ink-soft:#3a2c1c;
-  --red:#8B1A1A;
-  --red-deep:#6f1313;
-  --gold:#C4922A;
-  --night:#050A14;
-  --neural:#0A2540;
-  --neural-2:#11335c;
-  --activation:#00FFB2;
-  --rule: rgba(26,10,0,.18);
-}
-
-*{box-sizing:border-box; margin:0; padding:0;}
-html,body{ background:var(--paper); color:var(--ink); }
-body{
-  font-family:'Inter', system-ui, sans-serif;
-  font-weight:400;
-  font-size:16px;
-  line-height:1.55;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
-  overflow-x:hidden;
-}
-
-/* paper grain */
-body::before{
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:1;
-  background-image:
-    radial-gradient(rgba(26,10,0,.04) 1px, transparent 1.4px);
-  background-size: 5px 5px;
-  mix-blend-mode:multiply;
-  opacity:.7;
-}
-
-/* ===== type ===== */
-.display{
-  font-family:'Cormorant Garamond', serif;
-  font-weight:500;
-  letter-spacing:-.02em;
-  line-height:.92;
-}
-.serif{ font-family:'Cormorant Garamond', serif; font-weight:400; }
-.mono{
-  font-family:'JetBrains Mono', ui-monospace, monospace;
-  font-size:11px; letter-spacing:.18em; text-transform:uppercase;
-}
-.italic-serif{ font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:400; }
-
-/* ===== NAV ============================================================ */
-.nav{
-  position:fixed; top:0; left:0; right:0; z-index:50;
-  display:flex; align-items:center; justify-content:space-between;
-  padding:18px 36px;
-  transition: background .35s ease, backdrop-filter .35s ease, border-color .35s ease, color .35s ease;
-  border-bottom:1px solid transparent;
-}
-.nav.is-scrolled{
-  background:rgba(245,237,214,.78);
-  backdrop-filter: blur(10px) saturate(1.1);
-  -webkit-backdrop-filter: blur(10px) saturate(1.1);
-  border-bottom-color: var(--rule);
-}
-.nav .brand{
-  display:flex; align-items:center; gap:10px;
-  text-decoration:none; color:inherit; white-space:nowrap;
-}
-.nav .brand .lotus{
-  width:22px; height:22px;
-  background:url("assets/lotus.png") center/contain no-repeat;
-  filter:drop-shadow(0 0 0 transparent);
-}
-.nav .brand .name{
-  font-family:'Cormorant Garamond', serif;
-  font-size:18px; letter-spacing:.01em; font-weight:500;
-}
-.nav .links{ display:flex; gap:28px; }
-.nav .links a{
-  font-family:'Inter', sans-serif; font-size:13px; font-weight:500;
-  letter-spacing:.06em; text-transform:uppercase;
-  color:inherit; text-decoration:none; opacity:.78;
-  transition:opacity .2s;
-}
-.nav .links a:hover{ opacity:1; }
+/* page-specific: dropdown hover uses gold on the home page */
+.nav .links .nav-dropdown a:hover{ color:var(--gold); }
 
 /* ===== HERO =========================================================== */
 .hero-wrap{ position:relative; }
@@ -318,20 +228,7 @@ body::before{
   50%   { clip-path: inset(20% 0 55% 0); }
 }
 
-/* ====================================================================
-   SECTION SCAFFOLD shared
-   ==================================================================== */
-section.block{
-  position:relative; z-index:2;
-}
-.section-mark{
-  display:flex; align-items:center; gap:14px;
-  padding:0 36px;
-  font-family:'JetBrains Mono', monospace; font-size:10px;
-  letter-spacing:.24em; text-transform:uppercase;
-  opacity:.6;
-}
-.section-mark .rule{ flex:1; height:1px; background:currentColor; opacity:.4; }
+section.block{ position:relative; z-index:2; }
 
 /* ===== ABOUT ========================================================= */
 .about{
@@ -682,8 +579,6 @@ section.block{
 
 /* ===== mobile ========================================================= */
 @media (max-width:880px){
-  .nav{ padding:14px 18px; }
-  .nav .links{ gap:18px; }
   .hero-meta-tl, .hero-meta-tr{ display:none; }
   .about{ padding:80px 22px 100px; }
   .about .inner{ grid-template-columns:1fr; gap:36px; }
@@ -701,18 +596,8 @@ section.block{
 <body>
 
 <!-- =========================== NAV ============================ -->
-<header class="nav" id="nav">
-  <a class="brand" href="#" aria-label="Garv Aggarwal — home">
-    <span class="lotus" aria-hidden="true"></span>
-    <span class="name">Garv Aggarwal</span>
-  </a>
-  <nav class="links" aria-label="primary">
-    <a href="#about">About</a>
-    <a href="#work">Work</a>
-    <a href="#resources">Resources</a>
-    <a href="#connect">Connect</a>
-  </nav>
-</header>
+<div id="nav-mount" data-nav-root="" data-nav-pages="pages/" data-nav-current=""></div>
+<script src="nav-loader.js"></script>
 
 <main id="main">
 
@@ -751,7 +636,7 @@ section.block{
 
       <!-- meta corners -->
       <div class="hero-meta-tl">
-        Sanskrit · Saṁskṛta<br/>
+        Sanskrit · Saṃskṛtam<br/>
         <span style="opacity:.6">est. — present.</span>
       </div>
       <div class="hero-meta-tr">
@@ -997,10 +882,6 @@ section.block{
 </main>
 
 <script>
-/* ====================================================================
-   NAV — frosted-glass scroll state
-   ==================================================================== */
-const nav  = document.getElementById('nav');
 const hero = document.getElementById('hero');
 const word = document.getElementById('hero-word');
 const sub  = document.getElementById('hero-sub');
@@ -1016,8 +897,6 @@ function pickScramble(target){
 }
 
 function onScroll(){
-  nav.classList.toggle('is-scrolled', window.scrollY > 8);
-
   const r = hero.getBoundingClientRect();
   const total = hero.offsetHeight - window.innerHeight;
   const scrolled = Math.min(Math.max(-r.top, 0), total);
