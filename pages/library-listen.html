@@ -74,6 +74,24 @@
   body[data-page="listen"] .nav .links .nav-dropdown a{ color: var(--ink); }
   body[data-page="listen"] .nav .links .nav-dropdown a:hover{ color: var(--accent); }
 
+  /* ===== podcast section heading ===== */
+  .podcast-sec-head{
+    max-width:1280px; margin:60px auto 0;
+    padding:0 36px 24px;
+    position:relative; z-index:2;
+    border-bottom:1px solid var(--rule);
+  }
+  .podcast-sec-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(28px, 3vw, 42px); line-height:1.1; letter-spacing:-.015em;
+    margin-bottom:6px;
+  }
+  .podcast-sec-head h2 em{ font-style:italic; color: var(--accent); }
+  .podcast-sec-head .sub{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.55;
+  }
+
   /* ===== layout switch ===== */
   .var-switch{
     max-width:1280px; margin:60px auto 36px;
@@ -226,6 +244,73 @@
   }
   body[data-layout="list"] .ep:hover .arrow{ color: var(--accent); }
 
+  /* ===== playlist CTA ===== */
+  .playlist-cta{
+    max-width:1280px; margin:32px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .playlist-cta a{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    padding:11px 22px;
+    color:inherit; text-decoration:none;
+    border:1px solid currentColor; border-radius:99px;
+    transition: background .2s, color .2s;
+  }
+  .playlist-cta a:hover{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  /* ===== content sections (Music / Films / Lectures) ===== */
+  .content-section{
+    max-width:1280px; margin:80px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .content-sec-head{
+    margin-bottom:32px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--rule);
+  }
+  .content-sec-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(28px, 3vw, 42px); line-height:1.1; letter-spacing:-.015em;
+  }
+  .content-sec-head h2 em{ font-style:italic; color: var(--accent); }
+  .media-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:32px 28px;
+  }
+  .media-card{
+    display:flex; flex-direction:column; gap:14px;
+    text-decoration:none; color:inherit;
+    transition: transform .2s ease;
+  }
+  .media-card:hover{ transform:translateY(-3px); }
+  .media-card:hover .ep-thumb .play svg{ opacity:1; }
+  .media-card .ep-thumb{
+    aspect-ratio: 16 / 9;
+    border-radius:6px;
+  }
+  .media-card .info{ display:flex; flex-direction:column; gap:6px; }
+  .media-card .info h3{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:22px; line-height:1.2; letter-spacing:-.005em;
+  }
+  .media-card .info h3 em{ font-style:italic; }
+  .media-card .info .desc{
+    font-family:'Cormorant Garamond', serif; font-size:15px; line-height:1.45;
+    color: var(--ink-soft);
+    max-width:48ch;
+  }
+  .media-card .info .row{
+    display:flex; gap:14px; flex-wrap:wrap;
+    margin-top:4px;
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.22em; text-transform:uppercase; opacity:.55;
+  }
+
   /* subscribe strip */
   .subscribe{
     max-width:1280px; margin:120px auto 0;
@@ -265,6 +350,10 @@
     body[data-layout="list"] .ep .when, body[data-layout="list"] .ep .arrow{ display:none; }
     .var-switch, .subscribe{ padding:60px 22px; }
     .var-switch{ padding:0 22px; margin-top:40px; }
+    .podcast-sec-head{ padding:0 22px 24px; margin-top:40px; }
+    .playlist-cta{ padding:0 22px; }
+    .content-section{ padding:0 22px; margin-top:60px; }
+    .media-grid{ grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -285,14 +374,19 @@
         <span>01 — Listen</span>
       </div>
       <h1><em>Listen</em>.</h1>
-      <p class="lede">Recitations, conversations, the language as sound first. A long-form podcast and a growing shelf of recordings — mostly in Hindi, sometimes in English, often with chant.</p>
+      <p class="lede">Sanskrit as sound — podcasts, music, mantras, films, and lectures. Let the language enter through your ears first.</p>
       <div class="meta">
-        <span>12 episodes · ongoing</span>
-        <span>Avg. 42 min</span>
-        <span>YouTube · Spotify · Apple</span>
+        <span>4 episodes · ongoing</span>
+        <span>Avg. 40 min</span>
+        <span>YouTube only</span>
       </div>
     </div>
   </section>
+
+  <div class="podcast-sec-head">
+    <h2>Koshasatram — <em>The Sanskrit Podcast</em></h2>
+    <span class="sub">The world's first Sanskrit podcast</span>
+  </div>
 
   <div class="var-switch">
     <span class="lbl">View as</span>
@@ -304,144 +398,112 @@
 
   <div class="episodes" id="eps">
 
-    <a class="ep" href="#">
+    <a class="ep" href="https://www.youtube.com/watch?v=2yfP_suFKFg&list=PLdwujL56xgIPZ9uprfJLh-mQb_4pWk1ad&index=1&t=99s&pp=iAQB0gcJCQQLAYcqIYzv" target="_blank" rel="noopener noreferrer">
       <div class="ep-thumb t1">
-        <span class="num">EP·12</span><span class="dur">47:18</span>
+        <span class="num">EP·01</span><span class="dur">41:55</span>
         <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
       </div>
       <div class="info">
-        <h3>Why does a 3,000-year-old language still <em>scan</em>?</h3>
-        <p class="desc">On meter and memory, with notes on Pāṇini and a long detour into the Ṛgveda.</p>
-        <div class="row"><span>2025 · 10</span><span>Hindi</span></div>
-      </div>
-      <span class="when">2025 · 10</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t2">
-        <span class="num">EP·11</span><span class="dur">39:22</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>The grammar of <em>silence</em></h3>
-        <p class="desc">Pāṇini's <em>lopa</em> — deletion — and what every poet knows about the loudest syllable.</p>
-        <div class="row"><span>2025 · 09</span><span>Hindi</span></div>
-      </div>
-      <span class="when">2025 · 09</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t3">
-        <span class="num">EP·10</span><span class="dur">52:01</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>What <em>Yāska</em> would have made of search engines</h3>
-        <p class="desc">Etymology as art, not science. The Nirukta wasn't trying to be correct — it was trying to be useful.</p>
-        <div class="row"><span>2025 · 07</span><span>Hindi</span></div>
-      </div>
-      <span class="when">2025 · 07</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t4">
-        <span class="num">EP·09</span><span class="dur">44:55</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>Why translation is a kind of <em>theft</em></h3>
-        <p class="desc">And a kind of love, depending on the translator. On loss and fidelity.</p>
-        <div class="row"><span>2025 · 04</span><span>English</span></div>
-      </div>
-      <span class="when">2025 · 04</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t5">
-        <span class="num">EP·08</span><span class="dur">36:12</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3><em>Rasa</em>, in modern terms</h3>
-        <p class="desc">The aesthetic theory of the <em>Nāṭyaśāstra</em>, read against contemporary affect theory.</p>
-        <div class="row"><span>2025 · 02</span><span>English</span></div>
-      </div>
-      <span class="when">2025 · 02</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t6">
-        <span class="num">EP·07</span><span class="dur">58:30</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>Conversation with a <em>vaidika</em></h3>
-        <p class="desc">An hour with a Vedic scholar from Pune. We talk about training, error, and the politics of correct.</p>
-        <div class="row"><span>2024 · 12</span><span>Hindi · guest</span></div>
-      </div>
-      <span class="when">2024 · 12</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t7">
-        <span class="num">EP·06</span><span class="dur">31:44</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>Five myths about <em>Sanskrit</em></h3>
-        <p class="desc">It isn't dead. It isn't holy. It isn't all priests. Five things people say, and what's actually true.</p>
-        <div class="row"><span>2024 · 10</span><span>Hindi</span></div>
+        <h3>A Step-by-Step Approach for <em>Beginners</em> to learn Sanskrit</h3>
+        <div class="row"><span>2024 · 10</span><span>Sanskrit</span></div>
       </div>
       <span class="when">2024 · 10</span>
       <span class="arrow">→</span>
     </a>
 
-    <a class="ep" href="#">
-      <div class="ep-thumb t8">
-        <span class="num">EP·05</span><span class="dur">49:02</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>Reading <em>Kālidāsa</em> for the first time</h3>
-        <p class="desc">The Meghadūta, slowly. We read the opening verses together and stop on the second.</p>
-        <div class="row"><span>2024 · 08</span><span>Hindi</span></div>
-      </div>
-      <span class="when">2024 · 08</span>
-      <span class="arrow">→</span>
-    </a>
-
-    <a class="ep" href="#">
-      <div class="ep-thumb t9">
-        <span class="num">EP·04</span><span class="dur">42:11</span>
-        <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
-      </div>
-      <div class="info">
-        <h3>A field guide to <em>devanāgarī</em></h3>
-        <p class="desc">Why the script is shaped the way it is. A short history and a longer apology.</p>
-        <div class="row"><span>2024 · 06</span><span>English</span></div>
-      </div>
-      <span class="when">2024 · 06</span>
-      <span class="arrow">→</span>
-    </a>
-
   </div>
 
+  <div class="playlist-cta">
+    <a href="https://www.youtube.com/watch?v=2yfP_suFKFg&list=PLdwujL56xgIPZ9uprfJLh-mQb_4pWk1ad" target="_blank" rel="noopener noreferrer">Watch all episodes on YouTube ↗</a>
+  </div>
+
+  <!-- Music Section -->
+  <section class="content-section">
+    <div class="content-sec-head">
+      <h2><em>Music</em></h2>
+    </div>
+    <div class="media-grid">
+
+      <a class="media-card" href="https://www.youtube.com/watch?v=yKW3bZMsMDc&list=PL1W7mfZXVtp3vHZhTPKMvZSCwEQMpgqWL" target="_blank" rel="noopener noreferrer">
+        <div class="ep-thumb t2">
+          <span class="num">MUSIC</span>
+          <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+        </div>
+        <div class="info">
+          <h3>Sanskrit <em>Music</em> Playlist</h3>
+          <div class="row"><span>YouTube · Playlist</span></div>
+        </div>
+      </a>
+
+      <a class="media-card" href="https://www.youtube.com/watch?v=5qcWgsfehWQ&list=PL1W7mfZXVtp3vbSrW1CElBPeuVSv_xDdV" target="_blank" rel="noopener noreferrer">
+        <div class="ep-thumb t6">
+          <span class="num">MANTRA</span>
+          <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+        </div>
+        <div class="info">
+          <h3>Sanskrit <em>Mantras</em> Playlist</h3>
+          <div class="row"><span>YouTube · Playlist</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Films Section -->
+  <section class="content-section">
+    <div class="content-sec-head">
+      <h2><em>Films</em></h2>
+    </div>
+    <div class="media-grid">
+
+      <a class="media-card" href="https://www.youtube.com/watch?v=Ixgk2eoOqxk&list=PL1W7mfZXVtp2u-xrPMjnFZwqLZFw-qvpx" target="_blank" rel="noopener noreferrer">
+        <div class="ep-thumb t3">
+          <span class="num">FILM</span>
+          <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+        </div>
+        <div class="info">
+          <h3>Sanskrit <em>Movies</em> Playlist</h3>
+          <div class="row"><span>YouTube · Playlist</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Lectures Section -->
+  <section class="content-section">
+    <div class="content-sec-head">
+      <h2><em>Lectures</em></h2>
+    </div>
+    <div class="media-grid">
+
+      <a class="media-card" href="https://www.sanskrit.nic.in/sanskrit_language_teaching.php#30" target="_blank" rel="noopener noreferrer">
+        <div class="ep-thumb t4">
+          <span class="num">LECTURE</span>
+          <span class="play"><svg viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>
+        </div>
+        <div class="info">
+          <h3>Central <em>Sanskrit</em> University</h3>
+          <p class="desc">Structured beginner-friendly courses with interactive classroom lectures.</p>
+          <div class="row"><span>sanskrit.nic.in</span></div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Subscribe strip — commented out until links are confirmed
   <section class="subscribe">
     <h2>Subscribe <em>where you listen</em>.</h2>
     <p>New episodes every three to five weeks. No ads, ever.</p>
     <div class="row">
-      <a href="#">YouTube ↗</a>
+      <a href="https://www.youtube.com/@Vivakshu" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
       <a href="#">Spotify ↗</a>
       <a href="#">Apple Podcasts ↗</a>
       <a href="#">RSS ↗</a>
     </div>
   </section>
+  -->
 </main>
 
 <footer class="foot">
