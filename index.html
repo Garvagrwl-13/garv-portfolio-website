@@ -124,6 +124,7 @@
 }
 
 .lotus-stack{ display:none; }
+.lede-mobile{ display:none; }
 
 /* hero text */
 .hero-text{
@@ -632,6 +633,10 @@ section.block{ position:relative; z-index:2; }
   .work .head, .library .head{ flex-direction:column; align-items:flex-start; padding:0 22px 28px; }
   .chapter{ grid-template-columns: 56px 1fr 28px; gap:18px; padding:24px 22px; }
 
+  /* library lede text swap */
+  .lede-mobile{ display:inline; }
+  .lede-desktop{ display:none; }
+
   /* library: single column, reduced card height */
   .lib-grid{ grid-template-columns: 1fr; }
   .lib-card{ border-right:none; border-bottom:1px solid var(--rule); height:auto; min-height:300px; }
@@ -639,6 +644,8 @@ section.block{ position:relative; z-index:2; }
   .lib-card .ttl{ font-size:48px; }
   .lib-card.protect .gfx svg{ width:auto; max-height:120px; }
   .lib-card.speak .gfx svg{ width:auto; max-height:120px; }
+  /* tap-to-flip */
+  .lib-card.is-tapped .flipper{ transform:rotateY(180deg); }
 
   .connect{ padding:80px 22px 60px; }
 }
@@ -803,7 +810,10 @@ section.block{ position:relative; z-index:2; }
   <section class="block library" id="resources" aria-labelledby="lib-h">
     <div class="head">
       <h2 id="lib-h">The <em>Library</em>.</h2>
-      <p class="lede">Five practices for keeping a language alive. Hover any card to open it.</p>
+      <p class="lede">
+        <span class="lede-desktop">Five practices for keeping a language alive. Hover any card to open it.</span>
+        <span class="lede-mobile">Five practices for keeping a language alive. Tap any card to open it.</span>
+      </p>
     </div>
     <div class="lib-grid">
 
@@ -1079,6 +1089,22 @@ onScroll();
   resize();
   requestAnimationFrame(frame);
 })();
+
+/* Library card tap-to-flip on touch devices */
+if (window.matchMedia('(hover: none)').matches) {
+  document.querySelectorAll('.lib-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      if (!card.classList.contains('is-tapped')) {
+        card.classList.add('is-tapped');
+      }
+    });
+    card.querySelectorAll('.btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    });
+  });
+}
 </script>
 
 </body>
