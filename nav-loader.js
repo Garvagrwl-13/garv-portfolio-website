@@ -47,6 +47,37 @@
           timer = setTimeout(function() { wrap.classList.remove('dd-open'); }, 180);
         });
       });
+
+      // Mobile hamburger
+      const burger    = document.getElementById('nav-burger');
+      const mobileNav = document.getElementById('mobile-nav');
+      const mobileClose = document.getElementById('mobile-nav-close');
+
+      function openMobileNav() {
+        burger.classList.add('is-open');
+        burger.setAttribute('aria-expanded', 'true');
+        mobileNav.classList.add('is-open');
+        mobileNav.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('nav-open');
+      }
+
+      function closeMobileNav() {
+        burger.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        mobileNav.classList.remove('is-open');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('nav-open');
+      }
+
+      if (burger && mobileNav) {
+        burger.addEventListener('click', function() {
+          burger.classList.contains('is-open') ? closeMobileNav() : openMobileNav();
+        });
+        mobileClose && mobileClose.addEventListener('click', closeMobileNav);
+        mobileNav.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', closeMobileNav);
+        });
+      }
     })
     .catch(err => console.warn('[nav-loader] Failed to load nav.html:', err));
 }());

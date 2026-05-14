@@ -592,16 +592,51 @@ section.block{ position:relative; z-index:2; }
 /* ===== mobile ========================================================= */
 @media (max-width:880px){
   .hero-meta-tl, .hero-meta-tr{ display:none; }
+
+  /* hero lotuses: vw-relative so they scale with the screen */
+  .lotus.back{
+    width: clamp(140px, 42vw, 260px);
+    right: -3%;
+    top: 40%;
+  }
+  .lotus.front{
+    width: clamp(155px, 46vw, 280px);
+    left: -5%;
+    top: 50%;
+  }
+
+  /* about: single-column, text on top, ornament below */
   .about{ padding:80px 22px 100px; }
   .about .inner{ grid-template-columns:1fr; gap:36px; }
-  .about .ornament{ max-width:300px; margin:0 auto; }
+  .about .ornament{ max-width:280px; margin:0 auto; order:2; }
+  .about .inner > div:not(.ornament){ order:1; }
+
   .work{ padding:80px 0 20px; }
   .work .head, .library .head{ flex-direction:column; align-items:flex-start; padding:0 22px 28px; }
   .chapter{ grid-template-columns: 56px 1fr 28px; gap:18px; padding:24px 22px; }
+
+  /* library: single column, reduced card height */
   .lib-grid{ grid-template-columns: 1fr; }
-  .lib-card{ border-right:none; border-bottom:1px solid var(--rule); height:auto; min-height:380px; }
+  .lib-card{ border-right:none; border-bottom:1px solid var(--rule); height:auto; min-height:300px; }
   .lib-card:last-child{ border-bottom:none; }
+  .lib-card .ttl{ font-size:48px; }
+
   .connect{ padding:80px 22px 60px; }
+}
+
+@media (max-width:480px){
+  /* extra-small: shrink lotuses further */
+  .lotus.back{
+    width: clamp(100px, 36vw, 155px);
+    right: -5%;
+    top: 42%;
+  }
+  .lotus.front{
+    width: clamp(110px, 40vw, 165px);
+    left: -7%;
+    top: 52%;
+  }
+  .hero-sub{ font-size: clamp(14px, 3.8vw, 18px); bottom:10vh; }
 }
 </style>
 </head>
