@@ -133,6 +133,18 @@
   pointer-events:none;
   text-align:center;
 }
+.hero-portrait{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:53%;
+  width: clamp(140px, 22vh, 260px);
+  height: clamp(140px, 22vh, 260px);
+  border-radius:50%;
+  object-fit:cover;
+  opacity: calc(1 - var(--scroll-p, 0) * 1.5);
+  pointer-events:none;
+}
 .hero-word{
   font-family:'Cormorant Garamond', serif;
   font-weight:500;
@@ -684,6 +696,7 @@ section.block{ position:relative; z-index:2; }
 
       <!-- text overlay -->
       <div class="hero-text">
+        <img src="assets/garv.svg" class="hero-portrait" alt="Garv Aggarwal" />
         <div class="hero-word display glitch" id="hero-word" data-text="Sanskrit">Sanskrit</div>
       </div>
       <div class="hero-sub italic-serif" id="hero-sub">the language of the universe</div>
