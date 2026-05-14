@@ -143,7 +143,10 @@
   height: clamp(140px, 22vh, 260px);
   border-radius:50%;
   object-fit:cover;
-  opacity: calc(1 - var(--scroll-p, 0) * 1.5);
+  filter:
+    sepia(calc(var(--scroll-p, 0)))
+    hue-rotate(calc(var(--scroll-p, 0) * 105deg))
+    saturate(calc(1 + var(--scroll-p, 0) * 3));
   pointer-events:none;
 }
 .hero-word{
@@ -1092,16 +1095,15 @@ onScroll();
 
 /* Library card tap-to-flip on touch devices */
 if (window.matchMedia('(hover: none)').matches) {
-  document.querySelectorAll('.lib-card').forEach(function(card) {
+  const cards = document.querySelectorAll('.lib-card');
+  cards.forEach(function(card) {
     card.addEventListener('click', function() {
-      if (!card.classList.contains('is-tapped')) {
-        card.classList.add('is-tapped');
-      }
+      const isOpen = card.classList.contains('is-tapped');
+      cards.forEach(function(c) { c.classList.remove('is-tapped'); });
+      if (!isOpen) card.classList.add('is-tapped');
     });
     card.querySelectorAll('.btn').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-      });
+      btn.addEventListener('click', function(e) { e.stopPropagation(); });
     });
   });
 }
