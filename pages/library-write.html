@@ -194,6 +194,73 @@
   }
   .entry:hover .arrow{ opacity:1; color: var(--red); }
 
+  /* tools + prompts sections */
+  .tools-sec, .prompts-sec{
+    max-width:980px; margin:60px auto 80px;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .sec-head{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:.95; letter-spacing:-.015em;
+    margin-bottom:32px;
+  }
+  .sec-head em{ font-style:italic; color: var(--red); }
+  .tool-card{
+    background:#FDF7E2;
+    border:1px solid rgba(26,10,0,.12);
+    border-left:3px solid var(--red);
+    box-shadow:0 14px 36px rgba(26,10,0,.10);
+    padding:32px 40px;
+    margin-bottom:20px;
+    text-decoration:none; color:inherit;
+    display:block;
+    transition:box-shadow .2s ease, transform .2s ease;
+  }
+  .tool-card:hover{ box-shadow:0 20px 48px rgba(26,10,0,.16); transform:translateY(-2px); }
+  .tool-card .tool-name{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:32px; letter-spacing:-.015em;
+    margin-bottom:8px;
+  }
+  .tool-card .tool-desc{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; line-height:1.5; color:var(--ink-soft);
+  }
+  .tool-card .tool-link{
+    display:inline-block; margin-top:14px;
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.24em; text-transform:uppercase;
+    color:var(--red); border-bottom:1px solid var(--red); padding-bottom:2px;
+  }
+  .prompt-card{
+    background:#FDF7E2;
+    border:1px solid rgba(26,10,0,.12);
+    border-top:3px solid var(--red);
+    box-shadow:0 8px 24px rgba(26,10,0,.08);
+    padding:32px 40px;
+    margin-bottom:20px;
+  }
+  .prompt-card .prompt-level{
+    font-family:'JetBrains Mono', monospace; font-size:9px;
+    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
+    margin-bottom:10px;
+  }
+  .prompt-card .prompt-title{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:28px; letter-spacing:-.015em;
+    margin-bottom:10px;
+  }
+  .prompt-card .prompt-desc{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:18px; line-height:1.5; color:var(--ink-soft);
+    margin-bottom:18px;
+  }
+  .prompt-card .sample-placeholder{
+    font-family:'JetBrains Mono', monospace; font-size:10px;
+    letter-spacing:.18em; text-transform:uppercase; opacity:.4;
+  }
+
   @media (max-width:880px){
     .lib-hero{ padding:120px 22px 48px; }
     .featured{ padding:0 22px; }
@@ -201,6 +268,8 @@
     .arch{ padding:0 22px; }
     .entry{ grid-template-columns: 1fr; gap:6px; padding:18px 0; }
     .entry .kind, .entry .len, .entry .arrow{ display:none; }
+    .tools-sec, .prompts-sec{ padding:0 22px; }
+    .tool-card, .prompt-card{ padding:24px 20px; }
   }
 </style>
 </head>
@@ -222,13 +291,14 @@
     <h1><em>Write</em>.</h1>
     <p class="lede">Essays, translations, notes — thought against the page. Some are long. Most are not. All of them are in revision.</p>
     <div class="meta">
-      <span>47 pieces</span>
+      <span>2 tools · 3 prompts</span>
       <span>2021 → present</span>
-      <span>Essay · note · translation · field</span>
+      <span>Tools · Practice Prompts</span>
     </div>
   </section>
 
-  <!-- ===== featured ===== -->
+  <!-- ESSAYS / ARCHIVE SECTION — to be restored later with real published pieces -->
+  <!--
   <section class="featured">
     <article class="sheet">
       <div class="when">2025 · October · essay</div>
@@ -240,7 +310,6 @@
     </article>
   </section>
 
-  <!-- ===== archive ===== -->
   <section class="arch">
     <div class="arch-head">
       <h2><em>Archive</em>.</h2>
@@ -372,6 +441,53 @@
       </a>
     </div>
 
+  </section>
+  -->
+
+  <!-- ===== tools ===== -->
+  <section class="tools-sec">
+    <h2 class="sec-head"><em>Tools</em>.</h2>
+
+    <a class="tool-card" href="https://rysa.tech/social" target="_blank" rel="noopener noreferrer">
+      <div class="tool-name">RYSA</div>
+      <div class="tool-desc">A Twitter-style Sanskrit community platform — write posts, connect with other learners.</div>
+      <span class="tool-link">Visit →</span>
+    </a>
+
+    <a class="tool-card" href="https://dharmamitra.org" target="_blank" rel="noopener noreferrer">
+      <div class="tool-name">Dharmamitra</div>
+      <div class="tool-desc">Translation tool — helpful for composing and checking your Sanskrit writing.</div>
+      <span class="tool-link">Visit →</span>
+    </a>
+  </section>
+
+  <!-- ===== practice prompts ===== -->
+  <section class="prompts-sec">
+    <h2 class="sec-head"><em>Practice Prompts</em>.</h2>
+
+    <div class="prompt-card">
+      <div class="prompt-level">Beginner</div>
+      <div class="prompt-title">Write a Letter</div>
+      <div class="prompt-desc">Write a short letter to someone you love — surprise them in Sanskrit. Even three lines is a beautiful beginning.</div>
+      <!-- SAMPLE CONTENT TO BE ADDED -->
+      <div class="sample-placeholder">[Sample coming soon]</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-level">Beginner · Intermediate</div>
+      <div class="prompt-title">Keep a Journal</div>
+      <div class="prompt-desc">One line a day in Sanskrit. A small habit that builds into fluency over time.</div>
+      <!-- SAMPLE CONTENT TO BE ADDED -->
+      <div class="sample-placeholder">[Sample coming soon]</div>
+    </div>
+
+    <div class="prompt-card">
+      <div class="prompt-level">Intermediate</div>
+      <div class="prompt-title">Write a Poem</div>
+      <div class="prompt-desc">Sanskrit has one of the richest poetic traditions in the world. Try writing a short verse in a simple metre.</div>
+      <!-- SAMPLE CONTENT TO BE ADDED -->
+      <div class="sample-placeholder">[Sample coming soon]</div>
+    </div>
   </section>
 </main>
 
