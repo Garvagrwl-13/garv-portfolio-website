@@ -230,6 +230,79 @@
   }
   .recit:hover .arr{ opacity:1; color: var(--accent); }
 
+  /* challenge section */
+  .speak-challenge{
+    max-width:1280px; margin:80px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .speak-challenge .section-head,
+  .speak-resources .section-head{
+    display:flex; align-items:baseline; gap:18px;
+    margin-bottom:36px;
+  }
+  .speak-challenge .section-head h2,
+  .speak-resources .section-head h2{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(36px, 4vw, 56px); line-height:1; letter-spacing:-.015em;
+  }
+  .speak-challenge .section-head h2 em,
+  .speak-resources .section-head h2 em{ font-style:italic; color: var(--accent); }
+  .speak-challenge .section-head .rule,
+  .speak-resources .section-head .rule{ flex:1; height:1px; background: currentColor; opacity:.15; }
+  .challenge-card{
+    border:1px solid rgba(245,237,214,.15);
+    border-radius:8px;
+    padding:48px 52px;
+    background: rgba(245,237,214,.03);
+  }
+  .challenge-card .c-ttl{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:clamp(28px, 3vw, 42px); line-height:1.15;
+    letter-spacing:-.015em; margin-bottom:18px;
+  }
+  .challenge-card .c-desc{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:clamp(17px, 1.4vw, 22px); line-height:1.6;
+    color: rgba(245,237,214,.75); max-width:62ch; margin:0;
+  }
+
+  /* resources section */
+  .speak-resources{
+    max-width:1280px; margin:80px auto 0;
+    padding:0 36px;
+    position:relative; z-index:2;
+  }
+  .res-list{
+    display:grid; gap:0;
+    border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+  }
+  .res-card{
+    display:grid;
+    grid-template-columns: 1fr 48px;
+    gap:24px; align-items:center;
+    padding:22px 0;
+    border-bottom:1px solid var(--rule);
+    text-decoration:none; color:inherit;
+    transition: padding .2s ease, background .2s ease;
+  }
+  .res-card:last-child{ border-bottom:none; }
+  .res-card:hover{ padding-left:10px; background: rgba(245,237,214,.03); }
+  .res-card:hover .res-arr{ opacity:1; color: var(--accent); }
+  .res-card .res-ttl{
+    font-family:'Cormorant Garamond', serif; font-weight:500;
+    font-size:22px; line-height:1.2; margin-bottom:4px;
+  }
+  .res-card .res-desc{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:15px; color: rgba(245,237,214,.6);
+  }
+  .res-arr{
+    font-family:'Cormorant Garamond', serif; font-style:italic;
+    font-size:24px; opacity:.5; text-align:right;
+    transition: opacity .2s, color .2s;
+  }
+
   body[data-page="speak"] .foot{
     border-top-color: var(--rule);
   }
@@ -244,6 +317,9 @@
     .recitations{ padding:0 22px; }
     .recit{ grid-template-columns: 40px 1fr 36px; gap:14px; }
     .recit .dur{ display:none; }
+    .speak-challenge{ padding:0 22px; margin-top:60px; }
+    .challenge-card{ padding:32px 28px; }
+    .speak-resources{ padding:0 22px; margin-top:60px; }
   }
 </style>
 </head>
@@ -265,33 +341,30 @@
     <h1><em>Speak</em>.</h1>
     <p class="lede">Recordings and recitations — the mouth as instrument. Short reels for the algorithm; longer recitations for anyone who'll sit still for them.</p>
     <div class="meta">
-      <span>42 reels</span>
-      <span>11 recitations</span>
-      <span>Posted on <a href="https://instagram.com/garvagrwl" target="_blank" rel="noopener">@garvagrwl</a></span>
+      <span>1 challenge · 3 resources</span>
+      <span>Challenge · Classes · Lectures</span>
     </div>
   </section>
 
-  <!-- ===== reels grid ===== -->
+  <!-- REELS SECTION — to be restored later with real Instagram reel links and data -->
+  <!--
   <section class="reels">
     <div class="reels-head">
       <h2>Recent <em>reels</em></h2>
       <div class="rule"></div>
       <span class="count">10 of 42</span>
     </div>
-
     <div class="reel-grid">
-
       <a class="reel g-r1" href="#">
         <div class="gfx"></div>
         <span class="devanagari">वाच्</span>
-        <span class="views">182K · 🇪🇾</span>
+        <span class="views">182K</span>
         <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
         <div class="info">
           <div class="ttl">What <em>vāc</em> really means</div>
           <div class="row"><span>0:48</span><span>2025·10</span></div>
         </div>
       </a>
-
       <a class="reel g-r2" href="#">
         <div class="gfx"></div>
         <span class="devanagari">सन्धि</span>
@@ -302,18 +375,16 @@
           <div class="row"><span>1:00</span><span>2025·09</span></div>
         </div>
       </a>
-
       <a class="reel g-r3" href="#">
         <div class="gfx"></div>
         <span class="devanagari">अग्निमीळे</span>
-        <span class="views">241K · 🇪🇾</span>
+        <span class="views">241K</span>
         <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
         <div class="info">
           <div class="ttl">The first verse of the <em>Ṛgveda</em></div>
           <div class="row"><span>1:12</span><span>2025·08</span></div>
         </div>
       </a>
-
       <a class="reel g-r4" href="#">
         <div class="gfx"></div>
         <span class="devanagari">रस</span>
@@ -324,7 +395,6 @@
           <div class="row"><span>0:54</span><span>2025·08</span></div>
         </div>
       </a>
-
       <a class="reel g-r5" href="#">
         <div class="gfx"></div>
         <span class="devanagari">श्लोक</span>
@@ -335,18 +405,16 @@
           <div class="row"><span>0:42</span><span>2025·07</span></div>
         </div>
       </a>
-
       <a class="reel g-r6" href="#">
         <div class="gfx"></div>
         <span class="devanagari">मेघ॰</span>
-        <span class="views">128K · 🇪🇾</span>
+        <span class="views">128K</span>
         <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
         <div class="info">
           <div class="ttl">Kālidāsa's opening verse — slow</div>
           <div class="row"><span>1:20</span><span>2025·06</span></div>
         </div>
       </a>
-
       <a class="reel g-r7" href="#">
         <div class="gfx"></div>
         <span class="devanagari">कारक</span>
@@ -357,18 +425,16 @@
           <div class="row"><span>0:58</span><span>2025·05</span></div>
         </div>
       </a>
-
       <a class="reel g-r8" href="#">
         <div class="gfx"></div>
         <span class="devanagari">ॐ</span>
-        <span class="views">412K · 🇪🇾</span>
+        <span class="views">412K</span>
         <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
         <div class="info">
           <div class="ttl">What <em>oṁ</em> is — actually</div>
           <div class="row"><span>1:00</span><span>2025·04</span></div>
         </div>
       </a>
-
       <a class="reel g-r9" href="#">
         <div class="gfx"></div>
         <span class="devanagari">चन्दस्</span>
@@ -379,7 +445,6 @@
           <div class="row"><span>0:52</span><span>2025·03</span></div>
         </div>
       </a>
-
       <a class="reel g-r10" href="#">
         <div class="gfx"></div>
         <span class="devanagari">गायत्री</span>
@@ -390,16 +455,63 @@
           <div class="row"><span>1:08</span><span>2025·02</span></div>
         </div>
       </a>
+    </div>
+  </section>
+  -->
+
+  <!-- ===== challenge ===== -->
+  <section class="speak-challenge">
+    <div class="section-head">
+      <h2>Speak <em>Up</em></h2>
+      <div class="rule"></div>
+    </div>
+    <div class="challenge-card">
+      <div class="c-ttl">Make a Reel in Sanskrit</div>
+      <p class="c-desc">Pick up your phone. Speak one sentence in Sanskrit. Post it. You don't have to be perfect — you just have to begin. Tag us when you do.</p>
+    </div>
+  </section>
+
+  <!-- ===== resources ===== -->
+  <section class="speak-resources">
+    <div class="section-head">
+      <h2>Learn to <em>Speak</em></h2>
+      <div class="rule"></div>
+    </div>
+    <div class="res-list">
+
+      <a class="res-card" href="https://samskritabharati-in.translate.goog/?_x_tr_sl=en&_x_tr_tl=hi&_x_tr_hl=hi&_x_tr_pto=tc" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="res-ttl">Samskrit Bharati</div>
+          <div class="res-desc">Spoken Sanskrit classes — the largest Sanskrit speaking movement in the world</div>
+        </div>
+        <span class="res-arr">→</span>
+      </a>
+
+      <a class="res-card" href="http://upsanskritseva.in/Web/SanskritAdhyan" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="res-ttl">UP Sanskrit Sansthan</div>
+          <div class="res-desc">Free online Sanskrit classes by the Uttar Pradesh Sanskrit Sansthan</div>
+        </div>
+        <span class="res-arr">→</span>
+      </a>
+
+      <a class="res-card" href="https://www.sanskrit.nic.in/sanskrit_language_teaching.php#30" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="res-ttl">Central Sanskrit University</div>
+          <div class="res-desc">Beginner-friendly structured lectures — watch, listen, and imitate at home</div>
+        </div>
+        <span class="res-arr">→</span>
+      </a>
 
     </div>
   </section>
 
-  <!-- ===== recitations ===== -->
+  <!-- RECITATIONS SECTION — to be restored later with real audio links -->
+  <!--
   <section class="recitations">
     <h2>Long-form <em>recitations</em>.</h2>
     <p>Whole texts, or long pieces of them. Headphones recommended.</p>
     <div class="recit-list">
-
       <a class="recit" href="#">
         <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="info">
@@ -409,7 +521,6 @@
         <span class="dur">24:14</span>
         <span class="arr">→</span>
       </a>
-
       <a class="recit" href="#">
         <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="info">
@@ -419,7 +530,6 @@
         <span class="dur">38:02</span>
         <span class="arr">→</span>
       </a>
-
       <a class="recit" href="#">
         <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="info">
@@ -429,7 +539,6 @@
         <span class="dur">8:46</span>
         <span class="arr">→</span>
       </a>
-
       <a class="recit" href="#">
         <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="info">
@@ -439,7 +548,6 @@
         <span class="dur">14:30</span>
         <span class="arr">→</span>
       </a>
-
       <a class="recit" href="#">
         <div class="play-mini"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
         <div class="info">
@@ -449,9 +557,9 @@
         <span class="dur">3:12</span>
         <span class="arr">→</span>
       </a>
-
     </div>
   </section>
+  -->
 </main>
 
 <footer class="foot">
