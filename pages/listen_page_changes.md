@@ -1,5 +1,4 @@
 # Listen Page — Content Changes
-*Hand this to Claude Code to update the Listen page of the Garv Aggarwal Sanskrit website.*
 
 ---
 
@@ -95,4 +94,3 @@ Add a new section after Films.
 - Keep the existing visual design / card styles — just swap and add content
 - The 4 new sections (Music, Films, Lectures) should follow the same card/section pattern already used on the page
 - Do not remove any CSS or JS — content changes only
-- YouTube handle `@Vivakshu` needs to be confirmed by Garv before going live — flag it with a comment in the HTML
