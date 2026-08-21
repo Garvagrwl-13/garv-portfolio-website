@@ -3,7 +3,14 @@
     "allow": [
       "Bash(find /Users/garvaggarwal -name \"garv-aggarwal-portfolio-website.zip\" 2>/dev/null | head -5)",
       "Bash(cp -r \"/Users/garvaggarwal/Desktop/Garv Website/handoff_extracted/garv-aggarwal-portfolio-website/project/assets\" \"/Users/garvaggarwal/Desktop/Garv Website/assets\")",
-      "Bash(cp -r \"/Users/garvaggarwal/Desktop/Garv Website/handoff_extracted/garv-aggarwal-portfolio-website/project/uploads\" \"/Users/garvaggarwal/Desktop/Garv Website/uploads\")"
+      "Bash(cp -r \"/Users/garvaggarwal/Desktop/Garv Website/handoff_extracted/garv-aggarwal-portfolio-website/project/uploads\" \"/Users/garvaggarwal/Desktop/Garv Website/uploads\")",
+      "WebSearch",
+      "Bash(chmod +x \"/Users/garvaggarwal/Desktop/instagram-growth/system/new_episode.sh\")",
+      "Bash(\"/Users/garvaggarwal/Desktop/instagram-growth/system/new_episode.sh\" 01 ddlj)",
+      "Bash(python3 \"/Users/garvaggarwal/Desktop/instagram-growth/system/make_subtitles.py\" \"/Users/garvaggarwal/Desktop/instagram-growth/episodes/EP-01-ddlj/script.md\")",
+      "Bash(chmod +x system/new_week.sh system/new_reel.sh)",
+      "Bash(system/new_week.sh 14-20-July)",
+      "Bash(sed -i '' 's/^# WEEK: 2026-07-14/# WEEK: 14-20-July/' reels/14-20-July/*/script.md)"
     ]
   }
 }
