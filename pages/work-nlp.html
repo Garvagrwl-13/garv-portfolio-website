@@ -3,383 +3,890 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Deep Learning &amp; NLP — Garv Aggarwal</title>
+<title>Sanskrit NLP &amp; AI — Garv Aggarwal</title>
 <link rel="stylesheet" href="../shared.css" />
 <style>
   body[data-page="nlp"]{
-    --accent: #1E4E8C;
-    --accent-soft: rgba(30,78,140,.10);
+    --accent: var(--neural-2);
+    --accent-soft: rgba(17,51,92,.10);
+    background:var(--paper-2);
+    --page-bg:var(--paper-2);
   }
 
-  /* terminal-ish metric strip under hero */
-  .strip{
-    border-top:1px solid var(--rule);
-    border-bottom:1px solid var(--rule);
-    padding:22px 36px;
-    margin-bottom:96px;
-    font-family:'JetBrains Mono', monospace; font-size:11px;
-    letter-spacing:.16em; text-transform:uppercase;
-    position:relative; z-index:2;
+  .research-head{
+    padding-bottom:68px;
   }
-  .strip-inner{
-    max-width:1280px; margin:0 auto;
-    display:flex; gap:48px; flex-wrap:wrap; justify-content:space-between;
+  .research-head h1{
+    max-width:10ch;
+  }
+  .research-head .lede{
+    max-width:51ch;
+  }
+  .research-head .meta{
+    gap:18px 28px;
+  }
+
+  .research-intro,
+  .glance,
+  .process,
+  .dataset,
+  .conference,
+  .resources,
+  .closing{
+    max-width:1280px;
+    margin:0 auto;
+    padding-left:36px;
+    padding-right:36px;
+    position:relative;
+    z-index:2;
+  }
+
+  .research-intro{
+    display:grid;
+    grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr);
+    gap:80px;
+    padding-top:76px;
+    padding-bottom:120px;
+    border-top:1px solid var(--rule);
+  }
+  .eyebrow{
+    display:flex;
     align-items:center;
+    gap:12px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;
+    height:1px;
+    background:currentColor;
+  }
+  .research-intro h2,
+  .section-heading h2{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(42px,4.4vw,72px);
+    line-height:.96;
+    letter-spacing:-.02em;
+  }
+  .research-intro h2 em,
+  .section-heading h2 em{
+    font-style:italic;
+    color:var(--accent);
+    font-weight:400;
+  }
+  .research-intro .opening{
+    margin-top:22px;
+    max-width:37ch;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(21px,1.7vw,28px);
+    line-height:1.42;
     color:var(--ink-soft);
   }
-  .strip .num{
+  .project-record{
+    align-self:end;
+    padding:28px 30px 30px;
+    border:1px solid var(--rule);
+    background:rgba(245,237,214,.55);
+  }
+  .project-record .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:16px;
+  }
+  .project-record h3{
     font-family:'Cormorant Garamond', serif;
-    font-style:italic; font-weight:400;
-    font-size:32px; color:var(--accent);
+    font-weight:500;
+    font-size:clamp(24px,2.2vw,33px);
+    line-height:1.08;
     letter-spacing:-.01em;
-    margin-right:10px;
+    margin-bottom:22px;
   }
-  .strip .item{ display:flex; align-items:baseline; gap:6px; }
-
-  /* ====== PROJECTS ====== */
-  .projects{
-    max-width:1280px; margin:0 auto;
-    padding:0 36px;
-    position:relative; z-index:2;
-  }
-  .projects > .label{
-    font-family:'JetBrains Mono', monospace; font-size:10px;
-    letter-spacing:.24em; text-transform:uppercase; opacity:.55;
-    margin-bottom:24px;
-  }
-  .proj{
-    display:grid;
-    grid-template-columns: 220px 1fr 320px;
-    gap:40px;
-    padding:48px 0;
+  .project-record dl{
     border-top:1px solid var(--rule);
+  }
+  .project-record .record-row{
+    display:grid;
+    grid-template-columns:104px 1fr;
+    gap:16px;
+    padding:12px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .project-record dt{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.58;
+  }
+  .project-record dd{
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    line-height:1.38;
+  }
+
+  .section-heading{
+    display:flex;
+    align-items:flex-end;
+    gap:24px;
+    padding-bottom:26px;
+    margin-bottom:34px;
+    border-bottom:1px solid var(--rule);
+  }
+  .section-heading .number{
+    font-family:'Cormorant Garamond', serif;
+    font-size:46px;
+    font-style:italic;
+    font-weight:500;
+    line-height:.8;
+    color:var(--accent);
+  }
+  .section-heading .support{
+    margin-left:auto;
+    max-width:34ch;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:17px;
+    line-height:1.4;
+    color:var(--ink-soft);
+    text-align:right;
+  }
+
+  .glance{
+    padding-bottom:130px;
+  }
+  .glance-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-top:1px solid var(--rule);
+    border-left:1px solid var(--rule);
+  }
+  .glance-card{
+    min-height:224px;
+    padding:28px 24px;
+    border-right:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    display:flex;
+    flex-direction:column;
+  }
+  .glance-card .kind{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.58;
+    margin-bottom:auto;
+  }
+  .glance-card h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(25px,2.2vw,34px);
+    line-height:1.04;
+    letter-spacing:-.012em;
+    margin-top:32px;
+  }
+  .glance-card p{
+    margin-top:8px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px;
+    line-height:1.42;
+    color:var(--ink-soft);
+  }
+  .result-note{
+    grid-column:span 2;
+    padding:32px 34px;
+    background:var(--neural-2);
+    color:#e9e2c8;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr);
+    gap:24px;
+    align-items:start;
+    border-right:1px solid var(--neural-2);
+    border-bottom:1px solid var(--neural-2);
+  }
+  .result-note .signal{
+    width:9px;
+    height:9px;
+    margin-top:9px;
+    border-radius:50%;
+    background:var(--activation);
+    box-shadow:0 0 14px rgba(0,255,178,.8);
+  }
+  .result-note .label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--activation);
+    margin-bottom:10px;
+  }
+  .result-note blockquote{
+    max-width:56ch;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(21px,1.7vw,28px);
+    line-height:1.35;
+  }
+
+  .process-band{
+    position:relative;
+    z-index:2;
+    padding:116px 0 124px;
+    background:var(--night);
+    color:#e9e2c8;
+    overflow:hidden;
+  }
+  .process-band::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 15% 18%, rgba(0,255,178,.12), transparent 33%),
+      radial-gradient(circle at 88% 82%, rgba(17,51,92,.62), transparent 42%),
+      linear-gradient(rgba(0,255,178,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,178,.045) 1px, transparent 1px);
+    background-size:auto, auto, 48px 48px, 48px 48px;
+  }
+  .process-band .section-heading{
+    max-width:1280px;
+    margin-left:auto;
+    margin-right:auto;
+    padding-left:36px;
+    padding-right:36px;
+    border-bottom-color:rgba(233,226,200,.18);
+    position:relative;
+    z-index:1;
+  }
+  .process-band .section-heading h2 em,
+  .process-band .section-heading .number{
+    color:var(--activation);
+  }
+  .process-band .section-heading .support{
+    color:rgba(233,226,200,.66);
+  }
+  .process-flow{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 36px;
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    list-style:none;
+    counter-reset:flow;
+  }
+  .process-flow li{
+    counter-increment:flow;
+    min-height:192px;
+    padding:24px 20px 24px 0;
+    position:relative;
+    border-top:1px solid rgba(233,226,200,.18);
+  }
+  .process-flow li + li{
+    padding-left:20px;
+    border-left:1px solid rgba(233,226,200,.18);
+  }
+  .process-flow li:not(:last-child)::after{
+    content:"→";
+    position:absolute;
+    right:-8px;
+    top:calc(50% - 16px);
+    z-index:2;
+    width:16px;
+    height:32px;
+    display:grid;
+    place-items:center;
+    background:var(--night);
+    color:var(--activation);
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px;
+  }
+  .process-flow li::before{
+    content:"0" counter(flow);
+    display:block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.2em;
+    color:var(--activation);
+    opacity:.9;
+    margin-bottom:44px;
+  }
+  .process-flow h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(21px,1.8vw,28px);
+    line-height:1.08;
+    letter-spacing:-.01em;
+  }
+
+  .dataset,
+  .conference{
+    padding-top:126px;
+  }
+  .split-detail{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(250px,.72fr);
+    gap:70px;
     align-items:start;
   }
-  .proj:last-child{ border-bottom:1px solid var(--rule); }
-  .proj .side{
-    display:flex; flex-direction:column; gap:14px;
+  .split-detail .copy{
+    max-width:62ch;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(19px,1.5vw,23px);
+    line-height:1.5;
+    color:var(--ink-soft);
   }
-  .proj .side .id{
-    font-family:'Cormorant Garamond', serif; font-style:italic;
-    font-weight:500; font-size:40px; line-height:1; color:var(--accent);
+  .detail-box{
+    padding:28px;
+    border:1px solid var(--rule);
+    background:rgba(245,237,214,.55);
   }
-  .proj .side .yr{
-    font-family:'JetBrains Mono', monospace; font-size:10px;
-    letter-spacing:.24em; text-transform:uppercase; opacity:.6;
-  }
-  .proj .side .status{
-    display:inline-flex; align-items:center; gap:7px;
-    font-family:'JetBrains Mono', monospace; font-size:9px;
-    letter-spacing:.22em; text-transform:uppercase;
+  .detail-box .box-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
     color:var(--accent);
-  }
-  .proj .side .status .d{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
-  .proj .side .status.pub{ color:#1F8A5B; }
-  .proj .side .status.pub .d{ background:#1F8A5B; }
-  .proj .side .status.draft{ color:var(--ink-soft); }
-  .proj .side .status.draft .d{ background:var(--ink-soft); animation: pulse 1.6s ease-in-out infinite; }
-  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
-
-  .proj .body h3{
-    font-family:'Cormorant Garamond', serif; font-weight:500;
-    font-size:clamp(36px, 3.4vw, 52px);
-    line-height:1; letter-spacing:-.015em;
     margin-bottom:14px;
   }
-  .proj .body h3 em{ font-style:italic; color:var(--accent); font-weight:400; }
-  .proj .body .abstract{
+  .detail-box p{
     font-family:'Cormorant Garamond', serif;
-    font-size:18px; line-height:1.55;
-    color:var(--ink-soft);
-    max-width:62ch;
-    margin-bottom:20px;
+    font-size:19px;
+    line-height:1.4;
   }
-  .proj .body .tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
-  .proj .body .tags .pill{ font-size:9px; }
-  .proj .body .links{ display:flex; gap:18px; flex-wrap:wrap; }
-  .proj .body .links a{
-    font-family:'JetBrains Mono', monospace; font-size:10px;
-    letter-spacing:.22em; text-transform:uppercase;
-    color:inherit; text-decoration:none;
-    border-bottom:1px solid currentColor; padding-bottom:2px;
-    opacity:.85;
+  .text-link{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-top:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:inherit;
+    text-decoration:none;
+    border-bottom:1px solid currentColor;
+    padding-bottom:4px;
+    transition:color .2s, border-color .2s;
   }
-  .proj .body .links a:hover{ color:var(--accent); border-color:var(--accent); opacity:1; }
+  .text-link:hover{
+    color:var(--accent);
+    border-color:var(--accent);
+  }
+  .text-link .arrow{
+    font-family:'Cormorant Garamond', serif;
+    font-size:22px;
+    line-height:.6;
+  }
 
-  /* mini results panel */
-  .proj .panel{
-    border:1px solid var(--rule);
-    border-radius:4px;
-    padding:18px 18px 14px;
-    background: var(--accent-soft);
+  .conference{
+    padding-bottom:128px;
   }
-  .proj .panel .h{
-    font-family:'JetBrains Mono', monospace; font-size:9px;
-    letter-spacing:.24em; text-transform:uppercase; opacity:.6;
+  .conference .event-card{
+    padding:34px 0;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:32px;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+    align-items:end;
+  }
+  .event-card .name{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(30px,3vw,48px);
+    font-weight:500;
+    line-height:1.05;
+    letter-spacing:-.015em;
+  }
+  .event-card .name em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--accent);
+  }
+  .event-card .theme{
+    margin-top:10px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:18px;
+    color:var(--ink-soft);
+  }
+  .event-meta{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:10px 20px;
+    max-width:470px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.18em;
+    line-height:1.55;
+    text-transform:uppercase;
+    opacity:.66;
+    text-align:right;
+  }
+
+  .abstract-band{
+    position:relative;
+    z-index:2;
+    padding:116px 36px 122px;
+    background:var(--red-deep);
+    color:#F5EDD6;
+  }
+  .abstract-inner{
+    max-width:1280px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:minmax(240px,.72fr) minmax(0,1.28fr);
+    gap:90px;
+  }
+  .abstract-mark{
+    position:sticky;
+    top:116px;
+    align-self:start;
+  }
+  .abstract-mark .eyebrow{
+    color:var(--gold);
+  }
+  .abstract-mark h2{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(42px,4.4vw,72px);
+    font-weight:500;
+    line-height:.95;
+    letter-spacing:-.02em;
+  }
+  .abstract-mark h2 em{
+    color:var(--gold);
+    font-style:italic;
+    font-weight:400;
+  }
+  .abstract-mark .source-note{
+    max-width:27ch;
+    margin-top:20px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:17px;
+    line-height:1.45;
+    color:rgba(245,237,214,.72);
+  }
+  .abstract-mark .source-note a{
+    color:inherit;
+    text-decoration-color:rgba(245,237,214,.55);
+    text-underline-offset:4px;
+  }
+  .official-abstract{
+    border-top:1px solid rgba(245,237,214,.3);
+    padding-top:26px;
+  }
+  .official-abstract .paper-title{
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(22px,2vw,30px);
+    font-weight:500;
+    line-height:1.2;
     margin-bottom:12px;
   }
-  .proj .panel .row{
-    display:flex; align-items:baseline; justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px dashed rgba(0,0,0,.08);
-    font-family:'JetBrains Mono', monospace; font-size:11px;
-    letter-spacing:.04em;
+  .official-abstract .authors,
+  .official-abstract .keywords{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.16em;
+    line-height:1.65;
+    text-transform:uppercase;
+    color:rgba(245,237,214,.65);
   }
-  .proj .panel .row:last-child{ border-bottom:none; }
-  .proj .panel .row .v{
+  .official-abstract .keywords{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px solid rgba(245,237,214,.2);
+  }
+  .abstract-text{
+    margin-top:32px;
+  }
+  .abstract-text p{
     font-family:'Cormorant Garamond', serif;
-    font-style:italic; font-size:20px;
-    color:var(--accent);
+    font-size:clamp(18px,1.4vw,22px);
+    line-height:1.53;
+    color:rgba(245,237,214,.92);
   }
-  .proj .panel.code{
-    background:#0c1a2e; color:#bfd5ee;
-    border-color:#0c1a2e;
-  }
-  .proj .panel.code .h{ color:#7da9d6; opacity:1; }
-  .proj .panel.code pre{
-    font-family:'JetBrains Mono', monospace; font-size:11px; line-height:1.55;
-    white-space:pre; overflow:auto;
-  }
-  .proj .panel.code .kw{ color:#ff8a7a; }
-  .proj .panel.code .str{ color:var(--activation); }
-  .proj .panel.code .com{ color:#5d7ea0; font-style:italic; }
-  .proj .panel.code .num{ color:#e8b76a; }
-
-  /* sub-section header */
-  .sub-head{
-    max-width:1280px; margin:140px auto 36px;
-    padding:0 36px;
-    position:relative; z-index:2;
-  }
-  .sub-head h2{
-    font-family:'Cormorant Garamond', serif; font-weight:500;
-    font-size:clamp(48px,5vw,80px); line-height:.95; letter-spacing:-.02em;
-  }
-  .sub-head h2 em{ font-style:italic; color:var(--accent); }
-  .sub-head p{
-    font-family:'Cormorant Garamond', serif; font-style:italic;
-    font-size:18px; color:var(--ink-soft);
-    max-width:60ch; margin-top:14px;
+  .abstract-text p + p{
+    margin-top:20px;
   }
 
-  /* writings list */
-  .writings{
-    max-width:1280px; margin:0 auto; padding:0 36px;
-    position:relative; z-index:2;
+  .resources{
+    padding-top:126px;
   }
-  .writing{
-    display:grid; grid-template-columns: 100px 1fr auto; gap:32px;
-    align-items:baseline;
-    padding:22px 0;
+  .resource-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--rule);
+    border-left:1px solid var(--rule);
+  }
+  .resource{
+    min-height:270px;
+    padding:28px;
+    border-right:1px solid var(--rule);
     border-bottom:1px solid var(--rule);
+    display:flex;
+    flex-direction:column;
+    color:inherit;
+    text-decoration:none;
+    transition:background .25s,color .25s,transform .25s;
+  }
+  .resource:hover{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .resource .resource-number{
     font-family:'Cormorant Garamond', serif;
-    transition: padding .2s ease;
-  }
-  .writing:first-child{ border-top:1px solid var(--rule); }
-  .writing:hover{ padding-left:8px; }
-  .writing .yr{
-    font-family:'JetBrains Mono', monospace; font-size:11px;
-    letter-spacing:.16em; opacity:.55;
-  }
-  .writing .ttl{ font-size:22px; line-height:1.3; }
-  .writing .ttl em{ font-style:italic; }
-  .writing .where{
-    font-family:'JetBrains Mono', monospace; font-size:10px;
-    letter-spacing:.18em; text-transform:uppercase; opacity:.65;
+    font-style:italic;
+    font-size:36px;
+    line-height:.9;
     color:var(--accent);
+    margin-bottom:auto;
+  }
+  .resource:hover .resource-number{
+    color:var(--gold);
+  }
+  .resource .type{
+    margin-top:32px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+  .resource h3{
+    margin-top:9px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:30px;
+    font-weight:500;
+    line-height:1.08;
+    letter-spacing:-.01em;
+  }
+  .resource p{
+    margin-top:8px;
+    max-width:30ch;
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px;
+    font-style:italic;
+    line-height:1.42;
+    opacity:.75;
+  }
+
+  .closing{
+    padding-top:122px;
+    padding-bottom:8px;
+    text-align:center;
+  }
+  .closing p{
+    max-width:32ch;
+    margin:0 auto;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(30px,3.2vw,48px);
+    line-height:1.12;
+    letter-spacing:-.015em;
+  }
+  .closing p em{
+    color:var(--accent);
+    font-style:italic;
+    font-weight:400;
+  }
+  .closing .closing-mark{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    margin-top:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.55;
+  }
+  .closing .closing-mark::before,
+  .closing .closing-mark::after{
+    content:"";
+    width:22px;
+    height:1px;
+    background:currentColor;
   }
 
   @media (max-width:980px){
-    .proj{ grid-template-columns: 1fr; gap:20px; padding:36px 0; }
-    .proj .side{ flex-direction:row; align-items:baseline; gap:18px; }
-    .strip{ padding:18px 22px; }
-    .strip-inner{ gap:18px; }
-    .projects, .sub-head, .writings{ padding:0 22px !important; }
-    .writing{ grid-template-columns: 1fr; gap:6px; }
+    .research-intro,
+    .split-detail,
+    .abstract-inner{
+      grid-template-columns:1fr;
+      gap:38px;
+    }
+    .glance-grid{ grid-template-columns:repeat(2,1fr); }
+    .process-flow{ grid-template-columns:repeat(3,1fr); }
+    .process-flow li:nth-child(4){ padding-left:0; border-left:none; }
+    .process-flow li:nth-child(3)::after{ display:none; }
+    .abstract-mark{ position:static; }
+  }
+
+  @media (max-width:880px){
+    .research-head{ padding-bottom:52px; }
+    .research-intro,
+    .glance,
+    .process-band .section-heading,
+    .process-flow,
+    .dataset,
+    .conference,
+    .resources,
+    .closing{
+      padding-left:22px;
+      padding-right:22px;
+    }
+    .research-intro{ padding-top:58px; padding-bottom:80px; }
+    .glance{ padding-bottom:84px; }
+    .process-band{ padding:82px 0; }
+    .process-band .section-heading{ margin-bottom:28px; }
+    .dataset,
+    .conference,
+    .resources{ padding-top:82px; }
+    .conference{ padding-bottom:82px; }
+    .abstract-band{ padding:82px 22px; }
+    .closing{ padding-top:82px; }
+    .section-heading{ align-items:flex-start; flex-wrap:wrap; gap:12px 18px; }
+    .section-heading .support{ width:100%; margin-left:0; text-align:left; }
+    .event-meta{ justify-content:flex-start; text-align:left; }
+  }
+
+  @media (max-width:620px){
+    .project-record .record-row{ grid-template-columns:1fr; gap:3px; }
+    .glance-grid,
+    .resource-grid,
+    .process-flow{ grid-template-columns:1fr; }
+    .result-note{ grid-column:span 1; }
+    .glance-card{ min-height:190px; }
+    .process-flow li,
+    .process-flow li + li,
+    .process-flow li:nth-child(4){
+      min-height:auto;
+      padding:20px 0;
+      border-left:none;
+      border-top:1px solid rgba(233,226,200,.18);
+    }
+    .process-flow li::before{ margin-bottom:14px; }
+    .process-flow li:not(:last-child)::after{
+      content:"↓";
+      top:auto;
+      bottom:-17px;
+      right:calc(50% - 8px);
+    }
+    .conference .event-card{ grid-template-columns:1fr; }
+    .event-meta{ max-width:none; }
+    .resource{ min-height:220px; }
   }
 </style>
 </head>
-<body data-page="nlp" data-layout="default">
+<body data-page="nlp">
 
 <div id="nav-mount" data-nav-root="../" data-nav-pages="" data-nav-current="work"></div>
 <script src="../nav-loader.js"></script>
 
 <main>
-  <section class="page-head">
+  <section class="page-head research-head" aria-labelledby="page-title">
     <div class="crumb">
       <a href="../index.html">Garv Aggarwal</a>
       <span>·</span>
-      <a href="../index.html#work">The Work</a>
+      <span>The Work</span>
       <span>·</span>
       <span class="dot"></span>
-      <span>02 — Deep Learning &amp; NLP</span>
+      <span>01 — Research</span>
     </div>
-    <h1>Deep <em>Learning</em>.</h1>
-    <p class="lede">Sanskrit is, among other things, a 2,500-year-old experiment in formal grammar. The deep models we build today have a lot to learn from it — and a few things to give back.</p>
+    <h1 id="page-title">Sanskrit <em>NLP &amp; AI</em>.</h1>
+    <p class="lede">Grammar Error Correction and computational approaches to Sanskrit.</p>
+    <div class="meta">
+      <span>Research</span>
+      <span>Presented · CHORDS 2026</span>
+      <span>Hansraj College · University of Delhi</span>
+    </div>
   </section>
 
-  <!-- ===== metrics strip ===== -->
-  <div class="strip">
-    <div class="strip-inner">
-      <div class="item"><span class="num">04</span><span>Active projects</span></div>
-      <div class="item"><span class="num">02</span><span>Pre-prints</span></div>
-      <div class="item"><span class="num">19K</span><span>tokens · v0 corpus</span></div>
-      <div class="item"><span class="num">PyTorch</span><span>· HF · sktime</span></div>
+  <section class="research-intro" aria-labelledby="overview-title">
+    <div>
+      <div class="eyebrow">Research overview</div>
+      <h2 id="overview-title">Language technology, <em>in service of Sanskrit</em>.</h2>
+      <p class="opening">My recent research explores how Natural Language Processing can support Sanskrit learning and language use, beginning with Grammar Error Correction.</p>
     </div>
-  </div>
-
-  <!-- ===== Active projects ===== -->
-  <section class="projects" aria-labelledby="proj-h">
-    <div class="label" id="proj-h">→ Active research · last updated 2025-11</div>
-
-    <article class="proj">
-      <div class="side">
-        <div class="id">01</div>
-        <div class="yr">2024 — present</div>
-        <div class="status"><span class="d"></span>active</div>
-      </div>
-      <div class="body">
-        <h3>Pāṇini-aware <em>morphological parser</em></h3>
-        <p class="abstract">A transformer-based parser that doesn't just label morphemes — it predicts the Aṣṭādhyāyī rule chain that would have produced them. Sandhi-aware tokenisation, sūtra-conditioned attention, evaluated against the Digital Corpus of Sanskrit.</p>
-        <div class="tags">
-          <span class="pill">Morphology</span><span class="pill">Pāṇini</span><span class="pill">Transformers</span><span class="pill">PyTorch</span>
+    <aside class="project-record" aria-label="Research record">
+      <p class="label">Research record</p>
+      <h3>Preserving Sanskrit: Dataset Curation and AI-Based Fine-Tuned Model for Grammar Error Correction</h3>
+      <dl>
+        <div class="record-row">
+          <dt>Guidance</dt>
+          <dd>Prof. (Dr.) Baljeet Kaur</dd>
         </div>
-        <div class="links">
-          <a href="#">paper ↗</a>
-          <a href="#">github ↗</a>
-          <a href="#">live demo ↗</a>
+        <div class="record-row">
+          <dt>Presented</dt>
+          <dd>CHORDS 2026: International Conference on Computation and Humanities</dd>
         </div>
-      </div>
-      <aside class="panel">
-        <div class="h">↧ Selected metrics</div>
-        <div class="row"><span>Token-level F1</span><span class="v">0.913</span></div>
-        <div class="row"><span>Sūtra match @ k=5</span><span class="v">0.82</span></div>
-        <div class="row"><span>Params</span><span class="v">42M</span></div>
-        <div class="row"><span>Corpus size</span><span class="v">19K verses</span></div>
-      </aside>
-    </article>
-
-    <article class="proj">
-      <div class="side">
-        <div class="id">02</div>
-        <div class="yr">2024</div>
-        <div class="status pub"><span class="d"></span>pre-print</div>
-      </div>
-      <div class="body">
-        <h3>Sandhi as a <em>seq-to-seq</em> problem</h3>
-        <p class="abstract">A small character-level encoder–decoder learns the inverse of internal-sandhi: take a fused surface form and emit its underlying word boundary. Compared against rule-based baselines (saMsAdhanI, Sanskrit-Heritage) on five test sets.</p>
-        <div class="tags">
-          <span class="pill">Sandhi</span><span class="pill">seq2seq</span><span class="pill">char-level</span>
-        </div>
-        <div class="links">
-          <a href="#">pdf ↗</a>
-          <a href="#">code ↗</a>
-        </div>
-      </div>
-      <aside class="panel code" aria-label="code preview">
-        <div class="h">↧ inference.py</div>
-<pre><span class="com"># split a sandhi'd compound</span>
-<span class="kw">from</span> sandhi <span class="kw">import</span> split
-out = split(<span class="str">"tatraivakālaḥ"</span>)
-<span class="com"># → ['tatra', 'eva', 'kālaḥ']</span>
-<span class="com"># confidence: <span class="num">0.94</span></span></pre>
-      </aside>
-    </article>
-
-    <article class="proj">
-      <div class="side">
-        <div class="id">03</div>
-        <div class="yr">2025</div>
-        <div class="status"><span class="d"></span>active</div>
-      </div>
-      <div class="body">
-        <h3>Embedding the <em>śloka</em></h3>
-        <p class="abstract">A contrastive objective trains verse embeddings on the dual signal of meaning and metre. Same śloka in different metres lands close; same metre with different meaning stays apart. A small but useful primitive for stylometric retrieval.</p>
-        <div class="tags">
-          <span class="pill">Embeddings</span><span class="pill">Contrastive</span><span class="pill">Metre · chandas</span>
-        </div>
-        <div class="links">
-          <a href="#">notebook ↗</a>
-          <a href="#">retrieval demo ↗</a>
-        </div>
-      </div>
-      <aside class="panel">
-        <div class="h">↧ Retrieval · NDCG@10</div>
-        <div class="row"><span>Bag-of-syllables</span><span class="v">0.41</span></div>
-        <div class="row"><span>BERT-multi (zero-shot)</span><span class="v">0.53</span></div>
-        <div class="row"><span>Ours · meaning</span><span class="v">0.78</span></div>
-        <div class="row"><span>Ours · metre</span><span class="v">0.81</span></div>
-      </aside>
-    </article>
-
-    <article class="proj">
-      <div class="side">
-        <div class="id">04</div>
-        <div class="yr">2025</div>
-        <div class="status draft"><span class="d"></span>draft</div>
-      </div>
-      <div class="body">
-        <h3>Reading <em>commentary</em> at scale</h3>
-        <p class="abstract">An LLM-assisted reading layer that aligns root text and traditional commentary token-by-token. Less about translation; more about surfacing the inheritance — where Sāyaṇa lingered, where Yāska disagreed, what got cut. Closed alpha.</p>
-        <div class="tags">
-          <span class="pill">LLM</span><span class="pill">Alignment</span><span class="pill">Bhāṣya</span><span class="pill">UI</span>
-        </div>
-        <div class="links">
-          <a href="#">request access ↗</a>
-        </div>
-      </div>
-      <aside class="panel">
-        <div class="h">↧ Pipeline</div>
-        <div class="row"><span>OCR · printed devanāgarī</span><span class="v">→</span></div>
-        <div class="row"><span>Verse / commentary split</span><span class="v">→</span></div>
-        <div class="row"><span>Token alignment</span><span class="v">→</span></div>
-        <div class="row"><span>Reading UI</span><span class="v">live</span></div>
-      </aside>
-    </article>
-
+      </dl>
+    </aside>
   </section>
 
-  <!-- ===== writings ===== -->
-  <div class="sub-head">
-    <h2>Selected <em>writings</em>.</h2>
-    <p>Working notes, blog posts, and pre-prints — short-form is where most of the thinking happens.</p>
-  </div>
-  <div class="writings">
-    <div class="writing">
-      <span class="yr">2025 · 04</span>
-      <span class="ttl"><em>What Pāṇini got right about transformers</em></span>
-      <span class="where">Note · 2,400 words</span>
+  <section class="glance" aria-labelledby="glance-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">01</span>
+      <h2 id="glance-title">Research at a <em>glance</em>.</h2>
+      <p class="support">A curated dataset and a fine-tuned model for Sanskrit Grammar Error Correction.</p>
     </div>
-    <div class="writing">
-      <span class="yr">2024 · 11</span>
-      <span class="ttl">Sandhi, restated</span>
-      <span class="where">Pre-print · arxiv</span>
+    <div class="glance-grid">
+      <article class="glance-card">
+        <p class="kind">Dataset · SanskritGEC_V1.0</p>
+        <h3>855</h3>
+        <p>manually annotated Sanskrit sentence pairs</p>
+      </article>
+      <article class="glance-card">
+        <p class="kind">Dataset · SanskritGEC_V2.0</p>
+        <h3>103,798</h3>
+        <p>synthetic Sanskrit sentence pairs</p>
+      </article>
+      <article class="glance-card">
+        <p class="kind">Model</p>
+        <h3>ByT5-<br/>Sanskrit</h3>
+        <p>fine-tuned using LoRA</p>
+      </article>
+      <article class="glance-card">
+        <p class="kind">Task</p>
+        <h3>Grammar Error Correction</h3>
+        <p>for Sanskrit language use and learning</p>
+      </article>
+      <div class="result-note">
+        <span class="signal" aria-hidden="true"></span>
+        <div>
+          <p class="label">Evaluation</p>
+          <blockquote>The proposed model attained a BLEU score of 83.73 and a Character Error Rate of 10.59%.</blockquote>
+        </div>
+      </div>
     </div>
-    <div class="writing">
-      <span class="yr">2024 · 07</span>
-      <span class="ttl">Why Sanskrit is a benchmark</span>
-      <span class="where">Essay · long</span>
+  </section>
+
+  <section class="process-band" aria-labelledby="process-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">02</span>
+      <h2 id="process-title">Research <em>process</em>.</h2>
+      <p class="support">From curated examples to evaluated corrections.</p>
     </div>
-    <div class="writing">
-      <span class="yr">2023 · 10</span>
-      <span class="ttl">A tiny corpus is enough, sometimes</span>
-      <span class="where">Note · 1,100 words</span>
+    <ol class="process-flow">
+      <li><h3>Dataset Curation</h3></li>
+      <li><h3>Synthetic Error Generation</h3></li>
+      <li><h3>ByT5-Sanskrit</h3></li>
+      <li><h3>LoRA Fine-tuning</h3></li>
+      <li><h3>Grammar Error Correction</h3></li>
+      <li><h3>Evaluation</h3></li>
+    </ol>
+  </section>
+
+  <section class="dataset" aria-labelledby="dataset-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">03</span>
+      <h2 id="dataset-title">The <em>dataset</em>.</h2>
+      <p class="support">Available through Zenodo with restricted access.</p>
     </div>
-    <div class="writing">
-      <span class="yr">2023 · 03</span>
-      <span class="ttl"><em>Aṣṭādhyāyī</em> as a graph</span>
-      <span class="where">Talk · slides</span>
+    <div class="split-detail">
+      <div>
+        <p class="copy">The research involved the curation of a manually annotated Sanskrit Grammar Error Correction dataset and the generation of a larger synthetic dataset.</p>
+        <a class="text-link" href="https://zenodo.org/records/21203284" target="_blank" rel="noopener noreferrer">Explore the dataset on Zenodo <span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+      <aside class="detail-box">
+        <p class="box-label">Dataset record</p>
+        <p><em>SanskritGEC_V1.0</em> and <em>SanskritGEC_V2.0</em></p>
+      </aside>
     </div>
-  </div>
+  </section>
+
+  <section class="conference" aria-labelledby="conference-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">04</span>
+      <h2 id="conference-title">Conference <em>presentation</em>.</h2>
+      <p class="support">Supporting evidence for the presentation, not a substitute for the work.</p>
+    </div>
+    <div class="event-card">
+      <div>
+        <h3 class="name">Presented at <em>CHORDS 2026</em></h3>
+        <p class="theme">International Conference on Computation and Humanities · Digitization of Cultural Heritage</p>
+      </div>
+      <div class="event-meta">
+        <span>IIIT Kottayam · Kerala, India</span>
+        <span>13–15 July 2026</span>
+        <span>Hybrid mode</span>
+      </div>
+    </div>
+    <a class="text-link" href="../assets/chords_certificate.pdf" target="_blank" rel="noopener noreferrer">View participation certificate <span class="arrow" aria-hidden="true">↗</span></a>
+  </section>
+
+  <section class="abstract-band" aria-labelledby="abstract-title">
+    <div class="abstract-inner">
+      <div class="abstract-mark">
+        <div class="eyebrow">Source document</div>
+        <h2 id="abstract-title">Official <em>abstract</em>.</h2>
+        <p class="source-note">Reproduced verbatim from the conference abstract. <a href="../assets/Abstract.pdf" target="_blank" rel="noopener noreferrer">View the original PDF ↗</a></p>
+      </div>
+      <article class="official-abstract">
+        <h3 class="paper-title">Preserving Sanskrit: Dataset Curation and AI-Based Fine-Tuned Model for Grammar Error Correction</h3>
+        <p class="authors">Garv Aggarwal · Department of Sanskrit, Hansraj College, University of Delhi<br/>Prof. (Dr.) Baljeet Kaur · Department of Computer Science, Hansraj College, University of Delhi</p>
+        <p class="keywords">Keywords: Sanskrit Language, Grammar Error Correction, Fine-Tuning Pre-Trained AI Model, SanskritGEC_V1.0, SanskritGEC_V2.0</p>
+        <div class="abstract-text">
+          <p>Sanskrit is a living archive of India's civilisational memory. As the origin of most Indian languages and the lingua franca of pre-modern sciences including mathematics, astronomy, and medicine, Sanskrit has carried millennia of philosophical, literary, and scientific knowledge across generations. It preserves the foundational stories of Indian civilisation. Its highly structured grammar and phonetic precision have been linked to cognitive development, and it remains deeply compatible with formal computational systems. To preserve Sanskrit is to preserve access to one of humanity's richest intellectual and cultural traditions, and enabling intelligent AI tools for Sanskrit is therefore not a narrow technical exercise, but an act of cultural stewardship.</p>
+          <p>Sanskrit texts are being processed using applications like machine translation, post-processing of OCR results, and morphological analysis. However, Grammar Error Correction (GEC) remains unexplored, despite its foundational role in enabling intelligent language learning applications and automated essay scoring systems.</p>
+          <p>This paper presents the first publicly available dataset for Sanskrit grammar error correction. SanskritGEC_V1.0, a manually annotated dataset of 855 sentence pairs comprising correct and erroneous sentences, covering seven error types has been curated. Additionally, a large synthetic dataset, SanskritGEC_V2.0, comprising 1,03,798 sentence pairs, is generated by employing linguistically inspired error generation methods. Further, the pretrained ByT5-Sanskrit model is fine-tuned via Low-Rank Adaptation for developing a novel Grammar Error Correction system.</p>
+          <p>The proposed model attained a BLEU score of 83.73 and a Character Error Rate of 10.59%, thus setting the first benchmark for Sanskrit grammatical error correction. To the best of our knowledge this is the first time such initiative has been proposed for Sanskrit. This work represents a foundational step toward AI-enabled access to one of humanity's most significant linguistic and cultural traditions.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="resources" aria-labelledby="resources-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">05</span>
+      <h2 id="resources-title">Research <em>materials</em>.</h2>
+      <p class="support">Primary documents and the dataset record.</p>
+    </div>
+    <div class="resource-grid">
+      <a class="resource" href="../assets/Abstract.pdf" target="_blank" rel="noopener noreferrer">
+        <span class="resource-number">i.</span>
+        <p class="type">PDF · Conference abstract</p>
+        <h3>Download the abstract</h3>
+        <p>The official CHORDS 2026 abstract.</p>
+      </a>
+      <a class="resource" href="https://zenodo.org/records/21203284" target="_blank" rel="noopener noreferrer">
+        <span class="resource-number">ii.</span>
+        <p class="type">Zenodo · Restricted access</p>
+        <h3>Explore the dataset</h3>
+        <p>SanskritGEC_V1.0 and SanskritGEC_V2.0.</p>
+      </a>
+      <a class="resource" href="../assets/chords_certificate.pdf" target="_blank" rel="noopener noreferrer">
+        <span class="resource-number">iii.</span>
+        <p class="type">PDF · Supporting evidence</p>
+        <h3>View the certificate</h3>
+        <p>Participation at CHORDS 2026.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="closing" aria-label="Research closing">
+    <p>This work has led me to explore broader applications of Natural Language Processing and language technologies for Sanskrit <em>learning and use</em>.</p>
+    <div class="closing-mark">Research · Sanskrit NLP &amp; AI</div>
+  </section>
 </main>
 
 <footer class="foot">
   <div class="foot-inner">
     <div>
       <div class="colophon" aria-hidden="true"></div>
-      <div class="meta">02 / 04 — Deep Learning &amp; NLP · Garv Aggarwal</div>
+      <div class="meta">01 / 03 — Sanskrit NLP &amp; AI · Garv Aggarwal</div>
     </div>
-    <div class="next">next chapter: <a href="work-education.html">Sanskrit Education →</a></div>
+    <div class="next">back to: <a href="../index.html">Home →</a></div>
   </div>
 </footer>
 

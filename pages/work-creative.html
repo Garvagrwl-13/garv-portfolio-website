@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Creative &amp; Cultural Work — Garv Aggarwal</title>
+<link rel="stylesheet" href="../shared.css" />
+<style>
+  body[data-page="creative"]{
+    --accent: var(--gold);
+    --accent-soft: rgba(196,146,42,.13);
+    background:var(--paper-2);
+    --page-bg:var(--paper-2);
+  }
+
+  .creative-head{ padding-bottom:70px; }
+  .creative-head h1{ max-width:10ch; }
+  .creative-head .lede{ max-width:48ch; }
+
+  .creative-intro,
+  .film,
+  .closing{
+    max-width:1280px;
+    margin:0 auto;
+    padding-left:36px;
+    padding-right:36px;
+    position:relative;
+    z-index:2;
+  }
+  .creative-intro{
+    display:grid;
+    grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);
+    gap:84px;
+    padding-top:76px;
+    padding-bottom:122px;
+    border-top:1px solid var(--rule);
+  }
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+    color:var(--accent);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;
+    height:1px;
+    background:currentColor;
+  }
+  .creative-intro h2,
+  .section-heading h2{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-size:clamp(42px,4.4vw,72px);
+    line-height:.96;
+    letter-spacing:-.02em;
+  }
+  .creative-intro h2 em,
+  .section-heading h2 em{
+    color:var(--accent);
+    font-style:italic;
+    font-weight:400;
+  }
+  .creative-intro .opening{
+    max-width:39ch;
+    margin-top:22px;
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(21px,1.7vw,28px);
+    line-height:1.42;
+  }
+  .intro-note{
+    align-self:end;
+    padding:30px;
+    border:1px solid var(--rule);
+    background:rgba(245,237,214,.58);
+  }
+  .intro-note .label{
+    margin-bottom:17px;
+    color:var(--accent);
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+  }
+  .intro-note p{
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(21px,1.8vw,27px);
+    line-height:1.34;
+  }
+
+  .film{ padding-top:124px; }
+  .section-heading{
+    display:flex;
+    align-items:flex-end;
+    gap:24px;
+    margin-bottom:34px;
+    padding-bottom:26px;
+    border-bottom:1px solid var(--rule);
+  }
+  .section-heading .number{
+    color:var(--accent);
+    font-family:'Cormorant Garamond', serif;
+    font-size:46px;
+    font-style:italic;
+    font-weight:500;
+    line-height:.8;
+  }
+  .section-heading .support{
+    max-width:34ch;
+    margin-left:auto;
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    font-style:italic;
+    line-height:1.4;
+    text-align:right;
+  }
+
+  .film-frame{
+    position:relative;
+    min-height:505px;
+    display:grid;
+    grid-template-columns:minmax(0,1.03fr) minmax(330px,.97fr);
+    overflow:hidden;
+    color:var(--paper);
+    background:var(--night);
+  }
+  .film-frame::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background:
+      radial-gradient(circle at 14% 80%, rgba(196,146,42,.24), transparent 30%),
+      radial-gradient(circle at 88% 20%, rgba(139,26,26,.38), transparent 36%),
+      linear-gradient(135deg, rgba(17,51,92,.5), transparent 55%);
+  }
+  .film-frame > *{ position:relative; z-index:1; }
+  .film-entry{
+    padding:54px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .film-entry .film-type{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:var(--gold);
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+  }
+  .film-entry .film-type::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:currentColor;
+    box-shadow:0 0 14px rgba(196,146,42,.65);
+  }
+  .film-title{
+    margin-top:70px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(48px,5.8vw,88px);
+    font-weight:500;
+    line-height:.87;
+    letter-spacing:-.035em;
+  }
+  .film-title em{
+    color:var(--gold);
+    font-style:italic;
+    font-weight:400;
+  }
+  .film-summary{
+    max-width:36ch;
+    margin-top:22px;
+    color:rgba(245,237,214,.78);
+    font-family:'Cormorant Garamond', serif;
+    font-size:20px;
+    line-height:1.46;
+  }
+  .film-entry .contribution{
+    margin-top:40px;
+    color:rgba(245,237,214,.62);
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.19em;
+    line-height:1.7;
+    text-transform:uppercase;
+  }
+  .film-entry .contribution strong{
+    color:var(--paper);
+    font-weight:500;
+  }
+  .watch-link{
+    display:inline-flex;
+    align-items:center;
+    gap:11px;
+    align-self:flex-start;
+    margin-top:44px;
+    padding:12px 0 8px;
+    color:var(--gold);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.2em;
+    text-decoration:none;
+    text-transform:uppercase;
+    border-bottom:1px solid currentColor;
+    transition:color .2s;
+  }
+  .watch-link:hover{ color:var(--paper); }
+  .watch-link .play{
+    display:grid;
+    place-items:center;
+    width:21px;
+    height:21px;
+    border:1px solid currentColor;
+    border-radius:50%;
+    font-size:9px;
+    letter-spacing:0;
+  }
+  .recognition{
+    margin:36px;
+    align-self:end;
+    padding:32px;
+    border:1px solid rgba(245,237,214,.28);
+    background:rgba(5,10,20,.48);
+    backdrop-filter:blur(9px);
+    -webkit-backdrop-filter:blur(9px);
+  }
+  .recognition .label{
+    color:var(--gold);
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.23em;
+    text-transform:uppercase;
+  }
+  .recognition h3{
+    max-width:16ch;
+    margin-top:28px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(30px,3vw,46px);
+    font-weight:500;
+    line-height:1.02;
+    letter-spacing:-.015em;
+  }
+  .recognition h3 em{
+    color:var(--gold);
+    font-style:italic;
+    font-weight:400;
+  }
+  .recognition p{
+    margin-top:12px;
+    color:rgba(245,237,214,.68);
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    font-style:italic;
+    line-height:1.38;
+  }
+
+  .film-detail{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);
+    gap:76px;
+    padding:54px 0 0;
+  }
+  .film-detail .copy{
+    max-width:57ch;
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(19px,1.5vw,23px);
+    line-height:1.5;
+  }
+  .film-detail .credit-list{
+    border-top:1px solid var(--rule);
+  }
+  .film-detail .credit{
+    display:grid;
+    grid-template-columns:94px 1fr;
+    gap:16px;
+    padding:12px 0;
+    border-bottom:1px solid var(--rule);
+  }
+  .film-detail dt{
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.18em;
+    opacity:.58;
+    text-transform:uppercase;
+  }
+  .film-detail dd{
+    font-family:'Cormorant Garamond', serif;
+    font-size:18px;
+    line-height:1.35;
+  }
+
+  .avaranam{ padding-bottom:0; }
+  .avaranam .film-frame{
+    min-height:500px;
+    grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);
+    background:#1b0e12;
+  }
+  .avaranam .film-frame::before{
+    background:
+      radial-gradient(circle at 78% 18%, rgba(187, 131, 8, 0.24), transparent 28%),
+      radial-gradient(circle at 12% 86%, rgba(7, 1, 2, 0.58), transparent 42%),
+      linear-gradient(135deg, rgba(24, 0, 0, 0.78), rgba(23, 2, 9, 0.2) 62%);
+  }
+  .avaranam .festival-card{
+    margin:36px;
+    align-self:end;
+    padding:30px;
+    border:1px solid rgba(245,237,214,.32);
+    background:rgba(245,237,214,.92);
+    color:var(--ink);
+  }
+  .festival-card .label{
+    color:var(--red);
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+  }
+  .festival-card h3{
+    margin-top:22px;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(27px,2.6vw,39px);
+    font-weight:500;
+    line-height:1.04;
+  }
+  .festival-card h3 em{
+    color:var(--red);
+    font-style:italic;
+    font-weight:400;
+  }
+  .festival-card p{
+    margin-top:11px;
+    color:var(--ink-soft);
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px;
+    font-style:italic;
+    line-height:1.38;
+  }
+  .festival-card a{
+    display:inline-block;
+    margin-top:24px;
+    color:inherit;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.18em;
+    text-decoration:none;
+    text-transform:uppercase;
+    border-bottom:1px solid currentColor;
+    padding-bottom:3px;
+  }
+  .festival-card a:hover{ color:var(--red); }
+
+  .closing{
+    padding-top:124px;
+    padding-bottom:8px;
+    text-align:center;
+  }
+  .closing p{
+    max-width:31ch;
+    margin:0 auto;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(30px,3.2vw,48px);
+    line-height:1.12;
+    letter-spacing:-.015em;
+  }
+  .closing p em{
+    color:var(--accent);
+    font-style:italic;
+    font-weight:400;
+  }
+  .closing .closing-mark{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin-top:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.55;
+  }
+  .closing .closing-mark::before,
+  .closing .closing-mark::after{
+    content:"";
+    width:22px;
+    height:1px;
+    background:currentColor;
+  }
+
+  @media (max-width:980px){
+    .creative-intro,
+    .film-frame,
+    .film-detail{ grid-template-columns:1fr; gap:38px; }
+    .film-frame{ min-height:0; }
+    .recognition,
+    .avaranam .festival-card{ margin:0 38px 38px; }
+    .film-entry{ padding:46px; }
+  }
+  @media (max-width:880px){
+    .creative-head{ padding-bottom:52px; }
+    .creative-intro,
+    .film,
+    .closing{ padding-left:22px; padding-right:22px; }
+    .creative-intro{ padding-top:58px; padding-bottom:82px; }
+    .film{ padding-top:82px; }
+    .section-heading{ align-items:flex-start; flex-wrap:wrap; gap:12px 18px; }
+    .section-heading .support{ width:100%; margin-left:0; text-align:left; }
+    .closing{ padding-top:82px; }
+  }
+  @media (max-width:620px){
+    .film-entry{ padding:30px; }
+    .film-title{ margin-top:52px; }
+    .recognition,
+    .avaranam .festival-card{ margin:0 22px 22px; padding:25px; }
+    .film-detail{ padding-top:38px; }
+    .film-detail .credit{ grid-template-columns:1fr; gap:3px; }
+  }
+</style>
+</head>
+<body data-page="creative">
+
+<div id="nav-mount" data-nav-root="../" data-nav-pages="" data-nav-current="work"></div>
+<script src="../nav-loader.js"></script>
+
+<main>
+  <section class="page-head creative-head" aria-labelledby="page-title">
+    <div class="crumb">
+      <a href="../index.html">Garv Aggarwal</a>
+      <span>·</span>
+      <span>The Work</span>
+      <span>·</span>
+      <span class="dot"></span>
+      <span>03 — Creative</span>
+    </div>
+    <h1>Creative &amp; Cultural <em>Work</em>.</h1>
+    <p class="lede">Storytelling through film, from scripting and performance to editing.</p>
+    <div class="meta">
+      <span>Film</span>
+      <span>Cultural communication</span>
+      <span>Two short films</span>
+    </div>
+  </section>
+
+  <section class="creative-intro" aria-labelledby="creative-overview-title">
+    <div>
+      <div class="eyebrow">Film work</div>
+      <h2 id="creative-overview-title">Culture, carried <em>through story</em>.</h2>
+      <p class="opening">Film has been another way to communicate cultural ideas: a collaborative practice that brings together writing, performance, organization, and editing.</p>
+    </div>
+    <aside class="intro-note" aria-label="Creative work focus">
+      <p class="label">Selected work</p>
+      <p>Two short films with hands-on contributions across the creative process and external festival recognition.</p>
+    </aside>
+  </section>
+
+  <section class="film naraseva" aria-labelledby="naraseva-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">01</span>
+      <h2 id="naraseva-title"><em>Narasevā Nārāyaṇasevā</em>.</h2>
+      <p class="support">A short film recognized at the 25th CEC-UGC Educational Film Festival.</p>
+    </div>
+    <article class="film-frame">
+      <div class="film-entry">
+        <div>
+          <p class="film-type">Short film</p>
+          <h3 class="film-title">Narasevā<em> Nārāyaṇasevā</em></h3>
+          <p class="film-summary">A cultural short film created through a hands-on process of scripting, performance, and post-production.</p>
+          <p class="contribution">Contribution · <strong>Scripting, acting &amp; editing</strong></p>
+        </div>
+        <a class="watch-link" href="https://youtu.be/c21ybd31XLg?si=9k8tWjfuRez9rmST" target="_blank" rel="noopener noreferrer"><span class="play" aria-hidden="true">▶</span> Watch on YouTube</a>
+      </div>
+      <aside class="recognition" aria-label="Naraseva Narayanaseva recognition">
+        <p class="label">Recognition</p>
+        <h3>Best <em>Short Film</em></h3>
+        <p>25th CEC-UGC Educational Film Festival</p>
+      </aside>
+    </article>
+    <div class="film-detail">
+      <p class="copy">The project brought together the essential stages of short-film making — developing the script, performing on screen, and shaping the final edit.</p>
+      <dl class="credit-list">
+        <div class="credit">
+          <dt>Format</dt>
+          <dd>Short film</dd>
+        </div>
+        <div class="credit">
+          <dt>Contribution</dt>
+          <dd>Scripting, acting &amp; editing</dd>
+        </div>
+        <div class="credit">
+          <dt>Recognition</dt>
+          <dd>Best Short Film · 25th CEC-UGC Educational Film Festival</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="film avaranam" aria-labelledby="avaranam-title">
+    <div class="section-heading">
+      <span class="number" aria-hidden="true">02</span>
+      <h2 id="avaranam-title"><em>Āvaraṇam</em>.</h2>
+      <p class="support">A short film selected for the Nagpur Film Festival and named a Bharat Film Festival finalist.</p>
+    </div>
+    <article class="film-frame">
+      <div class="film-entry">
+        <div>
+          <p class="film-type">Short film</p>
+          <h3 class="film-title"><em>Āvaraṇam</em></h3>
+          <p class="film-summary">A cultural short film developed through collaborative writing, production coordination, performance, and editing.</p>
+          <p class="contribution">Contribution · <strong>Scripting, project management, acting &amp; editing</strong></p>
+        </div>
+        <a class="watch-link" href="https://youtu.be/p5gYKj9xG5U?si=9vS1WeOJjHuJ37MK" target="_blank" rel="noopener noreferrer"><span class="play" aria-hidden="true">▶</span> Watch on YouTube</a>
+      </div>
+      <aside class="festival-card" aria-label="Āvaraṇam festival recognition">
+        <p class="label">Festival recognition</p>
+        <h3>Official <em>Selection</em></h3>
+        <p>Nagpur Film Festival 2026</p>
+        <a href="../assets/nagpur_film.JPG" target="_blank" rel="noopener noreferrer">View screening certificate ↗</a>
+      </aside>
+    </article>
+    <div class="film-detail">
+      <p class="copy">Āvaraṇam extended the work across both creative and production responsibilities, with the film receiving recognition through festival selection and finalist status.</p>
+      <dl class="credit-list">
+        <div class="credit">
+          <dt>Format</dt>
+          <dd>Short film</dd>
+        </div>
+        <div class="credit">
+          <dt>Contribution</dt>
+          <dd>Scripting, project management, acting &amp; editing</dd>
+        </div>
+        <div class="credit">
+          <dt>Recognition</dt>
+          <dd>Official Selection · Nagpur Film Festival 2026</dd>
+        </div>
+        <div class="credit">
+          <dt>Additional</dt>
+          <dd>Finalist · Bharat Film Festival 2026</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="closing" aria-label="Creative work closing">
+    <p>These films are ways of making cultural ideas <em>visible, shared, and felt</em>.</p>
+    <div class="closing-mark">Creative · Cultural work</div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot-inner">
+    <div>
+      <div class="colophon" aria-hidden="true"></div>
+      <div class="meta">03 / 03 — Creative &amp; Cultural Work · Garv Aggarwal</div>
+    </div>
+    <div class="next">back to: <a href="../index.html">Home →</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

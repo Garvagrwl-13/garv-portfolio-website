@@ -369,33 +369,9 @@ Use the new three-page structure.
 
 ---
 
-# 9. CV ↔ Website Relationship
-
-The CV should remain concise.
-
-The website should provide evidence and context.
-
-### CV
-- Sanskrit GEC research
-- CHORDS presentation
-- Vivakshu
-- वाग्वर्धिनी
-- Films
-
-### Website
-- Research details
-- Abstract
-- Zenodo dataset
-- Certificate
-- Community links
-- Film videos
-- Festival evidence
-
-The website should **expand the CV rather than duplicate it**.
-
 ---
 
-# 10. Development Order
+# 9. Development Order
 
 ## Phase 1 — Sanskrit NLP & AI
 
@@ -452,7 +428,7 @@ This prevents the homepage from linking to unfinished pages.
 
 ---
 
-# 11. Definition of Done
+# 10. Definition of Done
 
 - [ ] Homepage has exactly three Work cards.
 - [ ] All three cards lead to real pages.
@@ -473,7 +449,7 @@ This prevents the homepage from linking to unfinished pages.
 
 ---
 
-# 12. Intended Impression
+# 11. Intended Impression
 
 A professor visiting the Work section should understand quickly:
 
