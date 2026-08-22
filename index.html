@@ -384,6 +384,13 @@ section.block{ position:relative; z-index:2; }
 .chapter:hover .tags{ opacity:.9; }
 .chapter:hover .num{ color:var(--gold); }
 
+/* Mobile: expanded state class mirrors hover */
+.chapter.is-expanded{ background:var(--ink); color:var(--paper); padding-top:48px; padding-bottom:48px; }
+.chapter.is-expanded .arrow{ color:var(--gold); transform: translateX(8px); }
+.chapter.is-expanded .desc{ opacity:1; max-height:80px; margin-top:10px; }
+.chapter.is-expanded .tags{ opacity:.9; }
+.chapter.is-expanded .num{ color:var(--gold); }
+
 .chapter .num{
   font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:500;
   font-size:44px; color:var(--ink-soft);
@@ -636,6 +643,9 @@ section.block{ position:relative; z-index:2; }
   .work{ padding:80px 0 20px; }
   .work .head, .library .head{ flex-direction:column; align-items:flex-start; padding:0 22px 28px; }
   .chapter{ grid-template-columns: 56px 1fr 28px; gap:18px; padding:24px 22px; }
+  /* Ensure chapter content is visible when expanded on mobile */
+  .chapter.is-expanded .desc{ opacity:1; max-height:80px; margin-top:10px; }
+  .chapter.is-expanded .tags{ opacity:.9; }
 
   /* library lede text swap */
   .lede-mobile{ display:inline; }
@@ -1094,6 +1104,33 @@ if (window.matchMedia('(hover: none)').matches) {
     });
     card.querySelectorAll('.btn').forEach(function(btn) {
       btn.addEventListener('click', function(e) { e.stopPropagation(); });
+    });
+  });
+}
+
+/* Work chapter tap-to-expand on touch devices */
+if (window.matchMedia('(hover: none)').matches) {
+  const chapters = document.querySelectorAll('.chapter');
+  chapters.forEach(function(chapter) {
+    chapter.addEventListener('click', function(e) {
+      // Don't intercept clicks on the link itself if it was a direct tap on a child that should navigate
+      // But we DO want to handle the tap on the chapter card itself
+      const isExpanded = chapter.classList.contains('is-expanded');
+
+      // Collapse all other chapters
+      chapters.forEach(function(c) {
+        if (c !== chapter) c.classList.remove('is-expanded');
+      });
+
+      if (isExpanded) {
+        // Second tap on same card -> allow navigation (don't prevent default)
+        // The link will naturally navigate
+        chapter.classList.remove('is-expanded');
+      } else {
+        // First tap -> expand and prevent navigation
+        e.preventDefault();
+        chapter.classList.add('is-expanded');
+      }
     });
   });
 }
