@@ -380,14 +380,14 @@ section.block{ position:relative; z-index:2; }
 }
 .chapter:hover{ background:var(--ink); color:var(--paper); padding-top:48px; padding-bottom:48px; }
 .chapter:hover .arrow{ color:var(--gold); transform: translateX(8px); }
-.chapter:hover .desc{ opacity:1; max-height:80px; margin-top:10px; }
+.chapter:hover .desc{ opacity:1; max-height:140px; margin-top:10px; }
 .chapter:hover .tags{ opacity:.9; }
 .chapter:hover .num{ color:var(--gold); }
 
 /* Mobile: expanded state class mirrors hover */
 .chapter.is-expanded{ background:var(--ink); color:var(--paper); padding-top:48px; padding-bottom:48px; }
 .chapter.is-expanded .arrow{ color:var(--gold); transform: translateX(8px); }
-.chapter.is-expanded .desc{ opacity:1; max-height:80px; margin-top:10px; }
+.chapter.is-expanded .desc{ opacity:1; max-height:140px; margin-top:10px; }
 .chapter.is-expanded .tags{ opacity:.9; }
 .chapter.is-expanded .num{ color:var(--gold); }
 
@@ -644,7 +644,7 @@ section.block{ position:relative; z-index:2; }
   .work .head, .library .head{ flex-direction:column; align-items:flex-start; padding:0 22px 28px; }
   .chapter{ grid-template-columns: 56px 1fr 28px; gap:18px; padding:24px 22px; }
   /* Ensure chapter content is visible when expanded on mobile */
-  .chapter.is-expanded .desc{ opacity:1; max-height:80px; margin-top:10px; }
+  .chapter.is-expanded .desc{ opacity:1; max-height:140px; margin-top:10px; }
   .chapter.is-expanded .tags{ opacity:.9; }
 
   /* library lede text swap */
